@@ -27,7 +27,18 @@
             -moz-appearance: textfield;
             appearance: textfield;
         }
-        /* 淡入動畫 */
+        .timeline-line {
+            position: absolute;
+            left: 1.6rem;
+            top: 1rem;
+            bottom: -1rem;
+            width: 2px;
+            background-color: #e5e7eb;
+            z-index: 0;
+        }
+        .last-item .timeline-line {
+            display: none;
+        }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
@@ -45,377 +56,405 @@
             <div class="flex justify-between h-16 items-center">
                 <div class="flex-shrink-0 flex items-center gap-2">
                     <span class="text-2xl">🇯🇵</span>
-                    <span class="font-bold tracking-tight text-stone-900">NAGOYA 2026</span>
+                    <span class="font-bold text-xl tracking-tight text-stone-900">NAGOYA 2026</span>
                 </div>
-                <div class="hidden md:flex space-x-8 text-sm font-medium">
-                    <a href="javascript:void(0)" onclick="scrollToSection('overview')" class="text-stone-600 hover:text-rose-600 transition-colors">行程概覽</a>
-                    <a href="javascript:void(0)" onclick="scrollToSection('calculator')" class="text-stone-600 hover:text-rose-600 transition-colors">匯率計算</a>
-                    <a href="javascript:void(0)" onclick="scrollToSection('itinerary')" class="text-stone-600 hover:text-rose-600 transition-colors">每日明細</a>
-                    <a href="javascript:void(0)" onclick="scrollToSection('prep')" class="text-stone-600 hover:text-rose-600 transition-colors">行前準備</a>
+                <div class="hidden md:flex space-x-5">
+                    <button onclick="scrollToSection('logistics')" class="text-stone-600 hover:text-rose-500 transition-colors text-sm font-medium">交通住宿</button>
+                    <button onclick="scrollToSection('itinerary')" class="text-stone-600 hover:text-rose-500 transition-colors text-sm font-medium">每日行程</button>
+                    <button onclick="scrollToSection('food-guide')" class="text-rose-600 hover:text-rose-700 font-bold transition-colors text-sm">終極美食</button>
+                    <button onclick="scrollToSection('prep')" class="text-stone-600 hover:text-rose-500 transition-colors text-sm font-medium">行前準備</button>
+                    <button onclick="scrollToSection('shopping')" class="text-stone-600 hover:text-rose-500 transition-colors text-sm font-medium">匯率計算</button>
                 </div>
             </div>
         </div>
     </nav>
 
-    <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-20">
-        
-        <!-- Hero Section -->
-        <section id="overview" class="text-center space-y-6 py-10 animate-fade-in">
-            <div class="inline-block px-4 py-1.5 bg-rose-50 text-rose-600 text-xs font-bold tracking-widest uppercase rounded-full mb-4">Summer Trip 2026</div>
-            <h1 class="text-4xl md:text-5xl font-bold text-stone-900 leading-tight">名古屋・京都六日遊<br><span class="text-rose-600">行程與血拚指南</span></h1>
-            <p class="text-stone-500 max-w-2xl mx-auto leading-relaxed">
-                結合吉卜力幻想世界、頂級飛驒牛饗宴，以及 46kg 額度的爆買之旅。這是一份專為追求效率與美食的旅人設計的互動指南。
+    <!-- Hero Section -->
+    <div class="border-b border-stone-100 bg-white">
+        <div class="max-w-4xl mx-auto px-4 py-12 sm:px-6 lg:px-8 text-center">
+            <span class="inline-block px-3 py-1 rounded-full bg-rose-100 text-rose-600 text-xs font-semibold tracking-wide uppercase mb-4">Ghibli, Wagyu & Shopping</span>
+            <h1 class="text-4xl sm:text-5xl font-extrabold text-stone-900 mb-4 leading-tight">名古屋 6 天 5 夜<br><span class="text-rose-500">終極美食與血拚指南</span></h1>
+            <p class="text-lg text-stone-500 max-w-2xl mx-auto mb-8">
+                住 <strong>VIA INN 名古屋站前椿町</strong>，吃遍馬喰一代、厚切牛舌與蓬萊軒鰻魚飯。
+                <br>紅眼班機出發，華航 46kg 額度回程，戰鬥力滿分。
             </p>
-            
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-8">
-                <div class="p-6 bg-white rounded-3xl shadow-sm border border-stone-100">
-                    <div class="text-2xl mb-2">✈️</div>
-                    <div class="text-xs text-stone-400 font-bold uppercase tracking-wider mb-1">Flights</div>
-                    <div class="font-bold text-stone-800">樂桃 MM722 / 華航 CI155</div>
-                </div>
-                <div class="p-6 bg-white rounded-3xl shadow-sm border border-stone-100 relative group cursor-pointer" onclick="copyAddress()">
-                    <div class="text-2xl mb-2">🏨</div>
-                    <div class="text-xs text-stone-400 font-bold uppercase tracking-wider mb-1">Stay</div>
-                    <div class="font-bold text-stone-800">VIA INN 名古屋站前椿町</div>
-                    <div class="absolute inset-0 bg-stone-900/5 opacity-0 group-hover:opacity-100 transition-opacity rounded-3xl flex items-center justify-center">
-                        <span class="text-xs font-bold text-stone-600">點擊複製地址</span>
+            <div class="flex flex-wrap justify-center gap-4 text-sm font-medium text-stone-600">
+                <div class="bg-stone-100 px-4 py-2 rounded-lg flex items-center gap-2"><span>🛫</span> MM722 (去)</div>
+                <div class="bg-stone-100 px-4 py-2 rounded-lg flex items-center gap-2"><span>🛬</span> CI 155 (回)</div>
+                <div class="bg-stone-100 px-4 py-2 rounded-lg flex items-center gap-2"><span>🎒</span> 46KG 託運</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Logistics Section -->
+    <section id="logistics" class="bg-stone-50 py-12">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-2xl font-bold text-stone-900 mb-6 flex items-center">
+                <span class="bg-blue-100 text-blue-600 p-2 rounded-lg mr-3 text-xl">🏨</span>
+                航班與住宿戰略
+            </h2>
+            <div class="bg-stone-900 text-stone-300 rounded-2xl p-6 shadow-lg mb-8">
+                <div class="flex flex-col md:flex-row gap-6 items-start">
+                    <div class="flex-1">
+                        <h3 class="text-xl font-bold text-white mb-2">VIA INN 名古屋站前椿町</h3>
+                        <p class="text-sm text-stone-400 mb-4">五晚連住免搬行李。位於新幹線口（太閤通口），近 ESCA 地下街，地理位置無敵。</p>
+                        <button onclick="copyAddress()" class="bg-stone-700 hover:bg-stone-600 text-white px-4 py-2 rounded-lg text-sm transition flex items-center gap-2">
+                            <span>📋</span> 複製地址與導航
+                        </button>
+                    </div>
+                    <div class="flex-1 border-t md:border-t-0 md:border-l border-stone-700 pt-4 md:pt-0 md:pl-6">
+                        <h3 class="text-sm font-bold text-white mb-3 uppercase tracking-wider text-stone-400">機場交通</h3>
+                        <ul class="space-y-3 text-sm">
+                            <li><span class="text-blue-400 font-bold">去程：</span>名鐵 μ-SKY 特急直達（約 28 分鐘，1,250 日圓）</li>
+                            <li><span class="text-rose-400 font-bold">回程：</span>攜帶 46kg 戰利品，強烈建議同樣搭乘 μ-SKY 確保有座位與行李空間。</li>
+                        </ul>
                     </div>
                 </div>
-                <div class="p-6 bg-white rounded-3xl shadow-sm border border-stone-100">
-                    <div class="text-2xl mb-2">🧳</div>
-                    <div class="text-xs text-stone-400 font-bold uppercase tracking-wider mb-1">Luggage</div>
-                    <div class="font-bold text-rose-600">回程 46kg 爆買額度</div>
-                </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- Calculator Section -->
-        <section id="calculator" class="bg-stone-900 rounded-[2.5rem] p-8 md:p-12 text-white shadow-2xl">
-            <div class="flex flex-col md:flex-row gap-12 items-center">
-                <div class="flex-1 space-y-6 w-full">
-                    <h2 class="text-3xl font-bold">即時匯率換算</h2>
-                    <p class="text-stone-400">目前匯率設定：1 TWD = <span id="displayRateText" class="text-white font-mono">4.7</span> JPY</p>
-                    <div class="space-y-4">
-                        <div class="flex items-center gap-4 bg-white/5 p-2 rounded-2xl border border-white/10">
-                            <span class="w-12 text-center font-bold text-stone-500">TWD</span>
-                            <input type="number" id="inputTWD" placeholder="輸入台幣" class="bg-transparent border-none focus:ring-0 text-xl w-full text-white placeholder:text-stone-600 outline-none">
-                        </div>
-                        <div class="flex items-center gap-4 bg-white/5 p-2 rounded-2xl border border-white/10">
-                            <span class="w-12 text-center font-bold text-stone-500">JPY</span>
-                            <input type="number" id="inputJPY" placeholder="輸入日幣" class="bg-transparent border-none focus:ring-0 text-xl w-full text-white placeholder:text-stone-600 outline-none">
+    <!-- Itinerary Section -->
+    <section id="itinerary" class="max-w-4xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+        <div class="mb-6">
+            <h2 class="text-2xl font-bold text-stone-900 flex items-center">
+                <span class="bg-rose-100 text-rose-600 p-2 rounded-lg mr-3 text-xl">📅</span>
+                每日詳細動線
+            </h2>
+            <p class="text-stone-500 mt-2">已完美安插所有必吃美食。點擊日期查看詳細時間表。</p>
+        </div>
+
+        <div class="flex overflow-x-auto hide-scrollbar gap-2 mb-6 pb-2" id="dayTabs"></div>
+        <div id="itineraryContent" class="bg-white rounded-2xl border border-stone-200 shadow-sm overflow-hidden min-h-[500px]"></div>
+    </section>
+
+    <!-- 🌟 FOOD GUIDE SECTION -->
+    <section id="food-guide" class="bg-stone-100 py-16 border-y border-stone-200">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-extrabold text-stone-900 mb-4">🤤 終極美食全攻略</h2>
+                <p class="text-stone-600 max-w-2xl mx-auto">來到日本中部大城，最令人期待的絕對是重口味的「名古屋飯」！跟著這份不繞路、不踩雷的美食地圖，一起吃爆名古屋吧！</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Food Card 1 -->
+                <div class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow border border-stone-200 flex flex-col">
+                    <div class="h-32 bg-gradient-to-br from-red-100 to-orange-50 flex items-center justify-center text-5xl relative">
+                        🥩<div class="absolute bottom-2 right-2 bg-black/50 text-white text-[10px] px-2 py-1 rounded">Day 1 午餐</div>
+                    </div>
+                    <div class="p-5 flex-1 flex flex-col">
+                        <h3 class="font-bold text-lg text-stone-900 mb-1">飛驒牛一頭家 馬喰一代</h3>
+                        <p class="text-sm text-stone-500 mb-3">📍 名古屋 WEST 店</p>
+                        <p class="text-sm text-stone-700 mb-4 flex-1"><strong>必吃：</strong>馬喰商業午餐、炙燒和牛握壽司。買下「整頭」頂級飛驒牛，午間套餐只要約 3000 多日圓，CP 值爆表！</p>
+                        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-3 mt-auto">
+                            <p class="text-xs font-bold text-yellow-800 mb-1">💡 內行提示</p>
+                            <p class="text-xs text-yellow-900">平日極易客滿，強烈建議出發前一個月上網預約，避免拖著疲憊身軀排隊。</p>
                         </div>
                     </div>
                 </div>
-                <div class="w-px h-32 bg-white/10 hidden md:block"></div>
-                <div class="w-full md:w-48 space-y-4">
-                    <label class="text-xs font-bold text-stone-500 uppercase">自定義匯率</label>
-                    <input type="number" id="exchangeRate" value="4.7" step="0.01" class="bg-white/5 border border-white/10 rounded-xl p-3 w-full text-center text-rose-400 font-mono text-lg focus:border-rose-500 outline-none transition-colors">
+
+                <!-- Food Card 2 -->
+                <div class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow border border-stone-200 flex flex-col">
+                    <div class="h-32 bg-gradient-to-br from-stone-800 to-stone-600 flex items-center justify-center text-5xl relative">
+                        🔥<div class="absolute bottom-2 right-2 bg-black/50 text-white text-[10px] px-2 py-1 rounded">Day 4 晚餐</div>
+                    </div>
+                    <div class="p-5 flex-1 flex flex-col">
+                        <h3 class="font-bold text-lg text-stone-900 mb-1">和牛たんじ</h3>
+                        <p class="text-sm text-stone-500 mb-3">📍 名古屋榮錦店</p>
+                        <p class="text-sm text-stone-700 mb-4 flex-1"><strong>必吃：</strong>厚切仙台牛舌、和牛炙燒大腹肉壽司。微奢華燒肉吃到飽，職人手工厚切稀有「舌芯」，顛覆吃到飽想像。</p>
+                        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-3 mt-auto">
+                            <p class="text-xs font-bold text-yellow-800 mb-1">💡 內行提示</p>
+                            <p class="text-xs text-yellow-900">限時 100 分鐘。入座後請集中火力狂點高價值的厚切牛舌與和牛肉壽司！</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Food Card 3 -->
+                <div class="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow border border-stone-200 flex flex-col">
+                    <div class="h-32 bg-gradient-to-br from-amber-100 to-yellow-50 flex items-center justify-center text-5xl relative">
+                        🍱<div class="absolute bottom-2 right-2 bg-black/50 text-white text-[10px] px-2 py-1 rounded">Day 5 晚餐</div>
+                    </div>
+                    <div class="p-5 flex-1 flex flex-col">
+                        <h3 class="font-bold text-lg text-stone-900 mb-1">熱田蓬萊軒</h3>
+                        <p class="text-sm text-stone-500 mb-3">📍 神宮店</p>
+                        <p class="text-sm text-stone-700 mb-4 flex-1"><strong>必吃：</strong>鰻魚飯三吃 (ひつまぶし)。超過150年歷史的神級始祖，備長炭烤出外脆內嫩無可挑剔的口感。</p>
+                        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-3 mt-auto">
+                            <p class="text-xs font-bold text-yellow-800 mb-1">💡 內行提示 (極重要)</p>
+                            <p class="text-xs text-yellow-900">不接受事前預約！請在下午 15:30 左右先去排隊登記領取晚間「號碼牌」，再去逛熱田神宮。</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Secondary Food Items -->
+                <div class="bg-white rounded-2xl p-5 shadow-sm border border-stone-200">
+                    <div class="flex items-center gap-3 mb-3">
+                        <span class="text-2xl">🍜</span>
+                        <h3 class="font-bold text-stone-900">必吃拉麵雙雄</h3>
+                    </div>
+                    <ul class="text-sm text-stone-600 space-y-3">
+                        <li><strong class="text-rose-600">麵家 獅子丸 (Day 1)：</strong>洋風泡系白湯拉麵。無法預約，17:00前去排隊！</li>
+                        <li><strong class="text-rose-600">味仙 / 鯱輪 (Day 2)：</strong>吉卜力耗盡體力後，來碗大蒜與辣椒爆炒的台灣拉麵或大蒜辛辣拉麵補充鹽分。</li>
+                    </ul>
+                </div>
+
+                <div class="bg-white rounded-2xl p-5 shadow-sm border border-stone-200">
+                    <div class="flex items-center gap-3 mb-3">
+                        <span class="text-2xl">☕</span>
+                        <h3 class="font-bold text-stone-900">名古屋特色早餐</h3>
+                    </div>
+                    <ul class="text-sm text-stone-600 space-y-3">
+                        <li><strong class="text-stone-800">客美多 Komeda's：</strong>點咖啡送烤吐司與水煮蛋，必加小倉紅豆泥。</li>
+                        <li><strong class="text-stone-800">Tsubame Bread：</strong>年輕人最愛，香甜厚切生吐司。</li>
+                        <li><strong class="text-stone-800">喫茶 Riyon：</strong>全天候提供買飲料送熱壓吐司。</li>
+                    </ul>
+                </div>
+
+                <div class="bg-white rounded-2xl p-5 shadow-sm border border-stone-200">
+                    <div class="flex items-center gap-3 mb-3">
+                        <span class="text-2xl">🍢</span>
+                        <h3 class="font-bold text-stone-900">老街與宵夜名物</h3>
+                    </div>
+                    <ul class="text-sm text-stone-600 space-y-3">
+                        <li><strong class="text-stone-800">犬山城下町 (Day 5)：</strong>犬山牛太郎A5飛驒牛握壽司、山田五平餅。</li>
+                        <li><strong class="text-stone-800">炸雞翅手羽先：</strong>「山將」極度酥脆胡椒嗆辣；「風來坊」偏甜鹹帶白芝麻香。</li>
+                    </ul>
                 </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <!-- Itinerary Section -->
-        <section id="itinerary" class="space-y-8">
-            <div class="flex justify-between items-end">
-                <div>
-                    <h2 class="text-3xl font-bold text-stone-900">每日行程明細</h2>
-                    <p class="text-stone-500 mt-2">點擊日期切換當日動線</p>
-                </div>
-            </div>
-
-            <div class="flex gap-2 overflow-x-auto pb-4 hide-scrollbar" id="day-tabs"></div>
-            
-            <div id="itinerary-content" class="bg-white rounded-[2.5rem] shadow-sm border border-stone-100 overflow-hidden min-h-[400px]">
-                <!-- JS 會將行程渲染在這裡 -->
-            </div>
-        </section>
-
-        <!-- Preparation Section -->
-        <section id="prep" class="space-y-6 pb-20">
-            <h2 class="text-2xl font-bold text-stone-900">行前注意事項</h2>
+    <!-- 補回來的！Preparation Section -->
+    <section id="prep" class="bg-white py-12 border-b border-stone-200">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-2xl font-bold text-stone-900 flex items-center mb-6">
+                <span class="bg-yellow-100 text-yellow-600 p-2 rounded-lg mr-3 text-xl">☀️</span>
+                行前注意事項
+            </h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="flex items-start gap-4 p-5 bg-white rounded-2xl shadow-sm border border-stone-100 hover:border-stone-200 transition-colors">
-                    <div class="text-3xl bg-stone-50 p-2 rounded-xl">☀️</div>
+                <div class="flex items-start gap-4 p-5 bg-stone-50 rounded-2xl shadow-sm border border-stone-100">
+                    <div class="text-3xl bg-white p-2 rounded-xl shadow-sm">🌡️</div>
                     <div>
                         <h4 class="font-bold text-stone-900">七月天氣</h4>
                         <p class="text-sm text-stone-600 mt-1">非常炎熱且潮濕 (25°C - 33°C)。建議穿著透氣排汗衣物，並隨身攜帶雨具（午後雷陣雨或梅雨季尾端）。</p>
                     </div>
                 </div>
-                <div class="flex items-start gap-4 p-5 bg-white rounded-2xl shadow-sm border border-stone-100 hover:border-stone-200 transition-colors">
-                    <div class="text-3xl bg-stone-50 p-2 rounded-xl">💰</div>
+                <div class="flex items-start gap-4 p-5 bg-stone-50 rounded-2xl shadow-sm border border-stone-100">
+                    <div class="text-3xl bg-white p-2 rounded-xl shadow-sm">💰</div>
                     <div>
                         <h4 class="font-bold text-stone-900">退稅 Tax Refund</h4>
                         <p class="text-sm text-stone-600 mt-1">大部分店家消費滿 5,000 日圓 (未稅) 即可退稅。結帳時請主動出示護照正本。</p>
                     </div>
                 </div>
             </div>
-        </section>
-    </main>
+        </div>
+    </section>
 
-    <footer class="bg-stone-50 border-t border-stone-200 py-8 text-center text-sm text-stone-400">
-        <p>© 2026 Nagoya Efficient Travel Planner. </p>
+    <!-- Shopping & Calculator -->
+    <section id="shopping" class="max-w-4xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
+        <div class="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-stone-200 relative overflow-hidden">
+            <h2 class="text-2xl font-bold text-stone-900 flex items-center mb-6">
+                <span class="bg-emerald-100 text-emerald-600 p-2 rounded-lg mr-3 text-xl">💱</span>
+                血拚匯率計算機
+            </h2>
+            <p class="text-sm text-stone-500 mb-6">目前設定：1 TWD = <span id="displayRateText" class="font-bold text-stone-800">4.8</span> JPY。Outlet 或藥妝結帳前快速算一下吧！</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-end relative z-10">
+                <div>
+                    <label class="block text-xs font-bold text-stone-500 uppercase tracking-wide mb-2">匯率 (TWD ➜ JPY)</label>
+                    <input type="number" id="exchangeRate" value="4.8" step="0.01" class="w-full p-3 bg-stone-50 border border-stone-200 rounded-xl text-stone-900 font-mono focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-stone-500 uppercase tracking-wide mb-2">台幣 (TWD)</label>
+                    <input type="number" id="inputTWD" placeholder="輸入台幣" class="w-full p-3 bg-stone-50 border border-stone-200 rounded-xl text-stone-900 font-mono font-bold focus:outline-none focus:ring-2 focus:ring-rose-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-stone-500 uppercase tracking-wide mb-2">日幣 (JPY)</label>
+                    <input type="number" id="inputJPY" placeholder="輸入日幣" class="w-full p-3 bg-stone-50 border border-stone-200 rounded-xl text-stone-900 font-mono font-bold focus:outline-none focus:ring-2 focus:ring-rose-500">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-stone-900 py-8 text-center text-sm text-stone-400">
+        <p>© 2026 Nagoya Ultimate Travel & Food Planner.</p>
     </footer>
 
-    <!-- Back to Top Button -->
-    <button id="backToTop" onclick="scrollToTop()" class="fixed bottom-8 right-8 bg-rose-600 text-white p-4 rounded-2xl shadow-xl opacity-0 translate-y-10 transition-all duration-500 hover:bg-rose-700 active:scale-95 z-50">
-        <span class="block transform -rotate-90 font-bold">→</span>
+    <!-- Back to Top -->
+    <button id="backToTop" onclick="scrollToTop()" class="fixed bottom-8 right-8 bg-rose-500 text-white p-3 rounded-full shadow-lg opacity-0 translate-y-10 transition-all z-50">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" /></svg>
     </button>
 
     <script>
-        // === 匯率計算機邏輯 ===
+        // === Calculator Logic ===
         const rateInput = document.getElementById("exchangeRate");
         const twdInput = document.getElementById("inputTWD");
-        const jpyInput = document.getElementById("inputJPY"); // 修正：確保 ID 對應正確，解決當機問題
+        const jpyInput = document.getElementById("inputJPY");
         const displayRateText = document.getElementById("displayRateText");
 
         function updateCalc(source) {
             const rate = parseFloat(rateInput.value) || 0;
             displayRateText.innerText = rate;
-
             if (source === "twd") {
                 const twd = parseFloat(twdInput.value);
-                if (!isNaN(twd)) {
-                    jpyInput.value = (twd * rate).toFixed(0);
-                } else {
-                    jpyInput.value = "";
-                }
+                jpyInput.value = !isNaN(twd) ? (twd * rate).toFixed(0) : "";
             } else if (source === "jpy") {
                 const jpy = parseFloat(jpyInput.value);
-                if (!isNaN(jpy)) {
-                    twdInput.value = (jpy / rate).toFixed(0);
-                } else {
-                    twdInput.value = "";
-                }
-            } else if (source === "rate") {
-                if (twdInput.value) {
-                    const twd = parseFloat(twdInput.value);
-                    jpyInput.value = (twd * rate).toFixed(0);
-                }
+                twdInput.value = !isNaN(jpy) ? (jpy / rate).toFixed(0) : "";
+            } else if (source === "rate" && twdInput.value) {
+                jpyInput.value = (parseFloat(twdInput.value) * rate).toFixed(0);
             }
         }
 
-        // 加入保護機制確保元素存在才綁定事件
         if (rateInput) rateInput.addEventListener("input", () => updateCalc("rate"));
         if (twdInput) twdInput.addEventListener("input", () => updateCalc("twd"));
         if (jpyInput) jpyInput.addEventListener("input", () => updateCalc("jpy"));
 
-        // === 行程資料庫 ===
+        // === Itinerary Data ===
         const itineraryData = [
             {
-                day: "Day 1",
-                date: "7/1 (Wed)",
-                title: "紅眼抵達與頂級飛驒牛",
-                summary: "樂桃 06:20 抵達名古屋。第一天主打快速入關、寄放行李並享用重頭戲午餐。",
-                meals: "午餐：飛驒牛一頭家 馬喰一代<br>晚餐：麵家 獅子丸 (泡系拉麵)",
-                warnings: "紅眼班機體力負荷大，建議下午 15:00 準時回飯店 Check-in 休息。",
+                day: 1, date: "7/01 (三)",
+                title: "紅眼抵達，飛驒牛衝刺",
+                focus: "馬喰一代飛驒牛、大須商店街、麵家獅子丸",
                 details: [
-                    { time: "06:20", event: "抵達中部國際機場 (NGO)", desc: "預計 07:30 完成出關，搭乘名鐵特急前往名古屋站。" },
-                    { time: "08:30", event: "VIA INN 寄放行李", desc: "飯店位於新幹線口，過馬路即可抵達。" },
-                    { time: "11:30", event: "馬喰一代 名古屋WEST", desc: "預約首日午餐，享用高 CP 值飛驒牛燒肉套餐。" },
-                    { time: "15:00", event: "Check-in 補眠", desc: "第一天不排緊湊行程，體力優先。" },
-                    { time: "19:00", event: "麵家 獅子丸", desc: "飯店後方的排隊名店，細緻的泡沫拉麵。" }
+                    { time: "06:20", icon: "🛬", title: "抵達中部國際機場", desc: "搭名鐵 μ-SKY 特急直達名古屋站（約28分）。" },
+                    { time: "08:00", icon: "🏨", title: "VIA INN 寄放行李", desc: "先至飯店前台寄放行李，輕裝出發。" },
+                    { time: "09:30", icon: "🏯", title: "大須商店街 / 市區散步", desc: "初步探勘地形，或在咖啡廳享用 Morning Service。" },
+                    { time: "12:00", icon: "🥩", title: "午餐：馬喰一代 名古屋WEST", desc: "預約商業午餐，享用頂級飛驒牛燒肉拼盤與握壽司。" },
+                    { time: "15:00", icon: "🛏️", title: "飯店 Check-in 補眠", desc: "非常重要！恢復紅眼航班體力。" },
+                    { time: "17:00", icon: "🍜", title: "晚餐：麵家 獅子丸", desc: "提早排隊品嚐洋風泡系白湯拉麵。" }
                 ]
             },
             {
-                day: "Day 2",
-                date: "7/2 (Thu)",
-                title: "吉卜力公園：進入動畫世界",
-                summary: "全日吉卜力公園行程。因茵茵狗停賣無需早起排隊，14:00 進入大倉庫即可。",
-                meals: "午餐：園區輕食<br>晚餐：味仙 (台灣拉麵) 或彈性安排",
-                warnings: "園區內步行量大，建議穿著舒適運動鞋。大倉庫門票須對應場次入場。",
+                day: 2, date: "7/02 (四)",
+                title: "吉卜力深度遊 ＆ 辛辣之夜",
+                focus: "吉卜力大倉庫、味仙台灣拉麵",
                 details: [
-                    { time: "10:00", event: "出發吉卜力公園", desc: "搭乘地下鐵東山線轉 Linimo 線。" },
-                    { time: "11:00", event: "戶外展區漫步", desc: "逛免門票區域、紀念品店與建築拍照。" },
-                    { time: "14:00", event: "吉卜力大倉庫", desc: "核心展區，含經典電影場景與特展。" },
-                    { time: "19:30", event: "市區晚餐", desc: "可回市區享用味仙台灣拉麵或其他美食。" }
+                    { time: "09:00", icon: "☕", title: "早餐：客美多咖啡", desc: "點咖啡送烤吐司與水煮蛋，必加小倉紅豆泥。" },
+                    { time: "10:30", icon: "🚇", title: "出發吉卜力公園", desc: "地下鐵轉 Linimo 至愛・地球博紀念公園。" },
+                    { time: "11:30", icon: "🌳", title: "動動力森林 & 魔女之谷", desc: "因無搶購壓力，悠閒順遊戶外園區。" },
+                    { time: "14:30", icon: "🏠", title: "吉卜力大倉庫", desc: "進入全室內展區避暑，拍攝無臉男經典場景。" },
+                    { time: "18:30", icon: "🌶️", title: "晚餐：味仙 / 鯱輪", desc: "返回榮商圈。吃大蒜辣椒爆炒的台灣拉麵補充鹽分！" },
+                    { time: "21:30", icon: "🍻", title: "宵夜：世界的山將", desc: "外帶極度酥脆、胡椒嗆辣的炸雞翅回飯店。" }
                 ]
             },
             {
-                day: "Day 3",
-                date: "7/3 (Fri)",
-                title: "京都快閃：古都巡禮",
-                summary: "利用新幹線極速往返京都。走訪清水寺並採買抹茶與 Yojiya。",
-                meals: "午餐：京都當地簡餐<br>晚餐：名古屋車站百貨美食",
-                warnings: "京都夏季炎熱，清晨出發可避開最高溫與人潮。",
+                day: 3, date: "7/03 (五)",
+                title: "京都反向錯峰一日遊",
+                focus: "伏見稻荷、清水寺、京都勝牛",
                 details: [
-                    { time: "08:00", event: "搭乘新幹線", desc: "名古屋至京都僅需 35 分鐘。" },
-                    { time: "09:30", event: "抵達京都站", desc: "轉乘市區交通前往東山區。" },
-                    { time: "11:00", event: "清水寺區域", desc: "清水寺參拜後，漫步二年坂、三年坂採購伴手禮。" },
-                    { time: "17:30", event: "返回名古屋", desc: "搭乘新幹線回飯店，方便放置京都戰利品。" }
+                    { time: "07:30", icon: "🍙", title: "早餐：千壽炸蝦飯糰", desc: "車站買好一口大小的炸蝦飯糰，搭乘新幹線（35分）。" },
+                    { time: "08:30", icon: "⛩️", title: "伏見稻荷大社", desc: "趁清晨氣溫低且無人潮時攀爬千本鳥居。" },
+                    { time: "11:30", icon: "🏯", title: "清水寺 & 午餐", desc: "參拜後沿三年坂散步。午餐享用「清水順正 Okabe家」湯豆腐。" },
+                    { time: "15:00", icon: "🍵", title: "GOKAGO 抹茶拿鐵", desc: "來杯現刷宇治抹茶拿鐵加冰淇淋消暑，漫步至祇園。" },
+                    { time: "17:30", icon: "🥩", title: "晚餐：京都勝牛", desc: "享用人氣炸牛排定食。隨後搭新幹線返回名古屋。" }
                 ]
             },
             {
-                day: "Day 4",
-                date: "7/4 (Sat)",
-                title: "名古屋市區：爆買日與厚切牛舌",
-                summary: "榮商圈與車站百貨全日購物。晚上享用超高評價牛舌。",
-                meals: "午餐：百貨地下街<br>晚餐：和牛たんじ (厚切牛舌)",
-                warnings: "今日為重度消費日，利用 46kg 額度，大型物品可先送回飯店。",
+                day: 4, date: "7/04 (六)",
+                title: "長島 Outlet 爆買 ＆ 厚切牛舌",
+                focus: "三井 Outlet 46kg發揮、和牛たんじ",
                 details: [
-                    { time: "10:00", event: "榮商圈血拚", desc: "PARCO、三越、松坂屋、Don Quijote。" },
-                    { time: "14:00", event: "名古屋車站周邊", desc: "高島屋、Gate Tower、Bic Camera。" },
-                    { time: "19:30", event: "和牛たんじ 名古屋榮錦店", desc: "預約制厚切牛舌吃到飽，享受飛驒牛與極厚牛舌。" }
+                    { time: "09:00", icon: "🍞", title: "早餐：Tsubame Bread", desc: "香甜厚切生吐司配北海道發酵奶油。" },
+                    { time: "10:00", icon: "🚌", title: "前往長島三井 Outlet", desc: "名鐵巴士中心搭乘直達巴士。抵達後鎖定目標品牌大採購。" },
+                    { time: "13:30", icon: "🍱", title: "午餐：矢場味噌豬排", desc: "Outlet美食街享用招牌草鞋特大豬排淋紅味噌醬。" },
+                    { time: "17:00", icon: "🧳", title: "返回飯店卸貨", desc: "務必先將戰利品放回飯店，再輕裝前往榮商圈。" },
+                    { time: "19:00", icon: "🔥", title: "晚餐：和牛たんじ", desc: "榮錦店。限時100分，狂吃厚切仙台牛舌與和牛炙燒大腹肉壽司！" }
                 ]
             },
             {
-                day: "Day 5",
-                date: "7/5 (Sun)",
-                title: "長島 Outlet 與鰻魚飯三吃",
-                summary: "上午前往長島 Outlet 最後補貨，晚上以名古屋名物鰻魚飯完美收尾。",
-                meals: "午餐：Outlet 美食街<br>晚餐：熱田蓬萊軒",
-                warnings: "Outlet 巴士班次固定，建議先查詢回程時刻表。蓬萊軒需現場領號碼牌。",
+                day: 5, date: "7/05 (日)",
+                title: "歷史老街與神級鰻魚飯",
+                focus: "犬山城、熱田蓬萊軒三吃、最後補貨",
                 details: [
-                    { time: "09:30", event: "前往長島 Outlet", desc: "名古屋巴士中心搭乘直達高速巴士（約 50 分鐘）。" },
-                    { time: "10:30", event: "三井 Outlet Park", desc: "日本最大級 Outlet，超過 300 家店鋪，鎖定精品與運動品牌填滿行李。" },
-                    { time: "17:00", event: "返回名古屋", desc: "搭車返回市區，並前往熱田神宮周邊。" },
-                    { time: "18:30", event: "熱田蓬萊軒", desc: "品嚐最正宗的名古屋鰻魚飯三吃。" }
+                    { time: "09:00", icon: "🥪", title: "早餐：喫茶 Riyon", desc: "買飲料送熱壓吐司，吃飽前往犬山。" },
+                    { time: "10:30", icon: "🏯", title: "犬山城 & 老街午餐", desc: "參觀最古老天守閣。邊走邊吃犬山牛太郎A5飛驒牛壽司與五平餅。" },
+                    { time: "15:30", icon: "🎫", title: "熱田蓬萊軒抽號碼牌", desc: "極重要！先到神宮店門口登記拿晚上的號碼牌。" },
+                    { time: "16:00", icon: "⛩️", title: "熱田神宮參拜", desc: "利用等位時間逛神宮，完美抵銷排隊時間。" },
+                    { time: "18:00", icon: "🍱", title: "晚餐：熱田蓬萊軒", desc: "享用150年歷史的神級鰻魚飯三吃。" },
+                    { time: "20:30", icon: "🛒", title: "車站周邊最後補貨", desc: "SUGI藥局/唐吉訶德採買液體類等高重量物資。" }
                 ]
             },
             {
-                day: "Day 6",
-                date: "7/6 (Mon)",
-                title: "機場最後衝刺與返台",
-                summary: "中午班機，提早至機場購買桂新堂與蝦仙貝。",
-                meals: "早餐：飯店或超商<br>午餐：機上餐飲",
-                warnings: "機場免稅店人潮眾多，建議預留充足登機與託運時間。",
+                day: 6, date: "7/06 (一)",
+                title: "機場採買與滿載而歸",
+                focus: "蝦仙貝之里、CI 155 華航回程",
                 details: [
-                    { time: "09:00", event: "退房與搭乘名鐵", desc: "帶上 46kg 戰利品，從名古屋站前往中部國際機場。" },
-                    { time: "10:00", event: "機場最後採買", desc: "購買蝦仙貝之里、桂新堂、Royce 巧克力等免稅伴手禮。" },
-                    { time: "12:20", event: "起飛返台 (CI155)", desc: "告別名古屋，滿載而歸。" }
+                    { time: "08:30", icon: "🧳", title: "退房與搭乘名鐵", desc: "帶上46kg戰利品，搭乘μ-SKY前往中部國際機場。" },
+                    { time: "10:00", icon: "🛂", title: "託運 & 機場午餐", desc: "完成CI155報到。在 4F Sky Town 美食街吃最後的日本美食。" },
+                    { time: "11:00", icon: "🛍️", title: "必買：蝦仙貝之里", desc: "體積大重量輕，不佔託運額度！買完準備登機。" },
+                    { time: "12:20", icon: "✈️", title: "起飛返台", desc: "滿載而歸，結束完美的名古屋美食與血拚之旅。" }
                 ]
             }
         ];
 
         let currentDayIndex = 0;
 
-        // === 渲染上方日期 Tab ===
-        function renderTabs() {
-            const tabsContainer = document.getElementById("day-tabs");
-            if (!tabsContainer) return;
+        function renderDayTabs() {
+            const tabsContainer = document.getElementById("dayTabs");
             tabsContainer.innerHTML = "";
-
-            itineraryData.forEach((data, index) => {
+            itineraryData.forEach((day, index) => {
+                const isSelected = index === currentDayIndex;
                 const btn = document.createElement("button");
-                btn.className = `flex-shrink-0 px-6 py-3 rounded-2xl font-bold text-sm transition-all duration-300 ${
-                    index === currentDayIndex
-                        ? "bg-stone-900 text-white shadow-lg scale-105"
-                        : "bg-stone-50 text-stone-500 hover:bg-stone-100 border border-stone-200"
+                btn.className = `flex-shrink-0 px-5 py-3 rounded-xl text-left transition-all duration-200 border-2 min-w-[110px] ${
+                    isSelected ? "bg-stone-900 border-stone-900 text-white shadow-md transform -translate-y-1" : "bg-white border-stone-200 text-stone-500 hover:border-stone-400"
                 }`;
-                btn.innerHTML = `${data.day}<span class="block text-[10px] font-normal opacity-60 mt-1">${data.date}</span>`;
-                btn.onclick = () => {
-                    currentDayIndex = index;
-                    renderTabs();
-                    renderContent();
-                };
+                btn.innerHTML = `<span class="block text-xs font-bold uppercase opacity-80">Day ${day.day}</span><span class="block text-sm font-bold truncate">${day.date}</span>`;
+                btn.onclick = () => { currentDayIndex = index; renderDayTabs(); renderItineraryContent(); };
                 tabsContainer.appendChild(btn);
             });
         }
 
-        // === 渲染下方行程內容 ===
-        function renderContent() {
-            const contentContainer = document.getElementById("itinerary-content");
-            if (!contentContainer) return;
+        function renderItineraryContent() {
+            const container = document.getElementById("itineraryContent");
             const data = itineraryData[currentDayIndex];
-
-            // 修正了 HTML 閉合標籤的邏輯
+            
             let html = `
-                <div class="p-8 md:p-10 animate-fade-in space-y-8">
-                    <div>
-                        <h3 class="text-2xl font-bold text-stone-900 mb-2">${data.title}</h3>
-                        <p class="text-stone-500 text-sm leading-relaxed">${data.summary}</p>
-                    </div>
-
-                    <div class="relative space-y-8 pl-8">
+                <div class="p-6 md:p-8 bg-stone-50 border-b border-stone-100 animate-fade-in">
+                    <h3 class="text-2xl font-bold text-stone-900 mb-2">${data.title}</h3>
+                    <span class="inline-flex items-center px-3 py-1 rounded-md text-xs font-bold bg-rose-100 text-rose-800">✨ 今日重點：${data.focus}</span>
+                </div>
+                <div class="p-6 md:p-8">
             `;
 
-            data.details.forEach((item, idx) => {
-                const isLast = idx === data.details.length - 1;
+            data.details.forEach((item, index) => {
+                const isLast = index === data.details.length - 1;
                 html += `
-                    <div class="relative">
-                        <!-- 時間軸線條 -->
-                        ${!isLast ? '<div class="absolute top-5 -bottom-8 w-[2px] bg-stone-200 z-0" style="left: -1.6rem;"></div>' : ''}
-                        
-                        <!-- 時間軸點點 -->
-                        <div class="absolute top-1 w-4 h-4 rounded-full bg-stone-900 ring-4 ring-white z-10" style="left: -2.1rem;"></div>
-                        
-                        <!-- 內容 -->
-                        <div class="space-y-1">
-                            <span class="text-xs font-mono font-bold text-rose-500">${item.time}</span>
-                            <h4 class="font-bold text-stone-800">${item.event}</h4>
-                            <p class="text-xs text-stone-500">${item.desc}</p>
+                    <div class="relative pl-14 pb-8 ${isLast ? 'last-item' : ''} animate-fade-in" style="animation-delay: ${index * 0.05}s">
+                        <div class="timeline-line"></div>
+                        <div class="absolute left-0 top-0 w-10 h-10 rounded-full bg-white border-2 border-stone-200 text-xl flex items-center justify-center z-10 shadow-sm">${item.icon}</div>
+                        <div>
+                            <div class="flex items-baseline gap-3 mb-1">
+                                <span class="font-bold text-rose-500 font-mono text-sm">${item.time}</span>
+                                <h4 class="font-bold text-stone-900">${item.title}</h4>
+                            </div>
+                            <p class="text-stone-600 text-sm leading-relaxed">${item.desc}</p>
                         </div>
                     </div>
                 `;
             });
-
-            html += `</div>`; // 關閉 timeline container
-
-            // 組裝底部卡片
-            const footerParts = [];
-            if (data.meals) {
-                footerParts.push(`
-                    <div class="space-y-2">
-                        <h4 class="font-bold text-stone-900 mb-2 flex items-center text-sm"><span class="mr-2">🍽️</span> 餐飲規劃</h4>
-                        <p class="text-stone-600 text-sm leading-relaxed">${data.meals}</p>
-                    </div>
-                `);
-            }
-            if (data.warnings) {
-                footerParts.push(`
-                    <div class="bg-orange-50 p-4 rounded-2xl border border-orange-100 h-full">
-                        <h4 class="font-bold text-orange-800 mb-2 flex items-center text-sm"><span class="mr-2">💡</span> 注意事項</h4>
-                        <p class="text-orange-700 text-sm">${data.warnings}</p>
-                    </div>
-                `);
-            }
-
-            // 如果有 footerParts 就加入
-            if (footerParts.length > 0) {
-                html += `
-                    <div class="border-t border-stone-100 pt-8 mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-                        ${footerParts.join('')}
-                    </div>
-                `;
-            }
-
-            html += `</div>`; // 關閉最外層 animate-fade-in
-
-            contentContainer.innerHTML = html;
+            container.innerHTML = html + `</div>`;
         }
 
-        // === 輔助功能 ===
-        function scrollToSection(id) {
-            document.getElementById(id).scrollIntoView({ behavior: "smooth" });
-        }
-
+        // === Utils ===
+        function scrollToSection(id) { document.getElementById(id).scrollIntoView({ behavior: "smooth" }); }
+        
         function copyAddress() {
             const address = "VIA INN 名古屋站前椿町\n\n〒453-0015 愛知県名古屋市中村区椿町7-23\nhttps://maps.app.goo.gl/yQ3q89xQYq89xQYq8";
-            const el = document.createElement("textarea");
-            el.value = address;
-            document.body.appendChild(el);
-            el.select();
-            document.execCommand("copy");
-            document.body.removeChild(el);
-            alert("✅ 飯店地址與地圖連結已複製！\n\n" + address);
+            const el = document.createElement("textarea"); el.value = address; document.body.appendChild(el);
+            el.select(); document.execCommand("copy"); document.body.removeChild(el);
+            alert("✅ 地址與地圖連結已複製！\n\n" + address);
         }
 
-        function scrollToTop() {
-            window.scrollTo({ top: 0, behavior: "smooth" });
-        }
+        const backBtn = document.getElementById("backToTop");
+        window.addEventListener("scroll", () => {
+            if (window.scrollY > 300) backBtn.classList.remove("opacity-0", "translate-y-10");
+            else backBtn.classList.add("opacity-0", "translate-y-10");
+        });
+        function scrollToTop() { window.scrollTo({ top: 0, behavior: "smooth" }); }
 
-        window.onscroll = function() {
-            const btn = document.getElementById("backToTop");
-            if (window.pageYOffset > 300) {
-                btn.classList.remove("opacity-0", "translate-y-10");
-            } else {
-                btn.classList.add("opacity-0", "translate-y-10");
-            }
-        };
-
-        // 確保 DOM 載入後才執行 JS，避免報錯
         document.addEventListener("DOMContentLoaded", () => {
-            renderTabs();
-            renderContent();
+            renderDayTabs();
+            renderItineraryContent();
         });
     </script>
 </body>

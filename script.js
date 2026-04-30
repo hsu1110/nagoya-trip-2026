@@ -4,28 +4,32 @@ const twdInput = document.getElementById("inputTWD");
 const jpyInput = document.getElementById("inputJPY");
 const displayRateText = document.getElementById("displayRateText");
 
+// 匯率方向：1 JPY = X TWD
 function updateCalc(source) {
   const rate = parseFloat(rateInput.value) || 0;
   displayRateText.innerText = rate;
 
-  if (source === "twd") {
-    const twd = parseFloat(twdInput.value);
-    if (!isNaN(twd)) {
-      jpyInput.value = (twd * rate).toFixed(0);
-    } else {
-      jpyInput.value = "";
-    }
-  } else if (source === "jpy") {
+  if (source === "jpy") {
+    // 輸入日幣 → 計算台幣
     const jpy = parseFloat(jpyInput.value);
     if (!isNaN(jpy)) {
-      twdInput.value = (jpy / rate).toFixed(0);
+      twdInput.value = (jpy * rate).toFixed(0);
     } else {
       twdInput.value = "";
     }
+  } else if (source === "twd") {
+    // 輸入台幣 → 計算日幣
+    const twd = parseFloat(twdInput.value);
+    if (!isNaN(twd) && rate > 0) {
+      jpyInput.value = (twd / rate).toFixed(0);
+    } else {
+      jpyInput.value = "";
+    }
   } else if (source === "rate") {
-    if (twdInput.value) {
-      const twd = parseFloat(twdInput.value);
-      jpyInput.value = (twd * rate).toFixed(0);
+    // 匯率變更時以日幣為伸手重新計算
+    if (jpyInput.value) {
+      const jpy = parseFloat(jpyInput.value);
+      twdInput.value = (jpy * rate).toFixed(0);
     }
   }
 }
@@ -34,114 +38,101 @@ if (rateInput) rateInput.addEventListener("input", () => updateCalc("rate"));
 if (twdInput) twdInput.addEventListener("input", () => updateCalc("twd"));
 if (jpyInput) jpyInput.addEventListener("input", () => updateCalc("jpy"));
 
-// --- DETAILED ITINERARY DATA ---
 const itineraryData = [
   {
-    day: 1,
-    date: "7/01 (三)",
+    day: 1, date: "7/01 (三)",
     title: "Day 1: 紅眼抵達，飛驒牛衝刺",
-    focus: "抵達名古屋、馬喰一代飛驒牛、麵家獅子丸",
+    focus: "馬喰一代飛驒牛、大須商店街、麵家獅子丸",
     logistics: "樂桃 MM722 (02:45 TPE ➔ 06:20 NGO)，名鐵 μ-SKY 至名古屋站（28 分鐘，1,250 日圓）",
     meals: "午餐：飛驒牛一頭家 馬喰一代（名古屋WEST店）商業午餐<br>晚餐：麵家 獅子丸（泡系拉麵）",
-    warnings: "紅眼航班體力消耗大，首日行程不宜過度緊湊，隨時保持彈性以便回飯店補眠。",
+    warnings: "紅眼班機體力負荷大，建議下午 15:00 準時回飯店 Check-in 休息。平日馬喰一代極易客滿，強烈建議出發前一個月上網預約！",
     details: [
-      { time: "06:20", icon: "🛬", title: "抵達中部國際機場 (NGO)", desc: "樂桃 MM722 降落。出關後搭名鐵 μ-SKY 特急直達名古屋站（約 28 分鐘）。" },
-      { time: "08:00", icon: "🏨", title: "VIA INN 寄放行李", desc: "Check-in 時間為 15:00，先至前台寄放行李，輕裝出發。" },
-      { time: "09:30", icon: "🏯", title: "大須商店街初探（可選）", desc: "若體力允許可至大須初步探勘地形，否則可在名古屋車站周邊的咖啡廳享用 Morning Service 休息。" },
-      { time: "12:00", icon: "🥩", title: "午餐：飛驒牛一頭家 馬喰一代", desc: "<strong>地點：</strong>名古屋WEST店。<br><strong>推薦：</strong>商業午餐套餐，性價比極高的飛驒牛體驗，比晚餐划算許多。" },
-      { time: "15:00", icon: "🛏️", title: "飯店 Check-in & 充電休息", desc: "辦理入住，補充紅眼班機消耗的體力。此為首日最重要的行程之一。" },
-      { time: "18:30", icon: "🍜", title: "晚餐：麵家 獅子丸", desc: "<strong>特色：</strong>名古屋超人氣「泡系拉麵」，湯頭濃厚綿密。<br><strong>位置：</strong>飯店附近步行可達，人氣高可能需稍候。" }
+      { time: "06:20", icon: "🛬", title: "抵達中部國際機場", desc: "樂桃 MM722 降落。搭名鐵 μ-SKY 特急直達名古屋站（約 28 分鐘）。" },
+      { time: "08:00", icon: "🏨", title: "VIA INN 寄放行李", desc: "先至飯店前台寄放行李，輕裝出發。" },
+      { time: "09:30", icon: "☕", title: "早餐：客美多咖啡", desc: "點咖啡送烤吐司與水煮蛋，<strong>必加小倉紅豆泥</strong>。名古屋特色 Morning Service 體驗。" },
+      { time: "11:00", icon: "🏯", title: "大須商店街初探", desc: "初步探勘地形，順逛古著、動漫週邊與各式特色小吃。" },
+      { time: "12:00", icon: "🥩", title: "午餐：馬喰一代 名古屋WEST", desc: "<strong>必吃：</strong>馬喰商業午餐、炙燒和牛握壽司。午間套餐約 3,000 日圓起，CP 值爆表。<strong>請務必事先預約！</strong>" },
+      { time: "15:00", icon: "🛏️", title: "飯店 Check-in 補眠", desc: "非常重要！恢復紅眼航班體力，為接下來五天蓄積能量。" },
+      { time: "17:00", icon: "🍜", title: "晚餐：麵家 獅子丸", desc: "洋風泡系白湯拉麵，<strong>無法預約，建議 17:00 前提早排隊！</strong>湯頭細緻綿密，名古屋必吃。" }
     ]
   },
   {
-    day: 2,
-    date: "7/02 (四)",
-    title: "Day 2: 走進動畫世界 — 吉卜力公園",
-    focus: "吉卜力大倉庫、園區限定紀念商品採購",
-    logistics: "名古屋市營地下鐵至藤が丘，轉乘東部丘陵線 Linimo 至「愛・地球博紀念公園」站",
-    meals: "午餐：園區內或周邊簡餐<br>晚餐：返回名古屋市區後彈性選擇",
-    warnings: "魔女之谷「茵茵狗」已確認停賣，不需要提早狂奔。但<strong>吉卜力大倉庫門票須提前於官網預購特定時段</strong>（目標 14:00 或 15:00 場次），請務必事先確認。",
+    day: 2, date: "7/02 (四)",
+    title: "Day 2: 吉卜力深度遊 ＆ 辛辣之夜",
+    focus: "吉卜力大倉庫、味仙台灣拉麵、山將炸雞翅",
+    logistics: "名古屋市營地下鐵至藤が丘，轉乘 Linimo 至愛・地球博紀念公園",
+    meals: "午餐：吉卜力園區周邊<br>晚餐：味仙 / 鯱輪（台灣拉麵）<br>宵夜：世界的山將炸雞翅",
+    warnings: "吉卜力大倉庫門票須提前於官網預購特定時段。園區步行量大，建議穿著舒適運動鞋。",
     details: [
-      { time: "09:30", icon: "☕", title: "市區悠閒早餐", desc: "今日門票時間充裕，可在名古屋市區享用名古屋特色的 Morning Service（點咖啡附贈厚片吐司）。" },
-      { time: "11:00", icon: "🚇", title: "出發前往吉卜力公園", desc: "搭乘市營地下鐵至藤が丘，轉乘 Linimo（磁浮列車）至愛・地球博紀念公園。<br><strong>費用：</strong>來回約 1,000 日圓。" },
-      { time: "12:00", icon: "🌿", title: "園區外圍散步 & 午餐", desc: "提早抵達，先於公園周邊覓食，保留體力準備下午入場。" },
-      { time: "14:00", icon: "🏠", title: "吉卜力大倉庫入場", desc: "<strong>重點區域：</strong>尼茲之家、貓咪巴士、電影場景復原區。<br><strong>提醒：</strong>標示不可拍照的展示區請遵守規定。" },
-      { time: "16:30", icon: "🛍️", title: "出口商店採購衝刺", desc: "限定紀念商品在出口商店選購，品項豐富，早點挑選避免缺貨。" },
-      { time: "18:00", icon: "🚋", title: "返回名古屋市區", desc: "搭乘 Linimo 返回藤が丘，轉地下鐵回市區享用晚餐。" }
+      { time: "09:00", icon: "☕", title: "早餐：客美多咖啡", desc: "點咖啡送烤吐司與水煮蛋，必加小倉紅豆泥。" },
+      { time: "10:30", icon: "🚇", title: "出發吉卜力公園", desc: "地下鐵東山線轉 Linimo 至愛・地球博紀念公園。" },
+      { time: "11:30", icon: "🌳", title: "動動力森林 & 魔女之谷", desc: "因無搶購壓力，悠閒順遊戶外免費園區，拍攝各類場景。" },
+      { time: "14:30", icon: "🏠", title: "吉卜力大倉庫", desc: "進入全室內展區，拍攝無臉男、貓巴士等經典場景。出口商店採購限定紀念品。" },
+      { time: "18:30", icon: "🌶️", title: "晚餐：味仙 / 鯱輪", desc: "返回榮商圈。吃大蒜辣椒爆炒的<strong>台灣拉麵</strong>補充鹽分！辛辣過癮，名古屋必吃。" },
+      { time: "21:30", icon: "🍗", title: "宵夜：世界的山將", desc: "外帶極度酥脆、胡椒嗆辣的<strong>炸雞翅手羽先</strong>回飯店。另一派風格可選「風來坊」（偏甜鹹白芝麻）。" }
     ]
   },
   {
-    day: 3,
-    date: "7/03 (五)",
-    title: "Day 3: 新幹線急行 — 京都古都巡禮",
-    focus: "清水寺、祇園、Yojiya 美妝、抹茶伴手禮",
+    day: 3, date: "7/03 (五)",
+    title: "Day 3: 京都反向錯峰一日遊",
+    focus: "伏見稻荷、清水寺、京都勝牛炸牛排",
     logistics: "東海道新幹線（名古屋 ➔ 京都，約 35 分鐘，自由席約 3,340 日圓）",
-    meals: "午餐：錦市場周邊小食<br>晚餐：視進度於京都或返回名古屋後用餐",
-    warnings: "京都夏季極為炎熱，步行時間長，務必做好防曬並隨時補充水分。需注意東海道新幹線末班車時間，<strong>建議最晚 19:00 前從京都出發</strong>返回名古屋。",
+    meals: "早餐：千壽炸蝦飯糰（車上）<br>午餐：清水順正 Okabe家 湯豆腐<br>下午：GOKAGO 抹茶拿鐵<br>晚餐：京都勝牛炸牛排",
+    warnings: "京都夏季炎熱，清晨出發可避開最高溫與人潮。建議最晚 19:00 前從京都出發返回名古屋。",
     details: [
-      { time: "07:30", icon: "🚄", title: "搭乘新幹線前往京都", desc: "從名古屋站搭乘東海道新幹線，約 35 分鐘即達京都站。建議購買自由席以節省費用。" },
-      { time: "09:00", icon: "⛩️", title: "清水寺參拜", desc: "搭乘市巴士至清水坂。<br><strong>路線：</strong>清水坂 → 清水寺正殿（舞台）→ 子安塔。<br><strong>提醒：</strong>早晨人潮相對少，適合拍照留念。" },
-      { time: "11:00", icon: "🏘️", title: "二年坂・三年坂漫步採買", desc: "沿古石板坂道漫步，兩旁有各式傳統工藝品、陶器、扇子。<br><strong>採買重點：</strong>抹茶製品（茶葉、茶點）、傳統工藝伴手禮。" },
-      { time: "13:00", icon: "🍢", title: "錦市場午餐掃食", desc: "「京都廚房」錦市場，邊散步邊品嚐各式京都小食：玉子燒、漬物、烤麻糬。" },
-      { time: "14:30", icon: "🌸", title: "祇園・花見小路散策", desc: "體驗古都氛圍，有機會目睹舞妓。沿花見小路漫步感受江戶風情。" },
-      { time: "16:00", icon: "💄", title: "Yojiya (優佳雅) 美妝採買", desc: "<strong>地點：</strong>祇園本店（推薦）或京都站店。<br><strong>必買：</strong>吸油面紙、潤膚面膜、臉部保養系列。" },
-      { time: "19:00", icon: "🚄", title: "搭乘新幹線返回名古屋", desc: "把握時間搭車返回，避免錯過末班車。回程在名古屋站地下街或飯店附近覓食。" }
+      { time: "07:30", icon: "🍙", title: "早餐：千壽炸蝦飯糰", desc: "在名古屋車站買好一口大小的<strong>炸蝦飯糰</strong>，搭乘新幹線（35分）當早餐。" },
+      { time: "08:30", icon: "⛩️", title: "伏見稻荷大社", desc: "<strong>趁清晨氣溫低且無人潮時攀爬千本鳥居。</strong>建議 08:30 前抵達，光線好且幾乎包場。" },
+      { time: "11:30", icon: "🏯", title: "清水寺 & 午餐", desc: "參拜後沿三年坂散步。午餐享用<strong>清水順正 Okabe家 湯豆腐</strong>定食，古樸庭園氛圍絕佳。" },
+      { time: "15:00", icon: "🍵", title: "GOKAGO 抹茶拿鐵", desc: "來杯現刷宇治<strong>抹茶拿鐵加冰淇淋</strong>消暑，漫步至祇園花見小路。順道選購 Yojiya 美妝。" },
+      { time: "17:30", icon: "🥩", title: "晚餐：京都勝牛", desc: "享用人氣<strong>炸牛排定食</strong>。和牛薄切、裹粉酥炸，搭配特製醬汁，附湯飯沙拉。隨後搭新幹線返回名古屋。" }
     ]
   },
   {
-    day: 4,
-    date: "7/04 (六)",
-    title: "Day 4: 戰力全開 — 名古屋重度血拚日",
-    focus: "高島屋、Gate Tower、榮商圈 Parco 三越、藥妝掃貨",
-    logistics: "名古屋市營地下鐵，建議購買一日乘車券（740 日圓）",
-    meals: "午/晚餐：百貨地下街美食或商場內餐廳，隨機應變以節省購物時間",
-    warnings: "善用飯店地理優勢，購買物品過多可先回飯店放置再出發。消費滿 5,000 日圓（未稅）即可辦理退稅，記得攜帶護照正本。",
+    day: 4, date: "7/04 (六)",
+    title: "Day 4: 長島 Outlet 爆買 ＆ 厚切牛舌",
+    focus: "三井 Outlet 46kg 發揮、矢場味噌豬排、和牛たんじ",
+    logistics: "名鐵巴士中心搭乘直達高速巴士前往「長島溫泉」（約 50 分鐘）",
+    meals: "早餐：Tsubame Bread 厚切生吐司<br>午餐：矢場味噌豬排（Outlet美食街）<br>晚餐：和牛たんじ 限時100分燒肉吃到飽",
+    warnings: "Outlet 巴士班次固定，建議先查詢回程時刻表。和牛たんじ 建議事先網路預約，避免等位。",
     details: [
-      { time: "10:00", icon: "🏬", title: "車站周邊：高島屋・Gate Tower", desc: "<strong>高島屋 B1-B2：</strong>名古屋最強地下美食街，各式甜點伴手禮首選。<br><strong>Gate Tower / JR Central Towers：</strong>日系服飾潮牌與精品雜貨。" },
-      { time: "13:00", icon: "🍱", title: "午餐休整", desc: "在百貨地下街選購午餐，補充體力的同時調整下午購物清單。" },
-      { time: "14:30", icon: "🚇", title: "移動至榮商圈", desc: "搭乘地下鐵東山線至榮站。<br><strong>戰鬥動線：</strong>Parco → 三越 → 松坂屋 → 名鐵百貨。" },
-      { time: "15:00", icon: "🛍️", title: "榮商圈全力掃蕩", desc: "<strong>Parco：</strong>潮流品牌、日系服飾。<br><strong>三越：</strong>高端品牌與精品食品。<br><strong>藥妝店：</strong>Matsumoto Kiyoshi、千里馬藥妝，補齊藥妝清單。" },
-      { time: "18:00", icon: "🏨", title: "返回飯店放置戰利品", desc: "利用飯店極佳地理位置，將戰利品卸貨，輕裝繼續二次出擊或享用晚餐。" }
+      { time: "09:00", icon: "🍞", title: "早餐：Tsubame Bread", desc: "<strong>香甜厚切生吐司</strong>配北海道發酵奶油，年輕人最愛，車站周邊可找到。" },
+      { time: "10:00", icon: "🚌", title: "前往長島三井 Outlet", desc: "名鐵巴士中心搭乘直達巴士（約 50 分鐘）。抵達後先下載地圖，鎖定目標品牌大採購。" },
+      { time: "13:30", icon: "🍱", title: "午餐：矢場味噌豬排", desc: "Outlet 美食街享用招牌<strong>草鞋特大豬排淋紅味噌醬</strong>，甜鹹濃郁，名古屋代表味。" },
+      { time: "17:00", icon: "🧳", title: "返回飯店卸貨", desc: "務必先將戰利品放回飯店，<strong>輕裝</strong>前往榮商圈，避免拿著大包包進燒肉店。" },
+      { time: "19:00", icon: "🔥", title: "晚餐：和牛たんじ", desc: "<strong>限時 100 分鐘！</strong>入座後集中火力狂點：厚切仙台牛舌、和牛炙燒大腹肉壽司。顛覆吃到飽想像。" }
     ]
   },
   {
-    day: 5,
-    date: "7/05 (日)",
-    title: "Day 5: Outlet 終極血拚與鰻魚飯盛宴",
-    focus: "三井 Outlet 爵士之夢長島、熱田蓬萊軒鰻魚飯三吃",
-    logistics: "名鐵巴士中心搭乘直達高速巴士前往「長島溫泉」（約 50 分鐘）。返回後搭地下鐵名城線至「神宮西」站（熱田蓬萊軒）",
-    meals: "午餐：Outlet 內美食街<br>晚餐：熱田蓬萊軒（ひつまぶし 鰻魚飯三吃）",
-    warnings: "Outlet 佔地廣大，建議先上網下載地圖並標記目標品牌。<strong>從 Outlet 回程時請注意時間掌控</strong>，熱田蓬萊軒需 16:30 前登記候位，今晚是旅程最後大餐！",
+    day: 5, date: "7/05 (日)",
+    title: "Day 5: 歷史老街與神級鰻魚飯",
+    focus: "犬山城下町、熱田蓬萊軒三吃、最後補貨",
+    logistics: "名鐵前往犬山城（約 30 分鐘），返回後地下鐵名城線至「神宮西」站（熱田蓬萊軒）",
+    meals: "早餐：喫茶 Riyon 熱壓吐司<br>午餐：犬山城下町 飛驒牛握壽司＋五平餅<br>晚餐：熱田蓬萊軒 鰻魚飯三吃",
+    warnings: "<strong>熱田蓬萊軒不接受事前預約！</strong>請在下午 15:30 左右先去排隊登記領取晚間「號碼牌」，再去逛熱田神宮。",
     details: [
-      { time: "09:00", icon: "🚌", title: "搭乘高速直達巴士至長島", desc: "從名鐵巴士中心搭乘直達「長島溫泉」的高速巴士，約 50 分鐘抵達。<br><strong>提醒：</strong>建議事先查好班次，避免等待時間過長。" },
-      { time: "10:00", icon: "🏷️", title: "三井 Outlet Park 爵士之夢長島", desc: "<strong>規模：</strong>日本最大級 Outlet，超過 300 家國內外知名品牌。<br><strong>戰略：</strong>事先標記目標品牌位置，有效率地掃蕩。<br><strong>必訪：</strong>國際精品、運動品牌（Nike、Adidas）、日系服飾。" },
-      { time: "13:00", icon: "🍱", title: "午餐：Outlet 內美食街", desc: "Outlet 內有豐富的餐飲選擇，邊休息邊補充體力，為下午的採購繼續衝刺。" },
-      { time: "15:30", icon: "🛍️", title: "最後衝刺 & 打包戰利品", desc: "確認行李重量，為 46kg 回程做最終規劃。將戰利品分裝整理，準備搭車返回市區。" },
-      { time: "16:00", icon: "🚌", title: "搭車返回名古屋市區", desc: "把握時間搭乘巴士返回，預留足夠時間前往熱田蓬萊軒登記候位。" },
-      { time: "16:30", icon: "🚇", title: "前往熱田蓬萊軒登記候位", desc: "<strong>地點：</strong>地下鐵名城線「神宮西」站附近。<br><strong>策略：</strong>提早登記，等待期間可步行至熱田神宮參拜。" },
-      { time: "18:30", icon: "🍣", title: "晚餐：熱田蓬萊軒 ひつまぶし", desc: "<strong>三吃順序：</strong>①原味品嚐 ②加薬味（芥末、海苔、蔥花）③加高湯茶泡飯。三種吃法各有風味，是名古屋最具代表性的美食體驗。" }
+      { time: "09:00", icon: "🥪", title: "早餐：喫茶 Riyon", desc: "買飲料送<strong>熱壓吐司</strong>，全天候提供。吃飽前往犬山。" },
+      { time: "10:30", icon: "🏯", title: "犬山城 & 老街午餐", desc: "參觀日本最古老天守閣。城下町邊走邊吃：<strong>犬山牛太郎 A5 飛驒牛握壽司</strong>、<strong>山田五平餅</strong>。" },
+      { time: "15:30", icon: "🎫", title: "熱田蓬萊軒抽號碼牌", desc: "<strong>極重要！</strong>先到神宮店門口登記拿晚上的號碼牌，再去逛神宮，完美抵銷排隊時間。" },
+      { time: "16:00", icon: "⛩️", title: "熱田神宮參拜", desc: "利用等位時間逛神宮，感受莊嚴氛圍，順道採買御守。" },
+      { time: "18:00", icon: "🍱", title: "晚餐：熱田蓬萊軒", desc: "<strong>150年歷史的神級鰻魚飯三吃：</strong>①原味 ②加薬味（芥末、海苔、蔥花）③加高湯茶泡飯。備長炭烤外脆內嫩。" },
+      { time: "20:30", icon: "🛒", title: "車站周邊最後補貨", desc: "SUGI藥局 / 唐吉訶德採買液體類等高重量物資，<strong>充分利用 46kg 額度！</strong>" }
     ]
   },
   {
-    day: 6,
-    date: "7/06 (一)",
-    title: "Day 6: 滿載而歸 — 機場最後採買",
-    focus: "桂新堂蝦餅、Royce 巧克力、CI 155 華航回程",
-    logistics: "名鐵特急至中部國際機場（37 分鐘，890 日圓）。航班：CI 155 (12:20 NGO ➔ 14:30 TPE)",
-    meals: "早餐：飯店或超商<br>午餐：機場內餐廳或機上餐點",
-    warnings: "請預留充足時間辦理行李託運（46kg 額度）。建議 09:30 前離開飯店，避免因購物導致包裝不及或行李超重。",
+    day: 6, date: "7/06 (一)",
+    title: "Day 6: 機場採買與滿載而歸",
+    focus: "桂新堂蝦仙貝、CI 155 華航回程",
+    logistics: "名鐵 μ-SKY 至中部國際機場（約 28 分鐘，1,250 日圓）。航班：CI 155 (12:20 NGO ➔ 14:30 TPE)",
+    meals: "早餐：超商<br>午餐：機場 4F Sky Town 美食街（最後日本美食）",
+    warnings: "請預留充足時間辦理 46kg 行李託運，建議 09:00 前離開飯店。蝦仙貝之里體積大重量輕，不佔託運額度！",
     details: [
-      { time: "08:00", icon: "🌅", title: "享用最後早餐", desc: "飯店早餐或附近超商，為漫長回程蓄積體力。" },
-      { time: "09:00", icon: "🧳", title: "辦理退房，整理行李", desc: "最終打包，確認 46kg 重量分配合理。貴重物品與換洗衣物放手提行李。" },
-      { time: "09:30", icon: "🚃", title: "搭乘名鐵前往中部國際機場", desc: "從名古屋站搭乘名鐵特急（890 日圓，約 37 分鐘）或 μ-SKY（1,250 日圓，約 28 分鐘）。" },
-      { time: "10:15", icon: "🛂", title: "CI 155 報到 & 行李託運", desc: "辦理登機手續，托運行李（最多 46kg）。完成後即可輕身前往免稅區最後衝刺。" },
-      { time: "10:45", icon: "🛒", title: "機場免稅最後衝刺", desc: "<strong>必買清單：</strong><br>• 桂新堂（蝦仙貝之里）機場限定蝦餅<br>• Royce 生巧克力（需冷藏，登機前最後購買）<br>• 名古屋地區限定零食伴手禮<br>• 免稅化妝品最後補貨" },
-      { time: "12:20", icon: "✈️", title: "起飛：CI 155 返回台北", desc: "帶著 46kg 的戰利品與滿滿回憶起飛！預計 14:30 抵達桃園機場，旅程圓滿結束。" }
+      { time: "08:30", icon: "🧳", title: "退房與搭乘名鐵", desc: "帶上 46kg 戰利品，搭乘名鐵 μ-SKY 前往中部國際機場。" },
+      { time: "10:00", icon: "🛂", title: "託運 & 機場美食", desc: "完成 CI155 報到，辦理託運後前往 <strong>4F Sky Town 美食街</strong>享用最後一頓日本美食。" },
+      { time: "11:00", icon: "🛍️", title: "必買：桂新堂 蝦仙貝之里", desc: "<strong>體積大重量輕，不佔託運額度！</strong>可放手提行李上機。另外別忘了 Royce 生巧克力（需冷藏）。" },
+      { time: "12:20", icon: "✈️", title: "起飛返台 CI 155", desc: "滿載而歸，結束完美的名古屋美食與血拚之旅！預計 14:30 抵達桃園機場。" }
     ]
   }
 ];
-
-// Chart.js Configuration
 
 // Itinerary Rendering Logic
 let currentDayIndex = 0;
