@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026 名古屋自由行：吉卜力、飛驒牛、爆買全攻略</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: "Noto Sans TC", sans-serif;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        /* 隱藏數字輸入框的上下箭頭 */
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        input[type="number"] {
+            -moz-appearance: textfield;
+            appearance: textfield;
+        }
+        /* 淡入動畫 */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+    </style>
+</head>
+<body class="bg-stone-50 text-stone-800 antialiased selection:bg-rose-200 selection:text-rose-900">
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-stone-50/90 backdrop-blur-md border-b border-stone-200 shadow-sm">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex-shrink-0 flex items-center gap-2">
+                    <span class="text-2xl">🇯🇵</span>
+                    <span class="font-bold tracking-tight text-stone-900">NAGOYA 2026</span>
+                </div>
+                <div class="hidden md:flex space-x-8 text-sm font-medium">
+                    <a href="javascript:void(0)" onclick="scrollToSection('overview')" class="text-stone-600 hover:text-rose-600 transition-colors">行程概覽</a>
+                    <a href="javascript:void(0)" onclick="scrollToSection('calculator')" class="text-stone-600 hover:text-rose-600 transition-colors">匯率計算</a>
+                    <a href="javascript:void(0)" onclick="scrollToSection('itinerary')" class="text-stone-600 hover:text-rose-600 transition-colors">每日明細</a>
+                    <a href="javascript:void(0)" onclick="scrollToSection('prep')" class="text-stone-600 hover:text-rose-600 transition-colors">行前準備</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-20">
+        
+        <!-- Hero Section -->
+        <section id="overview" class="text-center space-y-6 py-10 animate-fade-in">
+            <div class="inline-block px-4 py-1.5 bg-rose-50 text-rose-600 text-xs font-bold tracking-widest uppercase rounded-full mb-4">Summer Trip 2026</div>
+            <h1 class="text-4xl md:text-5xl font-bold text-stone-900 leading-tight">名古屋・京都六日遊<br><span class="text-rose-600">行程與血拚指南</span></h1>
+            <p class="text-stone-500 max-w-2xl mx-auto leading-relaxed">
+                結合吉卜力幻想世界、頂級飛驒牛饗宴，以及 46kg 額度的爆買之旅。這是一份專為追求效率與美食的旅人設計的互動指南。
+            </p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-8">
+                <div class="p-6 bg-white rounded-3xl shadow-sm border border-stone-100">
+                    <div class="text-2xl mb-2">✈️</div>
+                    <div class="text-xs text-stone-400 font-bold uppercase tracking-wider mb-1">Flights</div>
+                    <div class="font-bold text-stone-800">樂桃 MM722 / 華航 CI155</div>
+                </div>
+                <div class="p-6 bg-white rounded-3xl shadow-sm border border-stone-100 relative group cursor-pointer" onclick="copyAddress()">
+                    <div class="text-2xl mb-2">🏨</div>
+                    <div class="text-xs text-stone-400 font-bold uppercase tracking-wider mb-1">Stay</div>
+                    <div class="font-bold text-stone-800">VIA INN 名古屋站前椿町</div>
+                    <div class="absolute inset-0 bg-stone-900/5 opacity-0 group-hover:opacity-100 transition-opacity rounded-3xl flex items-center justify-center">
+                        <span class="text-xs font-bold text-stone-600">點擊複製地址</span>
+                    </div>
+                </div>
+                <div class="p-6 bg-white rounded-3xl shadow-sm border border-stone-100">
+                    <div class="text-2xl mb-2">🧳</div>
+                    <div class="text-xs text-stone-400 font-bold uppercase tracking-wider mb-1">Luggage</div>
+                    <div class="font-bold text-rose-600">回程 46kg 爆買額度</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Calculator Section -->
+        <section id="calculator" class="bg-stone-900 rounded-[2.5rem] p-8 md:p-12 text-white shadow-2xl">
+            <div class="flex flex-col md:flex-row gap-12 items-center">
+                <div class="flex-1 space-y-6 w-full">
+                    <h2 class="text-3xl font-bold">即時匯率換算</h2>
+                    <p class="text-stone-400">目前匯率設定：1 TWD = <span id="displayRateText" class="text-white font-mono">4.7</span> JPY</p>
+                    <div class="space-y-4">
+                        <div class="flex items-center gap-4 bg-white/5 p-2 rounded-2xl border border-white/10">
+                            <span class="w-12 text-center font-bold text-stone-500">TWD</span>
+                            <input type="number" id="inputTWD" placeholder="輸入台幣" class="bg-transparent border-none focus:ring-0 text-xl w-full text-white placeholder:text-stone-600 outline-none">
+                        </div>
+                        <div class="flex items-center gap-4 bg-white/5 p-2 rounded-2xl border border-white/10">
+                            <span class="w-12 text-center font-bold text-stone-500">JPY</span>
+                            <input type="number" id="inputJPY" placeholder="輸入日幣" class="bg-transparent border-none focus:ring-0 text-xl w-full text-white placeholder:text-stone-600 outline-none">
+                        </div>
+                    </div>
+                </div>
+                <div class="w-px h-32 bg-white/10 hidden md:block"></div>
+                <div class="w-full md:w-48 space-y-4">
+                    <label class="text-xs font-bold text-stone-500 uppercase">自定義匯率</label>
+                    <input type="number" id="exchangeRate" value="4.7" step="0.01" class="bg-white/5 border border-white/10 rounded-xl p-3 w-full text-center text-rose-400 font-mono text-lg focus:border-rose-500 outline-none transition-colors">
+                </div>
+            </div>
+        </section>
+
+        <!-- Itinerary Section -->
+        <section id="itinerary" class="space-y-8">
+            <div class="flex justify-between items-end">
+                <div>
+                    <h2 class="text-3xl font-bold text-stone-900">每日行程明細</h2>
+                    <p class="text-stone-500 mt-2">點擊日期切換當日動線</p>
+                </div>
+            </div>
+
+            <div class="flex gap-2 overflow-x-auto pb-4 hide-scrollbar" id="day-tabs"></div>
+            
+            <div id="itinerary-content" class="bg-white rounded-[2.5rem] shadow-sm border border-stone-100 overflow-hidden min-h-[400px]">
+                <!-- JS 會將行程渲染在這裡 -->
+            </div>
+        </section>
+
+        <!-- Preparation Section -->
+        <section id="prep" class="space-y-6 pb-20">
+            <h2 class="text-2xl font-bold text-stone-900">行前注意事項</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="flex items-start gap-4 p-5 bg-white rounded-2xl shadow-sm border border-stone-100 hover:border-stone-200 transition-colors">
+                    <div class="text-3xl bg-stone-50 p-2 rounded-xl">☀️</div>
+                    <div>
+                        <h4 class="font-bold text-stone-900">七月天氣</h4>
+                        <p class="text-sm text-stone-600 mt-1">非常炎熱且潮濕 (25°C - 33°C)。建議穿著透氣排汗衣物，並隨身攜帶雨具（午後雷陣雨或梅雨季尾端）。</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-4 p-5 bg-white rounded-2xl shadow-sm border border-stone-100 hover:border-stone-200 transition-colors">
+                    <div class="text-3xl bg-stone-50 p-2 rounded-xl">💰</div>
+                    <div>
+                        <h4 class="font-bold text-stone-900">退稅 Tax Refund</h4>
+                        <p class="text-sm text-stone-600 mt-1">大部分店家消費滿 5,000 日圓 (未稅) 即可退稅。結帳時請主動出示護照正本。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-stone-50 border-t border-stone-200 py-8 text-center text-sm text-stone-400">
+        <p>© 2026 Nagoya Efficient Travel Planner. </p>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button id="backToTop" onclick="scrollToTop()" class="fixed bottom-8 right-8 bg-rose-600 text-white p-4 rounded-2xl shadow-xl opacity-0 translate-y-10 transition-all duration-500 hover:bg-rose-700 active:scale-95 z-50">
+        <span class="block transform -rotate-90 font-bold">→</span>
+    </button>
+
+    <script>
+        // === 匯率計算機邏輯 ===
+        const rateInput = document.getElementById("exchangeRate");
+        const twdInput = document.getElementById("inputTWD");
+        const jpyInput = document.getElementById("inputJPY"); // 修正：確保 ID 對應正確，解決當機問題
+        const displayRateText = document.getElementById("displayRateText");
+
+        function updateCalc(source) {
+            const rate = parseFloat(rateInput.value) || 0;
+            displayRateText.innerText = rate;
+
+            if (source === "twd") {
+                const twd = parseFloat(twdInput.value);
+                if (!isNaN(twd)) {
+                    jpyInput.value = (twd * rate).toFixed(0);
+                } else {
+                    jpyInput.value = "";
+                }
+            } else if (source === "jpy") {
+                const jpy = parseFloat(jpyInput.value);
+                if (!isNaN(jpy)) {
+                    twdInput.value = (jpy / rate).toFixed(0);
+                } else {
+                    twdInput.value = "";
+                }
+            } else if (source === "rate") {
+                if (twdInput.value) {
+                    const twd = parseFloat(twdInput.value);
+                    jpyInput.value = (twd * rate).toFixed(0);
+                }
+            }
+        }
+
+        // 加入保護機制確保元素存在才綁定事件
+        if (rateInput) rateInput.addEventListener("input", () => updateCalc("rate"));
+        if (twdInput) twdInput.addEventListener("input", () => updateCalc("twd"));
+        if (jpyInput) jpyInput.addEventListener("input", () => updateCalc("jpy"));
+
+        // === 行程資料庫 ===
+        const itineraryData = [
+            {
+                day: "Day 1",
+                date: "7/1 (Wed)",
+                title: "紅眼抵達與頂級飛驒牛",
+                summary: "樂桃 06:20 抵達名古屋。第一天主打快速入關、寄放行李並享用重頭戲午餐。",
+                meals: "午餐：飛驒牛一頭家 馬喰一代<br>晚餐：麵家 獅子丸 (泡系拉麵)",
+                warnings: "紅眼班機體力負荷大，建議下午 15:00 準時回飯店 Check-in 休息。",
+                details: [
+                    { time: "06:20", event: "抵達中部國際機場 (NGO)", desc: "預計 07:30 完成出關，搭乘名鐵特急前往名古屋站。" },
+                    { time: "08:30", event: "VIA INN 寄放行李", desc: "飯店位於新幹線口，過馬路即可抵達。" },
+                    { time: "11:30", event: "馬喰一代 名古屋WEST", desc: "預約首日午餐，享用高 CP 值飛驒牛燒肉套餐。" },
+                    { time: "15:00", event: "Check-in 補眠", desc: "第一天不排緊湊行程，體力優先。" },
+                    { time: "19:00", event: "麵家 獅子丸", desc: "飯店後方的排隊名店，細緻的泡沫拉麵。" }
+                ]
+            },
+            {
+                day: "Day 2",
+                date: "7/2 (Thu)",
+                title: "吉卜力公園：進入動畫世界",
+                summary: "全日吉卜力公園行程。因茵茵狗停賣無需早起排隊，14:00 進入大倉庫即可。",
+                meals: "午餐：園區輕食<br>晚餐：味仙 (台灣拉麵) 或彈性安排",
+                warnings: "園區內步行量大，建議穿著舒適運動鞋。大倉庫門票須對應場次入場。",
+                details: [
+                    { time: "10:00", event: "出發吉卜力公園", desc: "搭乘地下鐵東山線轉 Linimo 線。" },
+                    { time: "11:00", event: "戶外展區漫步", desc: "逛免門票區域、紀念品店與建築拍照。" },
+                    { time: "14:00", event: "吉卜力大倉庫", desc: "核心展區，含經典電影場景與特展。" },
+                    { time: "19:30", event: "市區晚餐", desc: "可回市區享用味仙台灣拉麵或其他美食。" }
+                ]
+            },
+            {
+                day: "Day 3",
+                date: "7/3 (Fri)",
+                title: "京都快閃：古都巡禮",
+                summary: "利用新幹線極速往返京都。走訪清水寺並採買抹茶與 Yojiya。",
+                meals: "午餐：京都當地簡餐<br>晚餐：名古屋車站百貨美食",
+                warnings: "京都夏季炎熱，清晨出發可避開最高溫與人潮。",
+                details: [
+                    { time: "08:00", event: "搭乘新幹線", desc: "名古屋至京都僅需 35 分鐘。" },
+                    { time: "09:30", event: "抵達京都站", desc: "轉乘市區交通前往東山區。" },
+                    { time: "11:00", event: "清水寺區域", desc: "清水寺參拜後，漫步二年坂、三年坂採購伴手禮。" },
+                    { time: "17:30", event: "返回名古屋", desc: "搭乘新幹線回飯店，方便放置京都戰利品。" }
+                ]
+            },
+            {
+                day: "Day 4",
+                date: "7/4 (Sat)",
+                title: "名古屋市區：爆買日與厚切牛舌",
+                summary: "榮商圈與車站百貨全日購物。晚上享用超高評價牛舌。",
+                meals: "午餐：百貨地下街<br>晚餐：和牛たんじ (厚切牛舌)",
+                warnings: "今日為重度消費日，利用 46kg 額度，大型物品可先送回飯店。",
+                details: [
+                    { time: "10:00", event: "榮商圈血拚", desc: "PARCO、三越、松坂屋、Don Quijote。" },
+                    { time: "14:00", event: "名古屋車站周邊", desc: "高島屋、Gate Tower、Bic Camera。" },
+                    { time: "19:30", event: "和牛たんじ 名古屋榮錦店", desc: "預約制厚切牛舌吃到飽，享受飛驒牛與極厚牛舌。" }
+                ]
+            },
+            {
+                day: "Day 5",
+                date: "7/5 (Sun)",
+                title: "長島 Outlet 與鰻魚飯三吃",
+                summary: "上午前往長島 Outlet 最後補貨，晚上以名古屋名物鰻魚飯完美收尾。",
+                meals: "午餐：Outlet 美食街<br>晚餐：熱田蓬萊軒",
+                warnings: "Outlet 巴士班次固定，建議先查詢回程時刻表。蓬萊軒需現場領號碼牌。",
+                details: [
+                    { time: "09:30", event: "前往長島 Outlet", desc: "名古屋巴士中心搭乘直達高速巴士（約 50 分鐘）。" },
+                    { time: "10:30", event: "三井 Outlet Park", desc: "日本最大級 Outlet，超過 300 家店鋪，鎖定精品與運動品牌填滿行李。" },
+                    { time: "17:00", event: "返回名古屋", desc: "搭車返回市區，並前往熱田神宮周邊。" },
+                    { time: "18:30", event: "熱田蓬萊軒", desc: "品嚐最正宗的名古屋鰻魚飯三吃。" }
+                ]
+            },
+            {
+                day: "Day 6",
+                date: "7/6 (Mon)",
+                title: "機場最後衝刺與返台",
+                summary: "中午班機，提早至機場購買桂新堂與蝦仙貝。",
+                meals: "早餐：飯店或超商<br>午餐：機上餐飲",
+                warnings: "機場免稅店人潮眾多，建議預留充足登機與託運時間。",
+                details: [
+                    { time: "09:00", event: "退房與搭乘名鐵", desc: "帶上 46kg 戰利品，從名古屋站前往中部國際機場。" },
+                    { time: "10:00", event: "機場最後採買", desc: "購買蝦仙貝之里、桂新堂、Royce 巧克力等免稅伴手禮。" },
+                    { time: "12:20", event: "起飛返台 (CI155)", desc: "告別名古屋，滿載而歸。" }
+                ]
+            }
+        ];
+
+        let currentDayIndex = 0;
+
+        // === 渲染上方日期 Tab ===
+        function renderTabs() {
+            const tabsContainer = document.getElementById("day-tabs");
+            if (!tabsContainer) return;
+            tabsContainer.innerHTML = "";
+
+            itineraryData.forEach((data, index) => {
+                const btn = document.createElement("button");
+                btn.className = `flex-shrink-0 px-6 py-3 rounded-2xl font-bold text-sm transition-all duration-300 ${
+                    index === currentDayIndex
+                        ? "bg-stone-900 text-white shadow-lg scale-105"
+                        : "bg-stone-50 text-stone-500 hover:bg-stone-100 border border-stone-200"
+                }`;
+                btn.innerHTML = `${data.day}<span class="block text-[10px] font-normal opacity-60 mt-1">${data.date}</span>`;
+                btn.onclick = () => {
+                    currentDayIndex = index;
+                    renderTabs();
+                    renderContent();
+                };
+                tabsContainer.appendChild(btn);
+            });
+        }
+
+        // === 渲染下方行程內容 ===
+        function renderContent() {
+            const contentContainer = document.getElementById("itinerary-content");
+            if (!contentContainer) return;
+            const data = itineraryData[currentDayIndex];
+
+            // 修正了 HTML 閉合標籤的邏輯
+            let html = `
+                <div class="p-8 md:p-10 animate-fade-in space-y-8">
+                    <div>
+                        <h3 class="text-2xl font-bold text-stone-900 mb-2">${data.title}</h3>
+                        <p class="text-stone-500 text-sm leading-relaxed">${data.summary}</p>
+                    </div>
+
+                    <div class="relative space-y-8 pl-8">
+            `;
+
+            data.details.forEach((item, idx) => {
+                const isLast = idx === data.details.length - 1;
+                html += `
+                    <div class="relative">
+                        <!-- 時間軸線條 -->
+                        ${!isLast ? '<div class="absolute top-5 -bottom-8 w-[2px] bg-stone-200 z-0" style="left: -1.6rem;"></div>' : ''}
+                        
+                        <!-- 時間軸點點 -->
+                        <div class="absolute top-1 w-4 h-4 rounded-full bg-stone-900 ring-4 ring-white z-10" style="left: -2.1rem;"></div>
+                        
+                        <!-- 內容 -->
+                        <div class="space-y-1">
+                            <span class="text-xs font-mono font-bold text-rose-500">${item.time}</span>
+                            <h4 class="font-bold text-stone-800">${item.event}</h4>
+                            <p class="text-xs text-stone-500">${item.desc}</p>
+                        </div>
+                    </div>
+                `;
+            });
+
+            html += `</div>`; // 關閉 timeline container
+
+            // 組裝底部卡片
+            const footerParts = [];
+            if (data.meals) {
+                footerParts.push(`
+                    <div class="space-y-2">
+                        <h4 class="font-bold text-stone-900 mb-2 flex items-center text-sm"><span class="mr-2">🍽️</span> 餐飲規劃</h4>
+                        <p class="text-stone-600 text-sm leading-relaxed">${data.meals}</p>
+                    </div>
+                `);
+            }
+            if (data.warnings) {
+                footerParts.push(`
+                    <div class="bg-orange-50 p-4 rounded-2xl border border-orange-100 h-full">
+                        <h4 class="font-bold text-orange-800 mb-2 flex items-center text-sm"><span class="mr-2">💡</span> 注意事項</h4>
+                        <p class="text-orange-700 text-sm">${data.warnings}</p>
+                    </div>
+                `);
+            }
+
+            // 如果有 footerParts 就加入
+            if (footerParts.length > 0) {
+                html += `
+                    <div class="border-t border-stone-100 pt-8 mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+                        ${footerParts.join('')}
+                    </div>
+                `;
+            }
+
+            html += `</div>`; // 關閉最外層 animate-fade-in
+
+            contentContainer.innerHTML = html;
+        }
+
+        // === 輔助功能 ===
+        function scrollToSection(id) {
+            document.getElementById(id).scrollIntoView({ behavior: "smooth" });
+        }
+
+        function copyAddress() {
+            const address = "VIA INN 名古屋站前椿町\n\n〒453-0015 愛知県名古屋市中村区椿町7-23\nhttps://maps.app.goo.gl/yQ3q89xQYq89xQYq8";
+            const el = document.createElement("textarea");
+            el.value = address;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand("copy");
+            document.body.removeChild(el);
+            alert("✅ 飯店地址與地圖連結已複製！\n\n" + address);
+        }
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+
+        window.onscroll = function() {
+            const btn = document.getElementById("backToTop");
+            if (window.pageYOffset > 300) {
+                btn.classList.remove("opacity-0", "translate-y-10");
+            } else {
+                btn.classList.add("opacity-0", "translate-y-10");
+            }
+        };
+
+        // 確保 DOM 載入後才執行 JS，避免報錯
+        document.addEventListener("DOMContentLoaded", () => {
+            renderTabs();
+            renderContent();
+        });
+    </script>
+</body>
+</html>

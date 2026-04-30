@@ -1,0 +1,46 @@
+body {
+  font-family: "Noto Sans TC", sans-serif;
+}
+.chart-container {
+  position: relative;
+  width: 100%;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  height: 300px;
+  max-height: 400px;
+}
+@media (min-width: 768px) {
+  .chart-container {
+    height: 350px;
+  }
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+/* Hide number input arrows */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+.timeline-line {
+  position: absolute;
+  left: 1.6rem;
+  top: 1rem;
+  bottom: -1rem;
+  width: 2px;
+  background-color: #e5e7eb;
+  z-index: 0;
+}
+.last-item .timeline-line {
+  display: none;
+}
