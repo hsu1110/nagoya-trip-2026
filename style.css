@@ -44,3 +44,9 @@ input[type="number"] {
 .last-item .timeline-line {
   display: none;
 }
+.active-filter {
+  background-color: #f43f5e !important;
+  color: white !important;
+  border-color: #f43f5e !important;
+  box-shadow: 0 4px 6px -1px rgba(244, 63, 94, 0.2);
+}
