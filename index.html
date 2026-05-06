@@ -78,86 +78,47 @@
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 class="text-2xl font-bold text-stone-900 mb-6 flex items-center">
                 <span class="bg-blue-100 text-blue-600 p-2 rounded-lg mr-3 text-xl">🛫</span>
-                航班與 VIA INN 交通攻略
+                交通與住宿攻略
             </h2>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-                <!-- Inbound: NGO -> Hotel -->
-                <div>
-                    <h3 class="text-lg font-bold text-stone-800 mb-4 flex items-center">
-                        <span class="bg-blue-500 text-white text-xs px-2 py-1 rounded mr-2">去程</span>
-                        中部國際機場 (NGO) ➜ 住宿
+            <div class="flex flex-col gap-6">
+                <!-- Transportation -->
+                <div class="bg-blue-50 border border-blue-100 rounded-2xl p-6 hover:shadow-md transition-shadow">
+                    <h3 class="text-lg font-bold text-blue-900 mb-4 flex items-center">
+                        <span class="text-2xl mr-2">🚆</span> 機場 ⇄ 市區交通方式
                     </h3>
-                    <div class="space-y-4">
-                        <!-- Option 1: mu-SKY -->
-                        <div class="border border-blue-200 bg-blue-50 rounded-xl p-5 relative overflow-hidden transition-all hover:shadow-md">
-                            <div class="absolute top-0 right-0 bg-blue-500 text-white text-xs px-2 py-1 rounded-bl-lg">最速推薦</div>
-                            <h4 class="font-bold text-blue-900 mb-2 flex items-center gap-2">🚄 名鐵 μ-SKY 特急 <span class="text-xs font-normal text-blue-600 bg-blue-100 px-2 py-0.5 rounded-full">直達</span></h4>
-                            <ul class="text-sm text-stone-600 space-y-1">
-                                <li><strong>費用：</strong>1,250 日圓 (含指定席券)</li>
-                                <li><strong>時間：</strong>約 28-35 分鐘</li>
-                                <li><strong>搭乘：</strong>名鐵中部國際機場站 ➜ 名古屋站</li>
-                                <li><strong>優點：</strong>最快進入市區，全車對號座。</li>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-white rounded-xl p-5 border border-blue-50 shadow-sm relative overflow-hidden hover:border-blue-200 transition-all">
+                            <div class="absolute top-0 right-0 bg-blue-500 text-white text-xs px-3 py-1 rounded-bl-lg font-bold tracking-wider">去程</div>
+                            <h4 class="font-bold text-stone-800 mb-3 mt-1 text-base md:text-lg">🚄 預計搭乘：名鐵 μ-SKY 特急</h4>
+                            <ul class="text-sm text-stone-600 space-y-2">
+                                <li>💰 <strong>費用：1,250 日圓 (含指定席券)</strong></li>
+                                <li>⏱️ <strong>時間：約 28-35 分鐘</strong></li>
+                                <li>📍 <strong>搭乘：名鐵中部國際機場站 ➜ 名古屋站</strong></li>
                             </ul>
                         </div>
-                        <!-- Option 2: Meitetsu Limited Express -->
-                        <div class="border border-stone-200 rounded-xl p-5 hover:border-stone-300 transition-all">
-                            <h4 class="font-bold text-stone-800 mb-2">🚃 名鐵特急 (一般車廂)</h4>
-                            <ul class="text-sm text-stone-600 space-y-1">
-                                <li><strong>費用：</strong>890 日圓</li>
-                                <li><strong>時間：</strong>約 37 分鐘</li>
-                                <li><strong>備註：</strong>一般車廂不需特急券，但可能沒位置。</li>
+                        <div class="bg-white rounded-xl p-5 border border-blue-50 shadow-sm relative overflow-hidden hover:border-blue-200 transition-all">
+                            <div class="absolute top-0 right-0 bg-rose-500 text-white text-xs px-3 py-1 rounded-bl-lg font-bold tracking-wider">回程</div>
+                            <h4 class="font-bold text-stone-800 mb-3 mt-1 text-base md:text-lg">🚄 預計搭乘：名鐵 μ-SKY 特急</h4>
+                            <ul class="text-sm text-stone-600 space-y-2">
+                                <li>💰 <strong>費用：1,250 日圓 (含指定席券)</strong></li>
+                                <li>⏱️ <strong>時間：約 28-35 分鐘</strong></li>
+                                <li>📍 <strong>搭乘：名鐵名古屋站 ➜ 名鐵中部國際機場站</strong></li>
                             </ul>
                         </div>
                     </div>
                 </div>
 
-                <!-- Outbound: Hotel -> NGO -->
-                <div>
-                    <h3 class="text-lg font-bold text-stone-800 mb-4 flex items-center">
-                        <span class="bg-rose-500 text-white text-xs px-2 py-1 rounded mr-2">回程</span>
-                        住宿 ➜ 中部國際機場 (NGO)
-                    </h3>
-                    <div class="space-y-4">
-                        <!-- Highlight: Luggage -->
-                        <div class="border border-rose-200 bg-rose-50 rounded-xl p-5 relative overflow-hidden transition-all hover:shadow-md">
-                            <div class="absolute top-0 right-0 bg-rose-500 text-white text-xs px-2 py-1 rounded-bl-lg">行李無敵</div>
-                            <h4 class="font-bold text-rose-900 mb-2 flex items-center gap-2">🛍️ 華航 CI 155 <span class="text-xs font-normal text-rose-600 bg-rose-100 px-2 py-0.5 rounded-full">46kg</span></h4>
-                            <ul class="text-sm text-stone-600 space-y-1">
-                                <li><strong>託運：</strong>2 件 23kg (總計 46kg)</li>
-                                <li><strong>時間：</strong>12:20 起飛 (建議 09:30 出發)</li>
-                                <li><strong>任務：</strong>把握時間在機場採買「蝦仙貝之里」。</li>
-                            </ul>
-                        </div>
-                        <!-- Option 1: mu-SKY -->
-                        <div class="border border-stone-200 rounded-xl p-5 hover:border-stone-300 transition-all">
-                            <h4 class="font-bold text-stone-800 mb-2">🚄 名鐵 μ-SKY 特急</h4>
-                            <ul class="text-sm text-stone-600 space-y-1">
-                                <li><strong>費用：</strong>1,250 日圓</li>
-                                <li><strong>優點：</strong>穩定準時，推薦大行李乘客。</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bg-stone-50 border border-stone-200 rounded-2xl p-6">
-                <div class="flex flex-col md:flex-row gap-6 items-start">
-                    <div class="flex-1">
-                        <h3 class="text-lg font-bold text-stone-900 mb-3">🏨 VIA INN 名古屋站前椿町</h3>
-                        <p class="text-sm text-stone-500 mb-3">新幹線口（太閤通口）步行可達，近 ESCA 地下街。</p>
-                        <button onclick="copyAddress()" class="w-full sm:w-auto bg-stone-800 hover:bg-stone-700 text-white px-4 py-2 rounded-lg text-sm transition flex items-center justify-center gap-2">
-                            <span>📋</span> 複製日文地址與地圖連結
+                <!-- Accommodation -->
+                <div class="bg-stone-50 border border-stone-200 rounded-2xl p-6 hover:shadow-md transition-shadow">
+                    <div class="flex items-center flex-wrap gap-2 mb-2">
+                        <h3 class="text-xl font-bold text-stone-900">🏨 VIA INN 名古屋站前椿町</h3>
+                        <button onclick="openModal(db.find(x => x.id === 48))" class="text-xs bg-rose-50 text-rose-600 border border-rose-200 px-2 py-1 rounded-md hover:bg-rose-100 transition-all shadow-sm">
+                            <i class="fa-solid fa-map-location-dot mr-1 rounded-full"></i>查看地圖
                         </button>
                     </div>
-                    <div class="flex-1 border-t md:border-t-0 md:border-l border-stone-200 pt-4 md:pt-0 md:pl-6">
-                        <h3 class="text-lg font-bold text-stone-900 mb-3">💡 交通小貼士</h3>
-                        <ul class="space-y-2 text-sm text-stone-600">
-                            <li class="flex gap-2"><span class="text-xl">☕</span> <div><strong>Morning Service</strong>：名古屋特色，點咖啡送吐司。</div></li>
-                            <li class="flex gap-2"><span class="text-xl">💳</span> <div><strong>IC 卡 (Suica/ICOCA)</strong>：交通與超商支付必備，手機可儲值。</div></li>
-                            <li class="flex gap-2"><span class="text-xl">📱</span> <div><strong>Google Maps</strong>：日本導航首選，轉乘資訊非常準確。</div></li>
-                        </ul>
-                    </div>
+                    <p class="text-sm text-stone-600 mb-1">新幹線口（太閤通口）步行 5 分鐘，近 ESCA 地下街。</p>
+                    <p class="text-sm text-stone-500">本次旅程的大本營，鄰近車站與 Bic Camera，採買與回程卸貨極為方便。</p>
                 </div>
             </div>
         </div>
@@ -208,34 +169,34 @@
                     <div class="flex flex-col gap-3 md:gap-4 items-center w-full">
                         <!-- North -->
                         <div class="w-full flex justify-center">
-                            <button onclick="filterByArea('犬山區')" class="map-btn bg-orange-50 text-orange-700 border border-orange-200 hover:bg-orange-100 px-3 py-2 rounded-xl text-sm font-bold shadow-sm backdrop-blur-sm"><i class="fa-solid fa-landmark mr-1 text-orange-500"></i>犬山區 (北)</button>
+                            <button onclick="filterByArea('犬山區')" class="map-btn bg-orange-50 text-orange-700 border-2 border-orange-300 hover:bg-orange-100 px-4 py-3 rounded-2xl text-base font-extrabold shadow-md backdrop-blur-md transform hover:-translate-y-1 transition-all"><i class="fa-solid fa-landmark mr-1 text-orange-500"></i>犬山區 (北)</button>
                         </div>
                         
                         <!-- Center North -->
                         <div class="w-full flex justify-center">
-                            <button onclick="filterByArea('名古屋城區')" class="map-btn bg-teal-50 text-teal-700 border border-teal-200 hover:bg-teal-100 px-4 py-2 rounded-xl text-sm md:text-base font-bold shadow-sm backdrop-blur-sm"><i class="fa-solid fa-chess-rook mr-1 text-teal-500"></i>名古屋城區</button>
+                            <button onclick="filterByArea('名古屋城區')" class="map-btn bg-teal-50 text-teal-700 border-2 border-teal-300 hover:bg-teal-100 px-4 py-3 rounded-2xl text-base font-extrabold shadow-md backdrop-blur-md transform hover:-translate-y-1 transition-all"><i class="fa-solid fa-chess-rook mr-1 text-teal-500"></i>名古屋城區</button>
                         </div>
 
                         <!-- Center Row (West to East) -->
                         <div class="w-full flex flex-wrap md:flex-nowrap justify-between items-center gap-2">
-                            <button onclick="filterByArea('京都 / 市郊')" class="order-1 md:order-none map-btn bg-purple-50 text-purple-700 border border-purple-200 hover:bg-purple-100 px-3 py-2 rounded-xl text-sm font-bold shadow-sm backdrop-blur-sm w-[48%] md:w-auto"><i class="fa-solid fa-torii-gate mr-1 text-purple-500"></i>京都 (西)</button>
+                            <button onclick="filterByArea('京都 / 市郊')" class="order-1 md:order-none map-btn bg-purple-50 text-purple-700 border-2 border-purple-300 hover:bg-purple-100 px-4 py-3 rounded-2xl text-base font-extrabold shadow-md backdrop-blur-md transform hover:-translate-y-1 transition-all w-[48%] md:w-auto"><i class="fa-solid fa-torii-gate mr-1 text-purple-500"></i>京都 (西)</button>
                             
                             <div class="order-3 md:order-none w-full md:w-auto flex flex-row gap-2 justify-center">
                                 <button onclick="filterByArea('名站區')" class="map-btn bg-blue-50 text-blue-700 border-2 border-blue-300 hover:bg-blue-100 px-4 py-3 rounded-2xl text-base font-extrabold shadow-md backdrop-blur-md transform hover:-translate-y-1 transition-all w-full md:w-auto"><i class="fa-solid fa-hotel mr-1 text-blue-500"></i>名站區</button>
                                 <button onclick="filterByArea('大須 / 榮商圈')" class="map-btn bg-pink-50 text-pink-700 border-2 border-pink-300 hover:bg-pink-100 px-4 py-3 rounded-2xl text-base font-extrabold shadow-md backdrop-blur-md transform hover:-translate-y-1 transition-all w-full md:w-auto"><i class="fa-solid fa-bag-shopping mr-1 text-pink-500"></i>榮商圈</button>
                             </div>
                             
-                            <button onclick="filterByArea('京都 / 市郊')" class="order-2 md:order-none map-btn bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100 px-3 py-2 rounded-xl text-sm font-bold shadow-sm backdrop-blur-sm w-[48%] md:w-auto"><i class="fa-solid fa-tree mr-1 text-emerald-500"></i>吉卜力 (東)</button>
+                            <button onclick="filterByArea('京都 / 市郊')" class="order-2 md:order-none map-btn bg-emerald-50 text-emerald-700 border-2 border-emerald-300 hover:bg-emerald-100 px-4 py-3 rounded-2xl text-base font-extrabold shadow-md backdrop-blur-md transform hover:-translate-y-1 transition-all w-[48%] md:w-auto"><i class="fa-solid fa-tree mr-1 text-emerald-500"></i>吉卜力 (東)</button>
                         </div>
 
                         <!-- South -->
                         <div class="w-full flex justify-center mt-2">
-                            <button onclick="filterByArea('熱田神宮區')" class="map-btn bg-green-50 text-green-700 border border-green-200 hover:bg-green-100 px-4 py-2 rounded-xl text-sm md:text-base font-bold shadow-sm backdrop-blur-sm"><i class="fa-solid fa-leaf mr-1 text-green-500"></i>熱田神宮區 (南)</button>
+                            <button onclick="filterByArea('熱田神宮區')" class="map-btn bg-green-50 text-green-700 border-2 border-green-300 hover:bg-green-100 px-4 py-3 rounded-2xl text-base font-extrabold shadow-md backdrop-blur-md transform hover:-translate-y-1 transition-all"><i class="fa-solid fa-leaf mr-1 text-green-500"></i>熱田神宮區 (南)</button>
                         </div>
                         
                         <!-- Far South -->
                         <div class="w-full flex justify-center">
-                            <button onclick="filterByArea('京都 / 市郊')" class="map-btn bg-sky-50 text-sky-700 border border-sky-200 hover:bg-sky-100 px-3 py-2 rounded-xl text-sm font-bold shadow-sm backdrop-blur-sm"><i class="fa-solid fa-plane-departure mr-1 text-sky-500"></i>機場 / Outlet (南)</button>
+                            <button onclick="filterByArea('京都 / 市郊')" class="map-btn bg-sky-50 text-sky-700 border-2 border-sky-300 hover:bg-sky-100 px-4 py-3 rounded-2xl text-base font-extrabold shadow-md backdrop-blur-md transform hover:-translate-y-1 transition-all"><i class="fa-solid fa-plane-departure mr-1 text-sky-500"></i>機場 / Outlet (南)</button>
                         </div>
                     </div>
                 </div>
@@ -283,56 +244,44 @@
             實用工具與小撇步
         </h2>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="w-full">
             <!-- Currency Calculator -->
-            <div class="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-stone-200 p-6 md:p-8">
+            <div class="bg-white/80 backdrop-blur-xl rounded-3xl shadow-sm border border-stone-200 p-8 animate-fade-in-up">
                 <div class="flex flex-col md:flex-row gap-8 items-center h-full">
-                    <div class="flex-1 space-y-5 w-full">
+                    
+                    <div class="flex-1 space-y-6 w-full">
                         <div>
-                            <h3 class="text-xl font-bold text-stone-900 mb-1 flex items-center gap-2">✒️ 即時匯率換算</h3>
+                            <h3 class="text-2xl font-bold text-stone-900 mb-1 flex items-center gap-2">✒️ 即時匯率換算</h3>
                             <p class="text-stone-500 text-sm">目前匯率：1 JPY = <span id="displayRateText" class="text-stone-900 font-mono font-bold">0.20</span> TWD</p>
                         </div>
-                        <div class="space-y-3">
-                            <div class="flex items-center gap-4 bg-stone-50 px-4 py-3 rounded-xl border border-stone-200 focus-within:border-rose-400 focus-within:ring-2 focus-within:ring-rose-100 transition-all">
-                                <span class="text-sm font-bold text-stone-400 w-10 shrink-0">JPY</span>
-                                <input type="number" id="inputJPY" placeholder="輸入日幣" class="bg-transparent text-lg w-full text-stone-900 placeholder:text-stone-300 outline-none font-mono">
+                        
+                        <!-- Currency Inputs side by side -->
+                        <div class="flex flex-col sm:flex-row gap-4 items-center">
+                            <div class="w-full flex items-center gap-3 bg-stone-50 px-4 py-4 rounded-2xl border border-stone-200 focus-within:border-rose-400 focus-within:ring-2 focus-within:ring-rose-50 transition-all">
+                                <span class="text-base font-bold text-stone-400 shrink-0">JPY</span>
+                                <input type="number" id="inputJPY" placeholder="日幣" class="bg-transparent text-2xl w-full text-stone-900 font-bold outline-none font-mono">
                             </div>
-                            <div class="flex items-center gap-4 bg-stone-50 px-4 py-3 rounded-xl border border-stone-200 focus-within:border-rose-400 focus-within:ring-2 focus-within:ring-rose-100 transition-all">
-                                <span class="text-sm font-bold text-stone-400 w-10 shrink-0">TWD</span>
-                                <input type="number" id="inputTWD" placeholder="輸入台幣" class="bg-transparent text-lg w-full text-stone-900 placeholder:text-stone-300 outline-none font-mono">
+                            
+                            <div class="text-stone-300 sm:rotate-0 rotate-90 flex-shrink-0">
+                                <i class="fa-solid fa-arrow-right-arrow-left text-xl"></i>
+                            </div>
+
+                            <div class="w-full flex items-center gap-3 bg-stone-50 px-4 py-4 rounded-2xl border border-stone-200 focus-within:border-rose-400 focus-within:ring-2 focus-within:ring-rose-50 transition-all">
+                                <span class="text-base font-bold text-stone-400 shrink-0">TWD</span>
+                                <input type="number" id="inputTWD" placeholder="台幣" class="bg-transparent text-2xl w-full text-stone-900 font-bold outline-none font-mono">
                             </div>
                         </div>
                     </div>
-                    <div class="w-px h-28 bg-stone-200 hidden md:block self-center"></div>
-                    <div class="w-full md:w-40 space-y-3">
-                        <p class="text-xs font-bold text-stone-400 uppercase tracking-wider text-center md:text-left">自訂匯率</p>
-                        <input type="number" id="exchangeRate" value="0.20" step="0.001" class="bg-stone-50 border border-stone-200 rounded-xl p-4 w-full text-center text-rose-500 font-mono text-xl font-bold focus:border-rose-400 focus:ring-2 focus:ring-rose-100 outline-none transition-all">
-                    </div>
-                </div>
-            </div>
 
-            <!-- Quick Tips Grid -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4">
-                <div class="bg-white/90 backdrop-blur rounded-2xl p-5 border border-blue-100 shadow-sm flex gap-4 items-start hover:shadow-md transition-shadow">
-                    <div class="text-2xl bg-blue-50 text-blue-500 p-2 rounded-xl shrink-0">💳</div>
-                    <div>
-                        <h4 class="font-bold text-stone-900 text-sm">交通卡 (Suica/ICOCA)</h4>
-                        <p class="text-xs text-stone-600 mt-1">iPhone 用戶可直接在 Apple Wallet 加入並儲值，搭車超商皆可用，免排隊買票。</p>
+                    <!-- Divider -->
+                    <div class="w-px h-28 bg-stone-200 hidden md:block self-center"></div>
+
+                    <!-- Custom Exchange Rate on the Right -->
+                    <div class="w-full md:w-48 flex flex-col justify-center items-center md:items-start gap-3">
+                        <span class="text-sm font-bold text-stone-400">自訂匯率設定</span>
+                        <input type="number" id="exchangeRate" value="0.20" step="0.001" class="bg-stone-50 border border-stone-200 rounded-2xl px-4 py-4 w-full text-center text-rose-500 font-mono text-2xl font-bold focus:border-rose-400 focus:ring-2 focus:ring-rose-100 outline-none transition-all">
                     </div>
-                </div>
-                <div class="bg-white/90 backdrop-blur rounded-2xl p-5 border border-stone-200 shadow-sm flex gap-4 items-start hover:shadow-md transition-shadow">
-                    <div class="text-2xl bg-stone-50 p-2 rounded-xl shrink-0">🚕</div>
-                    <div>
-                        <h4 class="font-bold text-stone-900 text-sm">叫車服務</h4>
-                        <p class="text-xs text-stone-600 mt-1">直接使用台灣的 <strong>Uber</strong> App 叫車，會自動媒合當地計程車，免去溝通困擾。</p>
-                    </div>
-                </div>
-                <div class="bg-white/90 backdrop-blur rounded-2xl p-5 border border-stone-200 shadow-sm flex gap-4 items-start hover:shadow-md transition-shadow">
-                    <div class="text-2xl bg-stone-50 p-2 rounded-xl shrink-0">💰</div>
-                    <div>
-                        <h4 class="font-bold text-stone-900 text-sm">退稅 Tax Refund</h4>
-                        <p class="text-xs text-stone-600 mt-1">大部分店家消費滿 5,000 日圓 (未稅) 即可退稅。結帳時請主動出示護照正本。</p>
-                    </div>
+
                 </div>
             </div>
         </div>

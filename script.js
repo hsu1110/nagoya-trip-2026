@@ -354,7 +354,8 @@ const db = [
     { id: 44, area: "京都 / 市郊", type: "food", name: "祢ざめ家 (Nezameya)", hours: "10:00–17:30", location: "伏見稻荷大社旁", category: "小吃 / 午餐", notes: "近 500 年歷史的老店。來伏見稻荷必吃吸滿高湯的豆皮壽司 (稻荷壽司)，走完鳥居吃幾顆剛好。", icon: "fa-box-open", color: "bg-amber-100 text-amber-600", mapQuery: "祢ざめ家" },
     { id: 45, area: "京都 / 市郊", type: "food", name: "GOKAGO 抹茶拿鐵", hours: "10:00–18:00", location: "清水寺/祇園周邊", category: "飲品", notes: "網美風現刷宇治抹茶拿鐵加冰淇淋，是漫步清水寺與祇園時消暑的最佳聖品。", icon: "fa-mug-hot", color: "bg-green-100 text-green-800", mapQuery: "GOKAGO 京都" },
     { id: 46, area: "京都 / 市郊", type: "food", name: "矢場味噌豬排", hours: "11:00–21:00", location: "長島三井 Outlet 內", category: "午餐", notes: "Outlet 逛累了就來吃名古屋代表味。招牌草鞋特大豬排淋上紅味噌醬，甜鹹濃郁。", icon: "fa-piggy-bank", color: "bg-rose-100 text-rose-700", mapQuery: "矢場とん ジャズドリーム長島店" },
-    { id: 47, area: "京都 / 市郊", type: "food", name: "桂新堂 蝦仙貝之里", hours: "08:00–20:00 (依機場規定)", location: "中部國際機場 4 樓", category: "伴手禮", notes: "體積大但極輕，直接當手提行李上機，完美保留你的 46kg 托運額度裝其他重物！", icon: "fa-gift", color: "bg-blue-100 text-blue-500", mapQuery: "えびせんべいの里 中部国際空港店" }
+    { id: 47, area: "京都 / 市郊", type: "food", name: "桂新堂 蝦仙貝之里", hours: "08:00–20:00 (依機場規定)", location: "中部國際機場 4 樓", category: "伴手禮", notes: "體積大但極輕，直接當手提行李上機，完美保留你的 46kg 托運額度裝其他重物！", icon: "fa-gift", color: "bg-blue-100 text-blue-500", mapQuery: "えびせんべいの里 中部国際空港店" },
+    { id: 48, area: "名站區", type: "attraction", name: "VIA INN 名古屋站前椿町", hours: "Check-in 15:00 / Check-out 10:00", location: "太閤通口（新幹線口）步行 5 分鐘", transport: "名古屋站新幹線口", notes: "本次旅程的大本營，鄰近車站、Bic Camera 與 ESCA 地下街，採買極為方便。", icon: "fa-hotel", color: "bg-blue-100 text-blue-600", mapQuery: "ヴィアイン名古屋駅前椿町" }
 ];
 
 function renderCards(filter = 'All') {
