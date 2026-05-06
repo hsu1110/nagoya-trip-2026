@@ -50,11 +50,11 @@ const itineraryData = [
     details: [
       { time: "06:20", icon: "🛬", title: "抵達中部國際機場", desc: "樂桃 MM722 降落。搭名鐵 μ-SKY 特急直達名古屋站（約 28 分鐘）。" },
       { time: "08:00", icon: "🏨", title: "VIA INN 寄放行李", desc: "先至飯店前台寄放行李，輕裝出發。" },
-      { time: "08:30", icon: "☕", title: "早餐：客美多咖啡", desc: "點咖啡送烤吐司與水煮蛋，<strong>必加小倉紅豆泥</strong>。體驗名古屋特色 Morning Service 並稍作休息。" },
-      { time: "10:30", icon: "⛩️", title: "大須商店街尋寶", desc: "店家陸續開門。逛古著、動漫週邊、電子零件商場與各式特色小吃。" },
-      { time: "13:30", icon: "🥩", title: "午餐：馬喰一代 名古屋WEST", desc: "<strong>必吃：</strong>馬喰商業午餐、炙燒和牛握壽司。晚點吃剛好避開上班族午休人潮。<strong>請務必事先預約！</strong>" },
+      { time: "08:30", icon: "☕", title: "早餐：客美多咖啡", dbId: 14, desc: "點咖啡送烤吐司與水煮蛋，<strong>必加小倉紅豆泥</strong>。體驗名古屋特色 Morning Service 並稍作休息。" },
+      { time: "10:30", icon: "⛩️", title: "大須商店街尋寶", dbId: 18, desc: "店家陸續開門。逛古著、動漫週邊、電子零件商場與各式特色小吃。" },
+      { time: "13:30", icon: "🥩", title: "午餐：馬喰一代 名古屋WEST", dbId: 5, desc: "<strong>必吃：</strong>馬喰商業午餐、炙燒和牛握壽司。晚點吃剛好避開上班族午休人潮。<strong>請務必事先預約！</strong>" },
       { time: "15:30", icon: "🛏️", title: "飯店 Check-in 補眠", desc: "非常重要！徹底洗澡並恢復紅眼航班體力，為接下來五天蓄積能量。" },
-      { time: "18:30", icon: "🍣", title: "晚餐：梅丘壽司美登利", desc: "位於 JR Gate Tower 12 樓，吃飽後可直接在車站周邊或地下街熟悉環境與簡單採買。" }
+      { time: "18:30", icon: "🍣", title: "晚餐：梅丘壽司美登利", dbId: 7, desc: "位於 JR Gate Tower 12 樓，吃飽後可直接在車站周邊或地下街熟悉環境與簡單採買。" }
     ]
   },
   {
@@ -66,12 +66,12 @@ const itineraryData = [
     meals: "午餐：吉卜力園區周邊<br>晚餐：味仙拉麵（台灣拉麵）<br>宵夜：世界的山將炸雞翅",
     warnings: "吉卜力大倉庫門票須提前於官網預購特定時段。園區步行量大，建議穿著舒適運動鞋。味仙拉麵極度重口味，安排在回飯店前吃最適合。",
     details: [
-      { time: "09:30", icon: "🚇", title: "出發吉卜力公園", desc: "睡飽後出發，地下鐵東山線轉 Linimo 至愛・地球博紀念公園。" },
+      { time: "09:30", icon: "🚇", title: "出發吉卜力公園", dbId: 38, desc: "睡飽後出發，地下鐵東山線轉 Linimo 至愛・地球博紀念公園。" },
       { time: "10:30", icon: "🌳", title: "戶外園區漫遊", desc: "悠閒順遊青春之丘、動動力森林或魔女之谷等戶外區域，拍攝各類場景。" },
-      { time: "14:00", icon: "🏠", title: "吉卜力大倉庫", desc: "進入全室內展區，拍攝無臉男、貓巴士等經典場景。出口商店採購限定紀念品。" },
+      { time: "14:00", icon: "🏠", title: "吉卜力大倉庫", dbId: 38, desc: "進入全室內展區，拍攝無臉男、貓巴士等經典場景。出口商店採購限定紀念品。" },
       { time: "18:00", icon: "🚆", title: "返回名古屋市區", desc: "搭車返回名古屋車站商圈。" },
-      { time: "19:00", icon: "🌶️", title: "晚餐：味仙拉麵", desc: "吃大蒜辣椒爆炒的<strong>台灣拉麵</strong>！重口味且爆汗，吃完剛好回飯店洗澡休息。" },
-      { time: "21:30", icon: "🍗", title: "宵夜：世界的山將", desc: "外帶極度酥脆、胡椒嗆辣的<strong>炸雞翅手羽先</strong>回 VIA INN 配飲料享用。" }
+      { time: "19:00", icon: "🌶️", title: "晚餐：味仙拉麵", dbId: 9, desc: "吃大蒜辣椒爆炒的<strong>台灣拉麵</strong>！重口味且爆汗，吃完剛好回飯店洗澡休息。" },
+      { time: "21:30", icon: "🍗", title: "宵夜：世界的山將", dbId: 13, desc: "外帶極度酥脆、胡椒嗆辣的<strong>炸雞翅手羽先</strong>回 VIA INN 配飲料享用。" }
     ]
   },
   {
@@ -83,12 +83,12 @@ const itineraryData = [
     meals: "早餐：千壽炸蝦飯糰（車上）<br>午餐：清水順正 Okabe家 湯豆腐<br>晚餐：京都勝牛炸牛排",
     warnings: "京都夏季極度悶熱。強烈建議從伏見稻荷搭京阪本線至清水五條後，花點小錢搭計程車上山，避開夏日爬坡地獄。",
     details: [
-      { time: "07:30", icon: "🍙", title: "早餐：千壽炸蝦飯糰", desc: "在名古屋車站買好一口大小的<strong>炸蝦飯糰</strong>，搭乘新幹線當早餐。" },
-      { time: "08:30", icon: "⛩️", title: "伏見稻荷大社", desc: "<strong>趁清晨氣溫低且無人潮時攀爬千本鳥居。</strong>光線好且幾乎包場。" },
+      { time: "07:30", icon: "🍙", title: "早餐：千壽炸蝦飯糰", dbId: 17, desc: "在名古屋車站買好一口大小的<strong>炸蝦飯糰</strong>，搭乘新幹線當早餐。" },
+      { time: "08:30", icon: "⛩️", title: "伏見稻荷大社", dbId: 40, desc: "<strong>趁清晨氣溫低且無人潮時攀爬千本鳥居。</strong>光線好且幾乎包場。" },
       { time: "11:30", icon: "🚕", title: "神級避暑動線（轉乘）", desc: "搭「京阪本線」至「清水五條站」，出站直接<strong>攔計程車</strong>至清水寺上方的松原通或五條坂（車資約 1000 多日圓）。" },
-      { time: "12:00", icon: "🏯", title: "清水寺 & 午餐", desc: "享用<strong>清水順正 Okabe家 湯豆腐</strong>定食，隨後進入清水寺參拜。" },
+      { time: "12:00", icon: "🏯", title: "清水寺 & 午餐", dbId: 41, desc: "享用<strong>清水順正 Okabe家 湯豆腐</strong>定食，隨後進入清水寺參拜。" },
       { time: "13:30", icon: "🚶", title: "順坡輕鬆漫步", desc: "一路「往下坡走」完美省力：三年坂 ➔ 二年坂 ➔ 八坂神社 ➔ 祇園，順道吃冰消暑。" },
-      { time: "17:30", icon: "🥩", title: "晚餐：京都勝牛", desc: "京都站前店享用人氣<strong>炸牛排定食</strong>。隨後搭新幹線返回名古屋飯店。" }
+      { time: "17:30", icon: "🥩", title: "晚餐：京都勝牛", dbId: 42, desc: "京都站前店享用人氣<strong>炸牛排定食</strong>。隨後搭新幹線返回名古屋飯店。" }
     ]
   },
   {
@@ -101,11 +101,11 @@ const itineraryData = [
     warnings: "Outlet 巴士班次固定，建議先查詢回程時刻表。飯店西口到東口巴士中心需預留 15 分鐘步行時間。",
     details: [
       { time: "08:45", icon: "🚶", title: "提早穿越車站", desc: "從太閤通口（西口）徒步穿越車站前往櫻通口（東口）的名鐵巴士中心。" },
-      { time: "10:00", icon: "🚌", title: "前往長島三井 Outlet", desc: "搭乘直達巴士。抵達後先下載地圖，鎖定目標品牌大採購。" },
-      { time: "12:30", icon: "🍱", title: "午餐：矢場味噌豬排", desc: "Outlet 美食街享用招牌<strong>草鞋特大豬排淋紅味噌醬</strong>，名古屋代表味。" },
+      { time: "10:00", icon: "🚌", title: "前往長島三井 Outlet", dbId: 39, desc: "搭乘直達巴士。抵達後先下載地圖，鎖定目標品牌大採購。" },
+      { time: "12:30", icon: "🍱", title: "午餐：矢場味噌豬排", dbId: 46, desc: "Outlet 美食街享用招牌<strong>草鞋特大豬排淋紅味噌醬</strong>，名古屋代表味。" },
       { time: "16:30", icon: "🧳", title: "返回飯店卸貨", desc: "回到名古屋後，務必先將戰利品放回 VIA INN，<strong>輕裝</strong>前往榮商圈。" },
-      { time: "18:00", icon: "🔥", title: "晚餐：和牛たんじ", desc: "（名古屋榮錦店）入座後集中火力狂點：厚切仙台牛舌、和牛炙燒大腹肉壽司。" },
-      { time: "20:00", icon: "🌃", title: "綠洲 21 浪漫夜景", desc: "吃飽散步至 Oasis 21，登上頂樓「水之宇宙船」，以名古屋電視塔為背景拍下絕美夜景。" }
+      { time: "18:00", icon: "🔥", title: "晚餐：和牛たんじ", dbId: 21, desc: "（名古屋榮錦店）入座後集中火力狂點：厚切仙台牛舌、和牛炙燒大腹肉壽司。" },
+      { time: "20:00", icon: "🌃", title: "綠洲 21 浪漫夜景", dbId: 20, desc: "吃飽散步至 Oasis 21，登上頂樓「水之宇宙船」，以名古屋電視塔為背景拍下絕美夜景。" }
     ]
   },
   {
@@ -117,11 +117,11 @@ const itineraryData = [
     meals: "午餐：麵家 獅子丸（泡系拉麵）<br>晚餐：熱田蓬萊軒 鰻魚飯三吃",
     warnings: "<strong>週日熱田蓬萊軒及獅子丸皆可能有排隊人潮。</strong>熱田蓬萊軒請務必提早在 14:30 左右去排隊登記晚間號碼牌。",
     details: [
-      { time: "09:00", icon: "🏯", title: "名古屋城 & 本丸御殿", desc: "早上前往名古屋城。主攻耗資百億全木造復原的<strong>「本丸御殿」</strong>，內部極其華麗且有冷氣避暑。" },
-      { time: "12:00", icon: "🍜", title: "午餐：麵家 獅子丸", desc: "搭車回名站周邊（龜島方向）排隊。享用洋風泡系白湯拉麵，湯頭細緻綿密負擔小。" },
+      { time: "09:00", icon: "🏯", title: "名古屋城 & 本丸御殿", dbId: 27, desc: "早上前往名古屋城。主攻耗資百億全木造復原的<strong>「本丸御殿」</strong>，內部極其華麗且有冷氣避暑。" },
+      { time: "12:00", icon: "🍜", title: "午餐：麵家 獅子丸", dbId: 8, desc: "搭車回名站周邊（龜島方向）排隊。享用洋風泡系白湯拉麵，湯頭細緻綿密負擔小。" },
       { time: "14:30", icon: "🎫", title: "熱田蓬萊軒抽號碼牌", desc: "<strong>極重要！</strong>先到神宮店門口登記拿晚上的號碼牌，完美抵銷排隊時間。" },
-      { time: "15:00", icon: "⛩️", title: "熱田神宮參拜", desc: "利用等位時間逛神宮，感受莊嚴氛圍，於巨大鳥居前合影。" },
-      { time: "17:30", icon: "🍱", title: "晚餐：熱田蓬萊軒", desc: "<strong>神級鰻魚飯三吃：</strong>①原味 ②加薬味（芥末、海苔、蔥花）③加高湯茶泡飯。備長炭烤外脆內嫩。" },
+      { time: "15:00", icon: "⛩️", title: "熱田神宮參拜", dbId: 31, desc: "利用等位時間逛神宮，感受莊嚴氛圍，於巨大鳥居前合影。" },
+      { time: "17:30", icon: "🍱", title: "晚餐：熱田蓬萊軒", dbId: 33, desc: "<strong>神級鰻魚飯三吃：</strong>①原味 ②加薬味（芥末、海苔、蔥花）③加高湯茶泡飯。備長炭烤外脆內嫩。" },
       { time: "19:30", icon: "🛒", title: "車站周邊最後補貨", desc: "回飯店西口 SUGI藥局 / 唐吉訶德採買液體類等高重量物資，<strong>充分利用 46kg 額度！</strong>" }
     ]
   },
@@ -136,7 +136,7 @@ const itineraryData = [
     details: [
       { time: "09:00", icon: "🧳", title: "退房與搭乘名鐵", desc: "睡到自然醒。帶上 46kg 戰利品，搭乘名鐵 μ-SKY 前往中部國際機場。" },
       { time: "10:00", icon: "🛂", title: "託運 & 機場美食", desc: "完成 CI155 報到，辦理託運後前往 <strong>4F Sky Town 美食街</strong>享用最後一頓日本美食。" },
-      { time: "11:00", icon: "🛍️", title: "必買：桂新堂 蝦仙貝之里", desc: "<strong>體積大重量輕，不佔託運額度！</strong>可放手提行李上機。另外別忘了 Royce 生巧克力（需冷藏）。" },
+      { time: "11:00", icon: "🛍️", title: "必買：桂新堂 蝦仙貝之里", dbId: 47, desc: "<strong>體積大重量輕，不佔託運額度！</strong>可放手提行李上機。另外別忘了 Royce 生巧克力（需冷藏）。" },
       { time: "12:20", icon: "✈️", title: "起飛返台 CI 155", desc: "滿載而歸，結束完美的名古屋美食與血拚之旅！預計 14:30 抵達桃園機場。" }
     ]
   }
@@ -203,7 +203,7 @@ function renderItineraryContent() {
         <div class="absolute w-9 h-9 rounded-full bg-white border-2 border-stone-300 z-10 flex items-center justify-center text-base shadow-sm" style="left:-2.75rem;top:0;">${item.icon}</div>
         <div class="space-y-1.5">
           <span class="text-xs font-mono font-bold text-rose-500 tracking-wider">${item.time}</span>
-          <h4 class="font-bold text-stone-900">${item.title}</h4>
+          <div class="flex items-center flex-wrap gap-2"><h4 class="font-bold text-stone-900">${item.title}</h4>${item.dbId ? `<button onclick="openModal(db.find(x => x.id === ${item.dbId}))" class="text-[10px] sm:text-xs bg-rose-50 text-rose-600 border border-rose-200 px-2 py-0.5 rounded-md hover:bg-rose-100 hover:shadow-sm transition-all shadow-sm"><i class="fa-solid fa-map-location-dot mr-1"></i>查看地圖</button>` : ""}</div>
           <div class="text-stone-500 text-sm leading-relaxed bg-stone-50 rounded-xl p-3 border border-stone-100 hover:bg-white hover:shadow-sm transition-all duration-200">${item.desc}</div>
         </div>
       </div>
@@ -242,6 +242,11 @@ function renderItineraryContent() {
   }
 
   contentContainer.innerHTML = html;
+}
+
+function toggleMobileMenu() {
+  const menu = document.getElementById('mobile-menu');
+  menu.classList.toggle('hidden');
 }
 
 // Scroll helper
