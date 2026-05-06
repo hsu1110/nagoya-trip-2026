@@ -198,7 +198,7 @@ function renderItineraryContent() {
   data.details.forEach((item, index) => {
     const isLast = index === data.details.length - 1;
     html += `
-      <div class="relative">
+      <div class="relative animate-fade-in-up opacity-0" style="animation-delay: ${index * 0.1}s">
         ${!isLast ? `<div class="absolute w-0.5 bg-stone-200 z-0" style="left:-2.1rem;top:2.4rem;bottom:-2rem;"></div>` : ""}
         <div class="absolute w-9 h-9 rounded-full bg-white border-2 border-stone-300 z-10 flex items-center justify-center text-base shadow-sm" style="left:-2.75rem;top:0;">${item.icon}</div>
         <div class="space-y-1.5">
@@ -214,7 +214,7 @@ function renderItineraryContent() {
   const footerParts = [];
   if (data.logistics) {
     footerParts.push(`
-      <div class="flex items-start gap-3 col-span-2 bg-blue-50 rounded-xl px-4 py-3 border border-blue-100">
+      <div class="flex items-start gap-3 bg-blue-50 rounded-xl px-4 py-3 border border-blue-100">
         <span class="text-lg">🚆</span>
         <div><span class="font-bold text-blue-800 text-xs block mb-0.5">交通 / 物流</span>
         <span class="text-blue-700 text-sm">${data.logistics}</span></div>
@@ -236,7 +236,7 @@ function renderItineraryContent() {
   }
 
   if (footerParts.length) {
-    html += `</div></div><div class="border-t border-stone-100 px-8 py-6 grid grid-cols-1 md:grid-cols-2 gap-4">${footerParts.join("")}</div>`;
+    html += `</div></div><div class="border-t border-stone-100 px-8 py-6 flex flex-col gap-4">${footerParts.join("")}</div>`;
   } else {
     html += `</div></div>`;
   }
@@ -367,9 +367,10 @@ function renderCards(filter = 'All') {
 
     const filteredData = filter === 'All' ? db : db.filter(item => item.area === filter);
 
-    filteredData.forEach(item => {
+    filteredData.forEach((item, i) => {
         const card = document.createElement('div');
-        card.className = "bg-white p-5 rounded-2xl shadow-sm border border-stone-100 cursor-pointer hover:shadow-xl hover:border-stone-200 hover:-translate-y-1 transition-all duration-300 flex items-start space-x-4 group";
+        card.className = "bg-white p-5 rounded-2xl shadow-sm border border-stone-100 cursor-pointer hover:shadow-xl hover:border-stone-200 hover:-translate-y-1 transition-all duration-300 flex items-start space-x-4 group animate-fade-in-up opacity-0";
+        card.style.animationDelay = `${i * 0.05}s`;
         card.onclick = () => openModal(item);
 
         const iconDiv = document.createElement('div');
@@ -453,9 +454,20 @@ function openModal(item) {
             <p class="text-stone-600 leading-relaxed bg-yellow-50/50 p-4 rounded-xl border border-yellow-100/50">${item.notes}</p>
         </div>
 
-        <a href="${mapUrl}" target="_blank" rel="noopener noreferrer" class="block w-full bg-stone-900 hover:bg-rose-500 text-white text-center font-bold py-4 rounded-2xl transition-colors shadow-md flex items-center justify-center gap-2 group">
+        <div class="mb-6 rounded-2xl overflow-hidden shadow-inner border border-stone-200 relative animate-fade-in-up" style="animation-delay: 0.2s">
+            <iframe 
+                width="100%" 
+                height="250" 
+                style="border:0;" 
+                loading="lazy" 
+                allowfullscreen 
+                src="https://maps.google.com/maps?q=${encodeURIComponent(exactQuery)}&t=&z=15&ie=UTF8&iwloc=&output=embed">
+            </iframe>
+        </div>
+
+        <a href="${mapUrl}" target="_blank" rel="noopener noreferrer" class="block w-full bg-stone-900 hover:bg-rose-500 text-white text-center font-bold py-4 rounded-2xl transition-colors shadow-md flex items-center justify-center gap-2 group animate-fade-in-up" style="animation-delay: 0.3s">
             <i class="fa-solid fa-map-location-dot transform group-hover:scale-110 transition-transform"></i>
-            精準開啟 Google Maps
+            開啟 Google Maps App 導航
         </a>
     `;
     
