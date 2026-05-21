@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>吉卜力公園互動導覽與交通大補帖</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap');
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: #f4f8f0; /* 溫馨森林淡綠色 */
+        }
+        /* 自訂卷軸 */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #a7f3d0;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #059669;
+        }
+        @keyframes active-pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+            100% { transform: scale(1); }
+        }
+        /* 讓被選中 (active) 的地標本身圓點/矩形產生呼吸放大縮小效果 */
+        .group.active circle, .group.active rect {
+            animation: active-pulse 2s infinite ease-in-out;
+            stroke: #ffffff !important;
+            stroke-width: 3.5px !important;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.25));
+        }
+        /* 行動端地圖滾動容器 */
+        .map-container {
+            -webkit-overflow-scrolling: touch;
+        }
+        /* 解決 SVG 地標懸停放大時因基準點偏差導致的抖動問題 */
+        .group circle, .group rect {
+            transform-origin: center;
+            transform-box: fill-box;
+            transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .group:hover circle, .group:hover rect {
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased">
+
+    <!-- 頂部導航欄 -->
+    <header class="bg-emerald-800 text-white shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <span class="text-2xl">🍃</span>
+                <div>
+                    <h1 class="text-lg md:text-xl font-bold tracking-wider">吉卜力公園互動導覽大補帖</h1>
+                    <p class="text-[10px] text-emerald-200">實景地圖精準標點與路線互通版</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="hidden sm:inline-block text-xs bg-emerald-700 px-3 py-1.5 rounded-full border border-emerald-600">
+                    愛知縣地球博紀念公園內
+                </span>
+                <span class="text-xs bg-amber-500 text-emerald-950 font-bold px-2.5 py-1 rounded-md">2024.11最新改訂</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-3 py-6 space-y-6">
+        
+        <!-- 核心互動區：地圖與景點資訊 -->
+        <section class="bg-white rounded-3xl shadow-sm border border-emerald-100 p-4 md:p-6">
+            <!-- 區塊標題與路線控制選項 -->
+            <div class="border-b border-slate-100 pb-4 mb-6 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
+                <div>
+                    <h2 class="text-lg font-bold text-emerald-950 flex items-center gap-2">
+                        <i data-lucide="map" class="w-5 h-5 text-emerald-600"></i>
+                        吉卜力公園實景地圖路線導覽
+                    </h2>
+                    <p class="text-xs text-slate-500 mt-1">點擊地圖上的【彩色地標圈圈】，下方會自動切換顯示該區塊的完整景點清單與詳細路徑導航！</p>
+                </div>
+                
+                <!-- 地圖路線篩選與圖例控制器 -->
+                <div class="flex flex-wrap sm:flex-nowrap items-center gap-2 bg-slate-50 p-2 rounded-2xl border border-slate-100 text-xs w-full lg:w-auto shadow-inner overflow-x-auto">
+                    <span class="text-slate-400 font-bold mr-1 shrink-0">顯示控制：</span>
+                    
+                    <label class="flex items-center gap-1.5 bg-white px-2.5 py-1 rounded-xl border border-slate-200 cursor-pointer hover:bg-slate-100 transition-colors shrink-0">
+                        <input type="checkbox" id="toggle-landmarks" checked class="rounded text-emerald-600 focus:ring-emerald-500" onchange="toggleLandmarkLayer()">
+                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-600 inline-block"></span>
+                        <span class="font-bold text-emerald-800">📍 景點標點與名稱</span>
+                    </label>
+
+                    <label class="flex items-center gap-1.5 bg-white px-2.5 py-1 rounded-xl border border-slate-200 cursor-pointer hover:bg-slate-100 transition-colors shrink-0">
+                        <input type="checkbox" id="toggle-walk" checked class="rounded text-slate-800 focus:ring-slate-500" onchange="toggleRouteLayer('walk')">
+                        <span class="w-3.5 h-0.5 border-t-2 border-dashed border-slate-800 inline-block"></span>
+                        <span class="font-bold">🚶 徒步走路</span>
+                    </label>
+                    
+                    <label class="flex items-center gap-1.5 bg-white px-2.5 py-1 rounded-xl border border-slate-200 cursor-pointer hover:bg-slate-100 transition-colors shrink-0">
+                        <input type="checkbox" id="toggle-bus" checked class="rounded text-red-600 focus:ring-red-500" onchange="toggleRouteLayer('bus')">
+                        <span class="w-3.5 h-0.5 border-t-2 border-red-500 inline-block"></span>
+                        <span class="font-bold text-red-600">🚌 免費接駁公車</span>
+                    </label>
+                    
+                    <label class="flex items-center gap-1.5 bg-white px-2.5 py-1 rounded-xl border border-slate-200 cursor-pointer hover:bg-slate-100 transition-colors shrink-0">
+                        <input type="checkbox" id="toggle-catbus" checked class="rounded text-amber-500 focus:ring-amber-500" onchange="toggleRouteLayer('catbus')">
+                        <span class="w-3.5 h-0.5 border-t-2 border-dashed border-amber-500 inline-block"></span>
+                        <span class="font-bold text-amber-600">🐾 貓巴士</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- 地圖本體 -->
+            <div id="map-wrapper" class="relative w-full bg-[#e9f3df] rounded-2xl overflow-hidden border border-emerald-100 flex flex-col items-center p-1 md:p-2 shadow-inner">
+                
+                <!-- 手機版提示滑動小手勢 -->
+                <div class="md:hidden absolute top-3 right-3 z-10 bg-emerald-950/80 text-white text-[10px] px-2 py-1 rounded-full flex items-center gap-1 pointer-events-none">
+                    <i data-lucide="move-horizontal" class="w-3 h-3 animate-bounce"></i> 左右滑動檢視完整地圖
+                </div>
+
+                <div class="w-full overflow-auto map-container">
+                    <!-- 響應式包裝容器 (根據底圖 1000x850 等比例，並附帶大自然綠色底色作為降級備用背景) -->
+                    <div class="min-w-[760px] md:min-w-[900px] xl:min-w-full aspect-[1000/850] relative mx-auto bg-[#e2f0d9] rounded-2xl overflow-hidden">
+                        
+                        <!-- 1. 採用 GPU 硬體加速的 HTML <img> 標籤作為底圖，大幅優於 SVG <image> 的渲染清晰度！ -->
+                        <img 
+                            src="./data/ghibli_tour_map.jpg" 
+                            alt="吉卜力公園地圖底圖" 
+                            class="absolute inset-0 w-full h-full object-contain select-none pointer-events-none sharp-img rounded-2xl" 
+                            id="ghibli-bg-image"
+                        />
+
+                        <!-- 2. 完全透明的 SVG 作為上層，用於精準繪製所有交通連線、標點以及文字 -->
+                        <svg viewBox="0 0 1000 850" class="absolute inset-0 w-full h-full select-none" id="map-svg">
+                            
+                            <!-- 文字背景白底過濾器 (防止文字和線條重合看不清) -->
+                            <defs>
+                                <filter x="-0.1" y="-0.1" width="1.2" height="1.2" id="bg-white">
+                                    <feFlood flood-color="white" flood-opacity="0.85"/>
+                                    <feComposite in="SourceGraphic" operator="over"/>
+                                </filter>
+                            </defs>
+
+                            <!-- ================= 2. 交通連線繪製 ================= -->
+                            <g id="route-walk" class="transition-opacity duration-300"></g>
+                            <g id="route-bus" class="transition-opacity duration-300"></g>
+                            <g id="route-catbus" class="transition-opacity duration-300"></g>
+
+                            <!-- ================= 3. 主要地標圖層 ================= -->
+                            <g id="landmarks-layer" class="transition-opacity duration-300">
+                                <!-- 主要點按鈕與文字標籤 -->
+                                <g id="landmarks-group"></g>
+                            </g>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 景點動態展示面板 (點選後展示) -->
+            <div class="mt-6 bg-slate-50 border border-emerald-50 rounded-2xl p-5" id="detail-panel">
+                <div class="text-center py-8 text-slate-400" id="empty-state">
+                    <i data-lucide="info" class="w-12 h-12 mx-auto text-slate-300 mb-2"></i>
+                    <p class="font-medium">請點擊上方地圖上的任意「數字或交通」地標</p>
+                    <p class="text-xs mt-1">即時為您揭曉該區域特色設施、限定小景點與交通時間！</p>
+                </div>
+
+                <!-- 景點內容呈現區 -->
+                <div id="content-area" class="hidden">
+                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-slate-200 pb-4 mb-4">
+                        <div class="flex items-center gap-3">
+                            <span id="zone-badge" class="px-3 py-1 text-xs font-bold rounded-full text-white animate-pulse"></span>
+                            <h3 id="zone-title" class="text-lg md:text-xl font-bold text-slate-900"></h3>
+                        </div>
+                        <div id="zone-transport" class="text-xs text-slate-600 bg-white px-3 py-1.5 rounded-xl border border-slate-100 shadow-sm flex items-center gap-1.5 font-medium">
+                            <!-- 交通標籤 -->
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <!-- 內部詳細景點清單 -->
+                        <div class="lg:col-span-2">
+                            <h4 class="text-sm font-bold text-slate-700 mb-3 flex items-center gap-1.5">
+                                <i data-lucide="map-pin" class="w-4 h-4 text-emerald-600"></i>
+                                內部特色設施、景點列表
+                            </h4>
+                            <ul id="spot-list" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <!-- 景點動態生成 -->
+                            </ul>
+                        </div>
+                        
+                        <!-- 交通路徑建議 -->
+                        <div class="bg-white p-5 rounded-2xl border border-slate-100 space-y-4 shadow-sm flex flex-col justify-between">
+                            <div>
+                                <h4 class="text-sm font-bold text-slate-400 tracking-wider uppercase border-b border-slate-100 pb-2 mb-3">
+                                    🗺️ 由此區域出發的步行/交通時間
+                                </h4>
+                                <div id="navigation-list" class="space-y-2 text-xs text-slate-600">
+                                    <!-- 交通建議動態生成 -->
+                                </div>
+                            </div>
+                            <div class="text-[10px] text-slate-400 mt-4 bg-slate-50 p-2 rounded-lg border border-slate-100">
+                                💡 建議：點擊地圖上的其他地標，即可即時比對不同區域之間的穿梭路程！
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 交通方案與巴士資訊總覽 -->
+        <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            
+            <!-- 聯外交通與接駁規則 -->
+            <div class="bg-white rounded-3xl shadow-sm border border-emerald-100 p-5 flex flex-col justify-between">
+                <div>
+                    <h3 class="text-lg font-bold text-emerald-950 mb-4 flex items-center gap-2 border-b border-slate-100 pb-2">
+                        <i data-lucide="info" class="w-5 h-5 text-emerald-600"></i>
+                        遊園交通必知大補帖
+                    </h3>
+                    <div class="space-y-4 text-sm">
+                        <div class="bg-emerald-50/50 p-3 rounded-xl border border-emerald-100">
+                            <h4 class="font-bold text-emerald-900 text-xs mb-1.5 flex items-center gap-1">
+                                <span class="text-base">🚇</span> 外部地鐵串聯
+                            </h4>
+                            <ul class="space-y-1 text-xs text-emerald-950 list-disc list-inside">
+                                <li>從 <strong>藤之丘站</strong>（東山線）搭 Linimo ➔ 約 <strong>13 分鐘</strong>抵達園區。</li>
+                                <li>從 <strong>八草站</strong>（愛知環狀鐵道）搭 Linimo ➔ 約 <strong>4 分鐘</strong>抵達園區。</li>
+                            </ul>
+                        </div>
+
+                        <div class="space-y-2">
+                            <h4 class="font-bold text-slate-700 text-xs flex items-center gap-1">
+                                <span class="text-base">🚌</span> 免費接駁公車重要規則
+                            </h4>
+                            <ul class="space-y-1.5 text-xs text-slate-600 list-disc list-inside">
+                                <li class="text-red-600 font-bold">每週二（火曜日）停駛（遇休館亦不營運）。</li>
+                                <li>全程免費搭乘，直接上車（不需預約或驗票）。</li>
+                                <li>車內禁止飲食、禁止吸菸、禁止攜帶寵物。</li>
+                                <li>全園有 4 種不同吉卜力主題外觀塗裝的巴士。</li>
+                            </ul>
+                        </div>
+
+                        <div class="space-y-2 pt-2 border-t border-slate-100">
+                            <h4 class="font-bold text-amber-700 text-xs flex items-center gap-1">
+                                <span class="text-base">🐾</span> APM 貓巴士乘車體驗
+                            </h4>
+                            <ul class="space-y-1 text-xs text-slate-600 list-disc list-inside">
+                                <li>運行區間：<strong>魔女之谷與魔法之里中間 ⇄ 動動力森林</strong></li>
+                                <li>單程約 <strong>10 分鐘</strong>，需額外購買貓巴士乘車券。</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-6 pt-4 border-t border-slate-100 text-[10px] text-slate-400 text-center">
+                    修訂版本：2024年11月改訂版
+                </div>
+            </div>
+
+            <!-- 東路線 (E線) 時刻規律與站點對照表 -->
+            <div class="bg-white rounded-3xl shadow-sm border border-emerald-100 p-5 lg:col-span-2">
+                <div class="border-b border-slate-100 pb-3 mb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+                    <h3 class="text-lg font-bold text-emerald-950 flex items-center gap-2">
+                        <i data-lucide="clock" class="w-5 h-5 text-emerald-600"></i>
+                        E 東路線 完整站點與發車時刻參考
+                    </h3>
+                    <span class="text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded-full font-bold">每日行駛 (週二除外)</span>
+                </div>
+                <p class="text-xs text-slate-500 mb-4">
+                    📢 東路線（E線）約每 <strong>16～17 分鐘一班</strong>。以下為您整理以首站每小時「00分」發車時的各站點抵達與折返相對時間對照：
+                </p>
+
+                <div class="overflow-x-auto rounded-2xl border border-slate-100">
+                    <table class="w-full text-left border-collapse text-xs">
+                        <thead>
+                            <tr class="bg-slate-100 text-slate-700 font-bold border-b border-slate-200">
+                                <th class="p-3">編號</th>
+                                <th class="p-3">站名 (日文原名)</th>
+                                <th class="p-3">對應吉卜力園區位置</th>
+                                <th class="p-3">去程發車分</th>
+                                <th class="p-3">回程發車分</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100">
+                            <tr class="hover:bg-emerald-50/20 transition-colors">
+                                <td class="p-3 font-bold text-slate-400">E1</td>
+                                <td class="p-3 font-medium">地球市民交流センター</td>
+                                <td class="p-3 text-emerald-800 font-medium">公園北口 / 青春之丘附近</td>
+                                <td class="p-3 text-emerald-600 font-bold">每小時 00 分</td>
+                                <td class="p-3 text-slate-500">每小時 37 分 (終點)</td>
+                            </tr>
+                            <tr class="hover:bg-emerald-50/20 transition-colors">
+                                <td class="p-3 font-bold text-slate-400">E2</td>
+                                <td class="p-3 font-medium">もののけの里</td>
+                                <td class="p-3 text-purple-700 font-medium">魔法之里</td>
+                                <td class="p-3 text-emerald-600 font-bold">每小時 03 分</td>
+                                <td class="p-3 text-slate-500">每小時 35 分</td>
+                            </tr>
+                            <tr class="hover:bg-emerald-50/20 transition-colors">
+                                <td class="p-3 font-bold text-slate-400">E3</td>
+                                <td class="p-3 font-medium">魔女の谷</td>
+                                <td class="p-3 text-pink-600 font-medium font-bold">魔女之谷 (大芝生廣場)</td>
+                                <td class="p-3 text-emerald-600 font-bold">每小時 05 分</td>
+                                <td class="p-3 text-slate-500">每小時 33 分</td>
+                            </tr>
+                            <tr class="hover:bg-emerald-50/20 transition-colors">
+                                <td class="p-3 font-bold text-slate-400">E4</td>
+                                <td class="p-3 font-medium">ジブリの大倉庫</td>
+                                <td class="p-3 text-orange-600 font-medium font-bold">吉卜力大倉庫 (滑冰場)</td>
+                                <td class="p-3 text-emerald-600 font-bold">每小時 07 分</td>
+                                <td class="p-3 text-slate-500">每小時 31 分</td>
+                            </tr>
+                            <tr class="hover:bg-emerald-50/20 transition-colors">
+                                <td class="p-3 font-bold text-slate-400">E5</td>
+                                <td class="p-3 font-medium">西口広場</td>
+                                <td class="p-3 text-slate-600">西口廣場</td>
+                                <td class="p-3 text-emerald-600 font-bold">09分抵達 / 11分發車</td>
+                                <td class="p-3 text-slate-500">27分抵達 / 29分發車</td>
+                            </tr>
+                            <tr class="hover:bg-emerald-50/20 transition-colors">
+                                <td class="p-3 font-bold text-slate-400">E6</td>
+                                <td class="p-3 font-medium">日本庭園</td>
+                                <td class="p-3 text-slate-600">日本庭園 / 茶室</td>
+                                <td class="p-3 text-emerald-600 font-bold">每小時 14 分</td>
+                                <td class="p-3 text-slate-500">每小時 24 分</td>
+                            </tr>
+                            <tr class="hover:bg-emerald-50/20 transition-colors bg-lime-50/10">
+                                <td class="p-3 font-bold text-lime-700">E7</td>
+                                <td class="p-3 font-medium text-lime-900">どんどこ森</td>
+                                <td class="p-3 text-lime-700 font-bold">動動力森林 (最深處)</td>
+                                <td class="p-3 text-lime-600 font-bold">每小時 17 分抵達</td>
+                                <td class="p-3 text-lime-600 font-bold">每小時 21 分折返</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="mt-3 flex items-start gap-2 bg-amber-50 p-2.5 rounded-xl border border-amber-100 text-[11px] text-amber-800">
+                    <i data-lucide="info" class="w-4 h-4 text-amber-600 shrink-0 mt-0.5"></i>
+                    <span>小提示：E7 動動力森林抵達後，巴士會停留折返約 4 分鐘，於每小時的 <strong>21 分</strong> 準時朝北口方向折返。如果遊客走路走累了，極力建議在此站搭巴士返回北口！</span>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-slate-800 text-slate-400 text-xs py-10 mt-12 border-t border-slate-700">
+        <div class="max-w-7xl mx-auto px-4 text-center space-y-3">
+            <p class="text-slate-200 font-bold text-sm tracking-wider">🍃 吉卜力公園遊園交通大補帖 🍂</p>
+            <p class="text-[10px] text-slate-500">&copy; 2026 Ghibli Park Travel Guide. Built with Love for Ghibli Fans.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript 互動與資料載入邏輯 -->
+    <script>
+        // 初始化 Lucide 圖標
+        lucide.createIcons();
+
+        // ================= 1. 資料驅動：地標座標資料庫 =================
+        // 所有地標以 (cx, cy) 為基準，調整此處座標會自動帶動所有路線、公車連線、文字及發光環！
+        const landmarks = {
+            'north-gate': {
+                name: '公園北口',
+                short: '北',
+                cx: 580,
+                cy: 165,
+                r: 18,
+                glowR: 24,
+                color: '#0f766e',
+                textOffset: { x: 0, y: -25 }
+            },
+            'elevator-tower': {
+                name: '電梯塔',
+                short: '塔',
+                cx: 570,
+                cy: 290,
+                r: 12,
+                glowR: 20,
+                color: '#707f94', // 灰色
+                textOffset: { x: -50, y: 4 }
+            },
+            'youth-hill': {
+                name: '青春之丘',
+                short: '丘',
+                cx: 607,
+                cy: 289,
+                r: 20,
+                glowR: 28,
+                color: '#0ea5e9', // 天藍色
+                textOffset: { x: 55, y: 5 }
+            },
+            'ghibli-warehouse': {
+                name: '吉卜力大倉庫',
+                short: '倉',
+                cx: 611,
+                cy: 389,
+                r: 20,
+                glowR: 32,
+                color: '#f97316', // 橘色
+                textOffset: { x: 0, y: 43 }
+            },
+            'valley-mononoke': {
+                name: '魔法之里',
+                short: '里',
+                cx: 807,
+                cy: 244,
+                r: 20,
+                glowR: 28,
+                color: '#8b5cf6',
+                textOffset: { x: 55, y: 5 }
+            },
+            'valley-witches': {
+                name: '魔女之谷',
+                short: '谷',
+                cx: 771,
+                cy: 370,
+                r: 20,
+                glowR: 30,
+                color: '#ec4899', // 粉紅色
+                textOffset: { x: 0, y: -35 }
+            },
+            'catbus-station': {
+                name: '貓巴士乘車點',
+                short: '🐾🚌',
+                cx: 730,
+                cy: 345,
+                isRect: true,
+                width: 30,
+                height: 20,
+                glowR: 24,
+                color: '#d97706',
+                textOffset: { x: -62, y: 3 }
+            },
+            'dondoko-forest': {
+                name: '動動力森林',
+                short: '①',
+                cx: 777,
+                cy: 564,
+                r: 20,
+                glowR: 30,
+                color: '#84cc16',
+                textOffset: { x: 0, y: 37 }
+            }
+        };
+
+        // ================= 2. 資料驅動：交通連線與文字偏移資料庫 =================
+        // 所有文字與控制點均以 relative offset 計算，當起終點地標移動時會完美貼合，免手動調整！
+        const routes = {
+            // 🚶 徒步走路組
+            walk: [
+                { from: 'north-gate', to: 'elevator-tower', text: '🚶5m', textOffset: { x: 7.5, y: -2.5 } },
+                { from: 'elevator-tower', to: 'youth-hill', text: '🚶3m', textOffset: { x: -14.5, y: -12 } },
+                { from: 'elevator-tower', to: 'ghibli-warehouse', text: '🚶3m', textOffset: { x: -25, y: 2.5 } },
+                { from: 'youth-hill', to: 'ghibli-warehouse', text: '🚶4m', textOffset: { x: 9.5, y: 7.5 } },
+                { from: 'youth-hill', to: 'valley-witches', text: '🚶5m', textOffset: { x: -0.5, y: -12.5 } },
+                { from: 'youth-hill', to: 'valley-mononoke', text: '🚶8m', textOffset: { x: -5, y: -17.5 } },
+                { from: 'ghibli-warehouse', to: 'valley-witches', text: '🚶3m', textOffset: { x: 0, y: 15 } },
+                { from: 'valley-mononoke', to: 'valley-witches', text: '🚶6m', textOffset: { x: 12.5, y: 0 } },
+                { 
+                    from: 'ghibli-warehouse', 
+                    to: 'dondoko-forest', 
+                    text: '🚶20m', 
+                    isQuad: true, 
+                    controlOffset: { x: -47.5, y: -78 }, // 貝茲曲線控制點相對於兩點中點的位移
+                    textOffset: { x: 35, y: 63 }, // 文字相對於控制點的位移
+                    hasSpot: {
+                        text: '⛩️ 稻樓門/神隱少女雕像',
+                        textOffset: { x: 10, y: -10 } // 雕像名稱相對於控制點的位移
+                    }
+                }
+            ],
+            // 🚌 免費接駁公車 (E東路線)
+            bus: [
+                { from: 'north-gate', to: 'valley-mononoke', text: '🚌3m', isQuad: true, controlOffset: { x: 20, y: -65 }, textOffset: { x: -20, y: 35 } },
+                { from: 'valley-witches', to: 'ghibli-warehouse', text: '🚌2m', isQuad: true, controlOffset: { x: 0, y: 30 }, textOffset: { x: 0, y: 5 } },
+                { from: 'valley-witches', to: 'valley-mononoke', text: '🚌2m', textOffset: { x: -24.5, y: -5 } },
+                { from: 'ghibli-warehouse', to: 'dondoko-forest', text: '🚌10m', isQuad: true, controlOffset: { x: -172.5, y: 0 }, textOffset: { x: 40, y: 10 } }
+            ],
+            // 🐾 貓巴士
+            catbus: [
+                { from: 'catbus-station', to: 'dondoko-forest', text: '🐾 10m (貓巴士)', isQuad: true, controlOffset: { x: 115, y: -30 }, textOffset: { x: -55, y: 45 } }
+            ]
+        };
+
+        // 吉卜力公園景點資料庫
+        const zoneData = {
+            'north-gate': {
+                title: '公園北口 (愛・地球博記念公園駅)',
+                badge: '公園主起點',
+                badgeColor: 'bg-teal-700',
+                transport: '🚇 Linimo 磁浮線抵達站點 / 免費巴士 E1 站點',
+                spots: [
+                    { name: 'Linimo 車站出口', desc: '由此出站即是公園北口的大廣場區域。' },
+                    { name: '免費公車首發站 (E1)', desc: '可在這裡直接上車，搭乘免費的「E東路線」前往各主題園區。' },
+                    { name: '公園北口諮詢服務處', desc: '提供地圖導覽資訊與行李寄存服務（需自費）。' }
+                ],
+                navs: [
+                    '🚶 步行至 <strong>電梯塔</strong>：約 <strong>5 分鐘</strong>',
+                    '🚌 免費公車至 <strong>魔法之里附近</strong>：約 <strong>3 分鐘</strong>'
+                ]
+            },
+            'elevator-tower': {
+                title: '電梯塔 (エレベーター塔)',
+                badge: '園區免費地標',
+                badgeColor: 'bg-slate-500', // 灰色 Badge
+                transport: '🚶 步行重要交叉樞紐',
+                spots: [
+                    { name: '19世紀空想科學電梯塔', desc: '融合《天空之城》與《霍爾的移動城堡》科幻美學的塔形建築（免費參觀）。' },
+                    { name: '高低差通道', desc: '可搭乘電梯直達下方平原，步行直達吉卜力大倉庫，為重要步行樞紐。' }
+                ],
+                navs: [
+                    '🚶 步行至 <strong>青春之丘</strong>：約 <strong>3 分鐘</strong>',
+                    '🚶 步行至 <strong>吉卜力大倉庫</strong>：約 <strong>3 分鐘</strong>'
+                ]
+            },
+            'youth-hill': {
+                title: '⑤ 青春之丘 (青春の丘)',
+                badge: '主題園區 ⑤',
+                badgeColor: 'bg-sky-500', // 天藍色 Badge
+                transport: '🚶 靠近電梯塔 / E1 公車站',
+                spots: [
+                    { name: '地球屋', desc: '《心之谷》劇中那棟古董玩具與小提琴工藝工房，內部細節如劇中精細。' },
+                    { name: '貓的事務所', desc: '《貓的報恩》中縮小版的貓男爵辦公室，可以從小窗戶窺探裡面的精緻家具。' }
+                ],
+                navs: [
+                    '🚶 步行至 <strong>吉卜力大倉庫</strong>：約 <strong>4 分鐘</strong>',
+                    '🚶 步行至 <strong>魔女之谷</strong>：約 <strong>5 分鐘</strong>',
+                    '🚶 步行至 <strong>魔法之里</strong>：約 <strong>8 分鐘</strong>'
+                ]
+            },
+            'ghibli-warehouse': {
+                title: '④ 吉卜力大倉庫 (ジブリの大倉庫)',
+                badge: '主題園區 ④',
+                badgeColor: 'bg-orange-500', // 橘色 Badge
+                transport: '🚌 免費公車 E4 站點旁 / 核心主力大館',
+                spots: [
+                    { name: '經典作品名場面展', desc: '超人氣拍照點！可以與無臉男同坐電車、在《紅豬》海灘對決等。' },
+                    { name: '天空之城機器兵', desc: '在廢墟庭園中靜靜站立的巨大機器人，全身覆蓋青苔與蔓藤。' },
+                    { name: '湯婆婆館長辦公室', desc: '還原《神隱少女》中湯婆婆在滿桌契約書中狂怒的生動蠟像。' },
+                    { name: '獵戶座影像放映室', desc: '播映吉卜力工作室專屬、只在此放映的精緻短篇動畫。' },
+                    { name: '借物少女艾莉緹的秘密世界', desc: '放大版的世界！遊客如同變身小人族，在巨大蒲公英與草葉間探索。' },
+                    { name: '貓巴士房間', desc: '專屬兒童的柔軟觸感大貓巴士。' }
+                ],
+                navs: [
+                    '🚶 步行至 <strong>魔女之谷</strong>：約 <strong>3 分鐘</strong> (專屬快捷通道)',
+                    '🚶 步行至 <strong>動動力森林</strong>：約 <strong>20 分鐘</strong> (漫步下山，途中經過稻樓門古蹟與隧道)',
+                    '🚌 免費公車至 <strong>動動力森林</strong>：約 <strong>10 分鐘</strong> (極力推薦回程搭乘公車省體力！)'
+                ]
+            },
+            'valley-mononoke': {
+                title: '③ 魔法之里 (もののけの里)',
+                badge: '主題園區 ③',
+                badgeColor: 'bg-violet-500',
+                transport: '🚌 免費公車 E2 站點旁',
+                spots: [
+                    { name: '乙事主與邪魔神巨型滑梯', desc: '《魔法公主》劇中巨型山豬神「乙事主」與「邪魔神」外觀木造滑梯（滑梯限國小以下遊玩）。' },
+                    { name: '達達拉城 (體驗學習館)', desc: '還原劇中草庵外觀，可以在裡面自費體驗動手烤當地傳統美食「五平餅」。' }
+                ],
+                navs: [
+                    '🚶 步行至 <strong>魔女之谷</strong>：約 <strong>6 分鐘</strong>',
+                    '🚌 免費公車至 <strong>魔女之谷</strong>：約 <strong>2 分鐘</strong>'
+                ]
+            },
+            'valley-witches': {
+                title: '② 魔女之谷 (魔女の谷)',
+                badge: '主題園區 ②',
+                badgeColor: 'bg-pink-500', // 粉紅色 Badge
+                transport: '🚌 免費公車 E3 站點旁 / 最大型戶外園區',
+                spots: [
+                    { name: '霍爾的移動城堡', desc: '高達 20 米的巍峨蒸汽城堡！煙囪定時會噴煙，能參觀霍爾髒亂精美的房間。' },
+                    { name: '旋轉木馬與飛行飛行具', desc: '點綴了多部吉卜力作品角色的歐風古典旋轉木馬。' },
+                    { name: '琪琪老家：歐其諾之家', desc: '《魔女宅急便》女主角琪琪出發前的營意盎然老家與媽媽的研究室。' },
+                    { name: '蘇菲帽子店', desc: '《霍爾的移動城堡》中蘇菲設計帽子的裁縫店，並附設精美後庭院。' },
+                    { name: '熱風麵包店 (Goki-Pori)', desc: '完美還原劇中琪琪工作的麵包店，提供美味現烤麵包可現場購買！' }
+                ],
+                navs: [
+                    '🚶 步行至 <strong>吉卜力大倉庫</strong>：約 <strong>3 分鐘</strong>',
+                    '🚶 步行至 <strong>魔法之里</strong>：約 <strong>6 分鐘</strong>',
+                    '🚌 免費公車至 <strong>吉卜力大倉庫</strong>：約 <strong>2 分鐘</strong>',
+                    '🚌 免費公車至 <strong>魔法之里</strong>：約 <strong>2 分鐘</strong>'
+                ]
+            },
+            'catbus-station': {
+                title: '🐾 APM 貓巴士乘車點',
+                badge: '特色付費交通',
+                badgeColor: 'bg-amber-600',
+                transport: '📍 位於「魔女之谷」與「魔法之里」正中間位置的招呼亭',
+                spots: [
+                    { name: '貓巴士 APM 線候車處', desc: '位於魔女之谷與魔法之里的中間，地理位置便利。' },
+                    { name: '低速電動 APM 貓巴士', desc: '仿造龍貓多足貓巴士，擁有發光雙眼與極致柔軟觸感的座墊，可容納多位乘客。' }
+                ],
+                navs: [
+                    '🐾 搭乘 <strong>貓巴士</strong> 至 <strong>動動力森林</strong>：單程約 <strong>10 分鐘</strong> (本交通需另外在自動售票機購票)'
+                ]
+            },
+            'dondoko-forest': {
+                title: '① 動動力森林 (どんどこ森)',
+                badge: '主題園區 ①',
+                badgeColor: 'bg-lime-500',
+                transport: '🚌 免費公車 E7 終點站 / 南端森林頂',
+                spots: [
+                    { name: '小梅與小月的家', desc: '《龍貓》中完美重現的昭和木造民家，廚房炊具、水箱與爸爸的书房皆可親手開啟探索！' },
+                    { name: '動動力堂 (山頂巨型大龍貓)', desc: '山頂高達 5 米的木造大龍貓，可讓小朋友鑽進去探索。' }
+                ],
+                navs: [
+                    '🚶 步行至 <strong>吉卜力大倉庫</strong>：約 <strong>20 分鐘</strong> (下山漫步，中途經神隱少女雕像隧道)',
+                    '🚌 免費公車回 <strong>吉卜力大倉庫附近</strong>：約 <strong>10 分鐘</strong> (極佳的省力下山方案！)'
+                ]
+            }
+        };
+
+        // 輔助函式：動態創建帶有 XML Namespace 的 SVG 元素
+        function createSVGElement(tagName, attributes = {}) {
+            const el = document.createElementNS("http://www.w3.org/2000/svg", tagName);
+            for (const [key, value] of Object.entries(attributes)) {
+                el.setAttribute(key, value);
+            }
+            return el;
+        }
+
+        // ================= 3. 地圖動態繪製與定位核心邏輯 =================
+        function renderMap() {
+            const landmarksGroup = document.getElementById('landmarks-group');
+            if (!landmarksGroup) return;
+            landmarksGroup.innerHTML = '';
+
+            // 3.1 繪製所有地標點 (圓形/長方形) 及名稱標籤
+            for (const [key, item] of Object.entries(landmarks)) {
+                const g = createSVGElement('g', {
+                    'id': `landmark-${key}`,
+                    'class': 'cursor-pointer group',
+                    'onclick': `selectZone('${key}')`
+                });
+
+                if (item.isRect) {
+                    // 長方形地標（例如貓巴士乘車點）
+                    const x = item.cx - item.width / 2;
+                    const y = item.cy - item.height / 2;
+                    const rect = createSVGElement('rect', {
+                        'x': x,
+                        'y': y,
+                        'width': item.width,
+                        'height': item.height,
+                        'rx': 5,
+                        'fill': item.color,
+                        'stroke': '#ffffff',
+                        'stroke-width': 2
+                    });
+                    g.appendChild(rect);
+
+                    const shortText = createSVGElement('text', {
+                        'x': item.cx,
+                        'y': item.cy + 3,
+                        'fill': 'white',
+                        'class': 'text-[9px] font-bold',
+                        'text-anchor': 'middle'
+                    });
+                    shortText.textContent = item.short;
+                    g.appendChild(shortText);
+                } else {
+                    // 圓形地標
+                    const circle = createSVGElement('circle', {
+                        'cx': item.cx,
+                        'cy': item.cy,
+                        'r': item.r,
+                        'fill': item.color,
+                        'stroke': '#ffffff',
+                        'stroke-width': item.key === 'elevator-tower' ? 2 : 2.5
+                    });
+                    g.appendChild(circle);
+
+                    const shortText = createSVGElement('text', {
+                        'x': item.cx,
+                        'y': item.cy + 4,
+                        'fill': 'white',
+                        'class': `${item.r <= 15 ? 'text-[10px]' : (item.r >= 26 ? 'text-base' : 'text-sm')} font-bold`,
+                        'text-anchor': 'middle'
+                    });
+                    shortText.textContent = item.short;
+                    g.appendChild(shortText);
+                }
+
+                // 地標中文標題標籤 (帶有白底過濾器防止被線條遮擋)
+                const nameText = createSVGElement('text', {
+                    'x': item.cx + item.textOffset.x,
+                    'y': item.cy + item.textOffset.y,
+                    'fill': item.color,
+                    'class': 'text-xs font-bold',
+                    'text-anchor': 'middle',
+                    'filter': 'url(#bg-white)'
+                });
+                nameText.textContent = item.name;
+                g.appendChild(nameText);
+
+                landmarksGroup.appendChild(g);
+            }
+
+            // 3.2 繪製所有交通路線與時間標記
+            for (const [type, list] of Object.entries(routes)) {
+                const group = document.getElementById(`route-${type}`);
+                if (!group) continue;
+                group.innerHTML = '';
+
+                list.forEach(route => {
+                    const fromPt = landmarks[route.from];
+                    const toPt = landmarks[route.to];
+                    if (!fromPt || !toPt) return;
+
+                    let d = '';
+                    const midX = (fromPt.cx + toPt.cx) / 2;
+                    const midY = (fromPt.cy + toPt.cy) / 2;
+                    let textX = 0;
+                    let textY = 0;
+
+                    const stroke = type === 'walk' ? '#1e293b' : (type === 'bus' ? '#ef4444' : '#f59e0b');
+                    const strokeWidth = type === 'walk' ? '4.5' : (type === 'bus' ? '3.5' : '4.5');
+                    const strokeDash = type === 'walk' ? '6,6' : (type === 'catbus' ? '2, 8' : 'none');
+
+                    if (route.isQuad) {
+                        // 貝茲二次曲線：控制點 (ctrlX, ctrlY) 相對於兩點中點進行位移
+                        const ctrlX = midX + route.controlOffset.x;
+                        const ctrlY = midY + route.controlOffset.y;
+                        d = `M ${fromPt.cx} ${fromPt.cy} Q ${ctrlX} ${ctrlY} ${toPt.cx} ${toPt.cy}`;
+                        
+                        // 文字座標相對於控制點做偏移
+                        textX = ctrlX + route.textOffset.x;
+                        textY = ctrlY + route.textOffset.y;
+
+                        // 若此線路帶有特殊小地標（例如：稻樓門）
+                        if (route.hasSpot) {
+                            const spotG = createSVGElement('g');
+                            const spotCircle = createSVGElement('circle', {
+                                'cx': ctrlX,
+                                'cy': ctrlY,
+                                'r': 6,
+                                'fill': '#475569',
+                                'stroke': '#ffffff',
+                                'stroke-width': 1.5
+                            });
+                            spotG.appendChild(spotCircle);
+
+                            const spotName = createSVGElement('text', {
+                                'x': ctrlX + route.hasSpot.textOffset.x,
+                                'y': ctrlY + route.hasSpot.textOffset.y,
+                                'fill': '#334155',
+                                'class': 'text-[10px] font-bold',
+                                'filter': 'url(#bg-white)'
+                            });
+                            spotName.textContent = route.hasSpot.text;
+                            spotG.appendChild(spotName);
+
+                            group.appendChild(spotG);
+                        }
+                    } else {
+                        // 直線
+                        d = `M ${fromPt.cx} ${fromPt.cy} L ${toPt.cx} ${toPt.cy}`;
+                        // 文字座標相對於中點做偏移
+                        textX = midX + route.textOffset.x;
+                        textY = midY + route.textOffset.y;
+                    }
+
+                    // 繪製路徑
+                    const path = createSVGElement('path', {
+                        'd': d,
+                        'stroke': stroke,
+                        'stroke-width': strokeWidth,
+                        'fill': 'none'
+                    });
+                    if (strokeDash !== 'none') {
+                        path.setAttribute('stroke-dasharray', strokeDash);
+                    }
+                    if (type === 'catbus') {
+                        path.setAttribute('stroke-linecap', 'round');
+                    }
+                    group.appendChild(path);
+
+                    // 繪製交通時間標籤
+                    const text = createSVGElement('text', {
+                        'x': textX,
+                        'y': textY,
+                        'fill': type === 'walk' ? '#1e293b' : (type === 'bus' ? '#ef4444' : '#d97706'),
+                        'class': 'text-xs font-bold',
+                        'filter': 'url(#bg-white)'
+                    });
+                    text.textContent = route.text;
+                    group.appendChild(text);
+                });
+            }
+        }
+
+        // 路線顯示與隱藏切換
+        function toggleRouteLayer(type) {
+            const checkbox = document.getElementById(`toggle-${type}`);
+            const layer = document.getElementById(`route-${type}`);
+            if (checkbox && layer) {
+                if (checkbox.checked) {
+                    layer.style.opacity = '1';
+                    layer.style.pointerEvents = 'auto';
+                } else {
+                    layer.style.opacity = '0';
+                    layer.style.pointerEvents = 'none';
+                }
+            }
+        }
+
+        // 地標顯示與隱藏切換
+        function toggleLandmarkLayer() {
+            const checkbox = document.getElementById('toggle-landmarks');
+            const layer = document.getElementById('landmarks-layer');
+            if (checkbox && layer) {
+                if (checkbox.checked) {
+                    layer.style.opacity = '1';
+                    layer.style.pointerEvents = 'auto';
+                } else {
+                    layer.style.opacity = '0';
+                    layer.style.pointerEvents = 'none';
+                }
+            }
+        }
+
+        // 園區地標選取與聚焦
+        function selectZone(zoneKey) {
+            const data = zoneData[zoneKey];
+            const item = landmarks[zoneKey];
+            if (!data) return;
+
+            // 1. 切換 active 地標狀態，產生優雅呼吸縮放效果
+            document.querySelectorAll('#landmarks-group > g').forEach(el => el.classList.remove('active'));
+            const activeG = document.getElementById(`landmark-${zoneKey}`);
+            if (activeG) {
+                activeG.classList.add('active');
+            }
+
+            // 2. 隱藏預設空狀態，渲染資訊內容
+            document.getElementById('empty-state').classList.add('hidden');
+            const contentArea = document.getElementById('content-area');
+            if (contentArea) contentArea.classList.remove('hidden');
+
+            // 3. 渲染 Badge 與標題
+            const badge = document.getElementById('zone-badge');
+            if (badge) {
+                badge.innerText = data.badge;
+                badge.className = `px-3 py-1 text-xs font-bold rounded-full text-white ${data.badgeColor}`;
+            }
+            
+            const zoneTitle = document.getElementById('zone-title');
+            if (zoneTitle) zoneTitle.innerText = data.title;
+            
+            const zoneTransport = document.getElementById('zone-transport');
+            if (zoneTransport) {
+                zoneTransport.innerHTML = `
+                    <i data-lucide="map-pin" class="w-3.5 h-3.5"></i>
+                    <span>${data.transport}</span>
+                `;
+            }
+
+            // 4. 渲染細部小景點清單
+            const spotList = document.getElementById('spot-list');
+            if (spotList) {
+                spotList.innerHTML = '';
+                data.spots.forEach(spot => {
+                    const li = document.createElement('li');
+                    li.className = 'p-3 bg-white rounded-2xl border border-slate-100 hover:border-emerald-200 hover:shadow-sm transition-all';
+                    li.innerHTML = `
+                        <div class="font-bold text-slate-800 text-sm flex items-center gap-1.5">
+                            <span class="text-emerald-600">✦</span> ${spot.name}
+                        </div>
+                        <div class="text-xs text-slate-500 mt-1 pl-4 leading-relaxed">${spot.desc}</div>
+                    `;
+                    spotList.appendChild(li);
+                });
+            }
+
+            // 5. 渲染出發交通指南
+            const navList = document.getElementById('navigation-list');
+            if (navList) {
+                navList.innerHTML = '';
+                data.navs.forEach(nav => {
+                    const div = document.createElement('div');
+                    div.className = 'flex items-center gap-2 p-1.5 border-b border-slate-50 last:border-b-0';
+                    div.innerHTML = `
+                        <span class="text-emerald-600 text-[10px] font-bold">▶</span>
+                        <span class="text-xs">${nav}</span>
+                    `;
+                    navList.appendChild(div);
+                });
+            }
+
+            // 6. 重新啟用動態生成的 Lucide 圖標
+            lucide.createIcons();
+
+            // 7. 平滑滾動讓遊客更易閱讀
+            const detailPanel = document.getElementById('detail-panel');
+            if (detailPanel) detailPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        // 網頁載入完成後渲染地圖並自動優先聚焦「吉卜力大倉庫」
+        window.addEventListener('DOMContentLoaded', () => {
+            renderMap();
+            selectZone('ghibli-warehouse');
+        });
+    </script>
+</body>
+</html>
