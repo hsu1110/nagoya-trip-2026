@@ -54,6 +54,17 @@
         .group:hover circle, .group:hover rect {
             transform: scale(1.1);
         }
+        /* 銳利化地圖底圖 */
+        .sharp-img {
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: crisp-edges;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: o-crisp-edges;
+        }
+        /* 展開摺疊的過渡效果 */
+        .accordion-content {
+            transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+        }
     </style>
 </head>
 <body class="text-slate-800 antialiased">
@@ -79,7 +90,7 @@
 
     <main class="max-w-7xl mx-auto px-3 py-6 space-y-6">
         
-        <!-- 核心互動區：地圖與景點資訊 -->
+        <!-- 一、核心互動區：地圖與景點資訊 -->
         <section class="bg-white rounded-3xl shadow-sm border border-emerald-100 p-4 md:p-6">
             <!-- 區塊標題與路線控制選項 -->
             <div class="border-b border-slate-100 pb-4 mb-6 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
@@ -122,7 +133,7 @@
             </div>
 
             <!-- 地圖本體 -->
-            <div id="map-wrapper" class="relative w-full bg-[#e9f3df] rounded-2xl overflow-hidden border border-emerald-100 flex flex-col items-center p-1 md:p-2 shadow-inner">
+            <div id="map-wrapper" class="relative w-full bg-[#e9f3df] rounded-2xl overflow-hidden border border-emerald-100 flex flex-col items-center p-1 md:p-2 shadow-inner transition-all duration-300">
                 
                 <!-- 手機版提示滑動小手勢 -->
                 <div class="md:hidden absolute top-3 right-3 z-10 bg-emerald-950/80 text-white text-[10px] px-2 py-1 rounded-full flex items-center gap-1 pointer-events-none">
@@ -133,7 +144,7 @@
                     <!-- 響應式包裝容器 (根據底圖 1000x850 等比例，並附帶大自然綠色底色作為降級備用背景) -->
                     <div class="min-w-[760px] md:min-w-[900px] xl:min-w-full aspect-[1000/850] relative mx-auto bg-[#e2f0d9] rounded-2xl overflow-hidden">
                         
-                        <!-- 1. 採用 GPU 硬體加速的 HTML <img> 標籤作為底圖，大幅優於 SVG <image> 的渲染清晰度！ -->
+                        <!-- 1. 採用 GPU 硬體加速的 HTML <img> 標籤作為底圖 -->
                         <img 
                             src="./data/ghibli_tour_map.jpg" 
                             alt="吉卜力公園地圖底圖" 
@@ -218,7 +229,124 @@
             </div>
         </section>
 
-        <!-- 交通方案與巴士資訊總覽 -->
+        <!-- 二、核心深度摺疊區：吉卜力大倉庫深度導覽 -->
+        <section id="warehouse-depth-section" class="bg-white rounded-3xl shadow-sm border border-orange-100 overflow-hidden">
+            <!-- 摺疊標題列 -->
+            <button onclick="toggleWarehouseAccordion()" class="w-full px-6 py-5 bg-gradient-to-r from-orange-50 to-amber-50/30 flex justify-between items-center text-left focus:outline-none hover:from-orange-100/50 transition-colors">
+                <div class="flex items-center gap-3">
+                    <span class="text-2xl bg-orange-500 text-white p-2 rounded-2xl shadow-sm">🏭</span>
+                    <div>
+                        <h2 class="text-lg font-bold text-orange-950 flex items-center gap-2">
+                            吉卜力大倉庫 (ジブリの大倉庫) 深度導覽
+                        </h2>
+                        <p class="text-xs text-orange-800/80 mt-0.5 font-medium">
+                            極清晰中文版底圖 ➔ 網友力薦 0~8 號黃金不走回頭路玩遊路線
+                        </p>
+                    </div>
+                </div>
+                <div id="warehouse-arrow" class="text-orange-900 bg-white p-2 rounded-full border border-orange-200 shadow-sm transition-transform duration-300">
+                    <i data-lucide="chevron-down" class="w-5 h-5"></i>
+                </div>
+            </button>
+
+            <!-- 摺疊本體內容 -->
+            <div id="warehouse-accordion-content" class="hidden border-t border-orange-100 p-4 md:p-6 space-y-6">
+                
+                <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 border-b border-orange-50 pb-4">
+                    <p class="text-xs text-slate-500 max-w-xl">
+                        💡 <strong>如何使用大倉庫地圖</strong>：點擊地圖上的【圓圈數字步序】或是點擊右側【黃金步驟時間軸】，即可即時觸發高亮導航與優雅呼吸動畫，查看特色景點與過關秘笈！
+                    </p>
+                    
+                    <!-- 大倉庫圖層顯示控制器 -->
+                    <div class="flex flex-wrap items-center gap-2 bg-orange-50 p-2 rounded-2xl border border-orange-100 text-xs w-full lg:w-auto shadow-inner overflow-x-auto">
+                        <span class="text-orange-400 font-bold shrink-0">顯示控制：</span>
+                        
+                        <label class="flex items-center gap-1.5 bg-white px-2.5 py-1 rounded-xl border border-orange-200 cursor-pointer hover:bg-orange-100 transition-colors shrink-0">
+                            <input type="checkbox" id="toggle-wh-nodes" checked class="rounded text-orange-600 focus:ring-orange-500" onchange="toggleWarehouseLayer('nodes')">
+                            <span class="w-2.5 h-2.5 rounded-full bg-orange-600 inline-block"></span>
+                            <span class="font-bold text-orange-800">📍 步驟節點與標籤</span>
+                        </label>
+
+                        <label class="flex items-center gap-1.5 bg-white px-2.5 py-1 rounded-xl border border-orange-200 cursor-pointer hover:bg-orange-100 transition-colors shrink-0">
+                            <input type="checkbox" id="toggle-wh-route" checked class="rounded text-red-600 focus:ring-red-500" onchange="toggleWarehouseLayer('route')">
+                            <span class="w-3.5 h-0.5 border-t-2 border-dashed border-red-500 inline-block"></span>
+                            <span class="font-bold text-red-700">🚩 推薦遊覽路線</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 大倉庫互動底圖與時間軸 -->
+                <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+                    
+                    <!-- 1. 大倉庫實景 SVG 互動圖 -->
+                    <div class="xl:col-span-2 relative bg-slate-50 rounded-2xl overflow-hidden border border-slate-200 p-1">
+                        <div class="w-full overflow-auto map-container">
+                            <div class="min-w-[700px] aspect-[1000/760] relative bg-[#fafafa]">
+                                <!-- 高清中文版底圖 -->
+                                <img 
+                                    src="./data/ghibli_tour_detail_map.jpg" 
+                                    alt="吉卜力大倉庫清晰版地圖" 
+                                    class="absolute inset-0 w-full h-full object-contain sharp-img rounded-xl"
+                                />
+                                
+                                <svg viewBox="0 0 1000 760" class="absolute inset-0 w-full h-full select-none" id="warehouse-svg">
+                                    <!-- 文字背景白底過濾器 (防止文字和線條重合看不清) -->
+                                    <defs>
+                                        <filter x="-0.1" y="-0.1" width="1.2" height="1.2" id="bg-white">
+                                            <feFlood flood-color="white" flood-opacity="0.85"/>
+                                            <feComposite in="SourceGraphic" operator="over"/>
+                                        </filter>
+                                    </defs>
+
+                                    <!-- 路線畫線 (紅色厚實線條) -->
+                                    <g id="warehouse-route-lines" class="transition-opacity duration-300"></g>
+
+                                    <!-- 咖啡廳路線 (獨立圖層) -->
+                                    <g id="warehouse-cafe-line" class="transition-opacity duration-300"></g>
+
+                                    <!-- 互動節點容器 (主動繼承呼吸動畫) -->
+                                    <g id="warehouse-nodes-group" class="transition-opacity duration-300"></g>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2. 大倉庫黃金路線時間軸 (0 ➔ 8) -->
+                    <div class="xl:col-span-1 flex flex-col justify-between space-y-4">
+                        <div class="bg-gradient-to-br from-slate-50 to-orange-50/10 p-4 rounded-2xl border border-slate-100 max-h-[520px] overflow-y-auto">
+                            <h3 class="text-sm font-bold text-orange-950 mb-3 flex items-center gap-1.5 border-b border-orange-100 pb-2">
+                                <i data-lucide="list-ordered" class="w-4 h-4 text-orange-600"></i>
+                                黃金不走回頭路時間軸
+                            </h3>
+                            <div class="relative pl-6 border-l border-orange-200/60 space-y-4" id="timeline-list">
+                                <!-- 由 JS 動態生成 -->
+                            </div>
+                        </div>
+
+                        <!-- 當前選中大倉庫節點詳情 -->
+                        <div class="bg-white p-5 rounded-2xl border border-orange-200 shadow-md transition-all duration-300" id="warehouse-detail-box">
+                            <div class="flex items-center justify-between mb-2">
+                                <div class="flex items-center gap-2">
+                                    <span id="wh-step-badge" class="bg-orange-600 text-white font-bold rounded-xl text-xs w-6 h-6 flex items-center justify-center">1</span>
+                                    <h4 id="wh-step-title" class="font-bold text-slate-900 text-base"></h4>
+                                </div>
+                                <span id="wh-step-level" class="text-[10px] font-bold px-2 py-0.5 rounded-full"></span>
+                            </div>
+                            <p id="wh-step-desc" class="text-xs text-slate-500 leading-relaxed mb-3"></p>
+                            <div class="bg-orange-50/50 rounded-xl p-3 border border-orange-100">
+                                <span class="text-[10px] uppercase font-bold text-orange-800 tracking-wider flex items-center gap-1">
+                                    <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> 黃金密技 / 亮點
+                                </span>
+                                <p id="wh-step-tip" class="text-xs text-slate-700 font-medium mt-1 leading-relaxed"></p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 三、交通方案與巴士資訊總覽 -->
         <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             
             <!-- 聯外交通與接駁規則 -->
@@ -228,34 +356,37 @@
                         <i data-lucide="info" class="w-5 h-5 text-emerald-600"></i>
                         遊園交通必知大補帖
                     </h3>
-                    <div class="space-y-4 text-sm">
-                        <div class="bg-emerald-50/50 p-3 rounded-xl border border-emerald-100">
-                            <h4 class="font-bold text-emerald-900 text-xs mb-1.5 flex items-center gap-1">
-                                <span class="text-base">🚇</span> 外部地鐵串聯
+                    <div class="space-y-3.5 text-sm">
+                        <!-- 1. 外部地鐵串聯 (綠色系) -->
+                        <div class="bg-emerald-50/40 p-3.5 rounded-2xl border border-emerald-100">
+                            <h4 class="font-bold text-emerald-900 text-xs mb-1.5 flex items-center gap-1.5">
+                                <span class="text-sm">🚇</span> 外部地鐵交通串聯
                             </h4>
-                            <ul class="space-y-1 text-xs text-emerald-950 list-disc list-inside">
+                            <ul class="space-y-1.5 text-xs text-emerald-950 list-disc list-inside">
                                 <li>從 <strong>藤之丘站</strong>（東山線）搭 Linimo ➔ 約 <strong>13 分鐘</strong>抵達園區。</li>
                                 <li>從 <strong>八草站</strong>（愛知環狀鐵道）搭 Linimo ➔ 約 <strong>4 分鐘</strong>抵達園區。</li>
                             </ul>
                         </div>
 
-                        <div class="space-y-2">
-                            <h4 class="font-bold text-slate-700 text-xs flex items-center gap-1">
-                                <span class="text-base">🚌</span> 免費接駁公車重要規則
+                        <!-- 2. 免費接駁公車重要規則 (紅色系) -->
+                        <div class="bg-red-50/30 p-3.5 rounded-2xl border border-red-100">
+                            <h4 class="font-bold text-red-900 text-xs mb-1.5 flex items-center gap-1.5">
+                                <span class="text-sm">🚌</span> 免費接駁公車重要規則
                             </h4>
-                            <ul class="space-y-1.5 text-xs text-slate-600 list-disc list-inside">
-                                <li class="text-red-600 font-bold">每週二（火曜日）停駛（遇休館亦不營運）。</li>
-                                <li>全程免費搭乘，直接上車（不需預約或驗票）。</li>
+                            <ul class="space-y-1.5 text-xs text-red-950 list-disc list-inside">
+                                <li class="text-red-700 font-bold">每週二（火曜日）停駛（遇休館亦不營運）。</li>
+                                <li>全程免費搭乘，直接上車（不需預約 or 驗票）。</li>
                                 <li>車內禁止飲食、禁止吸菸、禁止攜帶寵物。</li>
                                 <li>全園有 4 種不同吉卜力主題外觀塗裝的巴士。</li>
                             </ul>
                         </div>
 
-                        <div class="space-y-2 pt-2 border-t border-slate-100">
-                            <h4 class="font-bold text-amber-700 text-xs flex items-center gap-1">
-                                <span class="text-base">🐾</span> APM 貓巴士乘車體驗
+                        <!-- 3. APM 貓巴士乘車體驗 (橘黃色系) -->
+                        <div class="bg-amber-50/40 p-3.5 rounded-2xl border border-amber-100">
+                            <h4 class="font-bold text-amber-900 text-xs mb-1.5 flex items-center gap-1.5">
+                                <span class="text-sm">🐾</span> APM 貓巴士乘車體驗
                             </h4>
-                            <ul class="space-y-1 text-xs text-slate-600 list-disc list-inside">
+                            <ul class="space-y-1.5 text-xs text-amber-950 list-disc list-inside">
                                 <li>運行區間：<strong>魔女之谷與魔法之里中間 ⇄ 動動力森林</strong></li>
                                 <li>單程約 <strong>10 分鐘</strong>，需額外購買貓巴士乘車券。</li>
                             </ul>
@@ -309,7 +440,7 @@
                             </tr>
                             <tr class="hover:bg-emerald-50/20 transition-colors">
                                 <td class="p-3 font-bold text-slate-400">E3</td>
-                                <td class="p-3 font-medium">魔女の谷</td>
+                                <td class="p-3 font-medium">魔女之谷</td>
                                 <td class="p-3 text-pink-600 font-medium font-bold">魔女之谷 (大芝生廣場)</td>
                                 <td class="p-3 text-emerald-600 font-bold">每小時 05 分</td>
                                 <td class="p-3 text-slate-500">每小時 33 分</td>
@@ -347,7 +478,7 @@
                 </div>
                 <div class="mt-3 flex items-start gap-2 bg-amber-50 p-2.5 rounded-xl border border-amber-100 text-[11px] text-amber-800">
                     <i data-lucide="info" class="w-4 h-4 text-amber-600 shrink-0 mt-0.5"></i>
-                    <span>小提示：E7 動動力森林抵達後，巴士會停留折返約 4 分鐘，於每小時的 <strong>21 分</strong> 準時朝北口方向折返。如果遊客走路走累了，極力建議在此站搭巴士返回北口！</span>
+                    <span>小提示：E7 動動力森林抵達後，巴士會停留折返約 4 分鐘，於每小時의 <strong>21 分</strong> 準時朝北口方向折返。如果遊客走路走累了，極力建議在此站搭巴士返回北口！</span>
                 </div>
             </div>
         </section>
@@ -365,8 +496,17 @@
         // 初始化 Lucide 圖標
         lucide.createIcons();
 
+        // 輔助函式：動態創建帶有 XML Namespace 的 SVG 元素
+        function createSVGElement(tagName, attributes = {}) {
+            const el = document.createElementNS("http://www.w3.org/2000/svg", tagName);
+            for (const [key, value] of Object.entries(attributes)) {
+                el.setAttribute(key, value);
+            }
+            return el;
+        }
+
         // ================= 1. 資料驅動：地標座標資料庫 =================
-        // 所有地標以 (cx, cy) 為基準，調整此處座標會自動帶動所有路線、公車連線、文字及發光環！
+        // 所有地標以 (cx, cy) 為基準，調整此處座標會自動帶動所有路線、公車連線、文字及呼吸動畫！
         const landmarks = {
             'north-gate': {
                 name: '公園北口',
@@ -431,8 +571,8 @@
             'catbus-station': {
                 name: '貓巴士乘車點',
                 short: '🐾🚌',
-                cx: 730,
-                cy: 345,
+                cx: 760,
+                cy: 290,
                 isRect: true,
                 width: 30,
                 height: 20,
@@ -487,7 +627,7 @@
             ],
             // 🐾 貓巴士
             catbus: [
-                { from: 'catbus-station', to: 'dondoko-forest', text: '🐾 10m (貓巴士)', isQuad: true, controlOffset: { x: 115, y: -30 }, textOffset: { x: -55, y: 45 } }
+                { from: 'catbus-station', to: 'dondoko-forest', text: '🐾 10m (貓巴士)', isQuad: true, controlOffset: { x: 60, y: -20 }, textOffset: { x: -65, y: 20 } }
             ]
         };
 
@@ -618,27 +758,114 @@
             }
         };
 
-        // 輔助函式：動態創建帶有 XML Namespace 的 SVG 元素
-        function createSVGElement(tagName, attributes = {}) {
-            const el = document.createElementNS("http://www.w3.org/2000/svg", tagName);
-            for (const [key, value] of Object.entries(attributes)) {
-                el.setAttribute(key, value);
+        // ================= 3. 吉卜力大倉庫 0~8號 及 餐廳數據庫 =================
+        const warehouseSteps = {
+            '0': {
+                title: '驗票入口進場',
+                level: '1F 綠框',
+                levelClass: 'bg-green-100 text-green-800 border-green-200',
+                cx: 120, cy: 250, r: 18,
+                desc: '探險之旅的完美起點！在此接受驗票並持特製電影底片票卡入館。',
+                tip: '進館時拿到的特製底片膠捲票卡，是用來觀看【2】特別企劃展與電影的憑證，具有精緻的底片細節，非常適合作為書籤或紀念品收藏！'
+            },
+            '1': {
+                title: '動畫人物名場面展',
+                level: '1F/B1 混合',
+                levelClass: 'bg-gradient-to-r from-green-100 to-yellow-100 text-slate-800 border-orange-200',
+                cx: 430, cy: 370, r: 20,
+                desc: '大倉庫人氣最高的經典展區！名場面本館位於一樓（綠框），側邊入口及部分排隊通道延伸至地下一樓（黃框）。',
+                tip: '🌟 <strong>黃金密技</strong>：所有人一進場都會塞在玄關，此時二話不說，<strong>立刻直奔名場面展排隊</strong>！優先跟無臉男電車合照，能幫您省下後續整整 1.5～2 小時 the 漫長排隊時間！'
+            },
+            '2': {
+                title: '特別企劃展覽 & 電影放映室',
+                level: '1F 綠框',
+                levelClass: 'bg-green-100 text-green-800 border-green-200',
+                cx: 460, cy: 150, r: 20,
+                desc: '展示吉卜力經典動畫背後的食物學問與創作手稿。放映室「Cinema Orion」也在隔壁。',
+                tip: '特別企劃展內有《神隱少女》中御白樣的巨大立體造景，非常適合打卡！放映室則可憑入口處的票根免費觀看一次吉卜力不對外公開的專屬原創動畫短片。'
+            },
+            '3': {
+                title: '冒牌館長室 (湯婆婆)',
+                level: '1F 綠框',
+                levelClass: 'bg-green-100 text-green-800 border-green-200',
+                cx: 490, cy: 80, r: 18,
+                desc: '還原《神隱少女》中湯婆婆在契約書漫天飛舞中狂怒的辦公場景。隔壁可以看到可愛的白龍！',
+                tip: '您可以站在湯婆婆巨大的書桌正前方拍照，假裝自己是正在和她簽下名字契約的「千尋」！'
+            },
+            '4': {
+                title: '天空之庭 ➔ 南街 ➔ 貓巴士房',
+                level: '1F 綠框',
+                levelClass: 'bg-green-100 text-green-800 border-green-200',
+                cx: 940, cy: 200, r: 20,
+                desc: '串聯大倉庫右半邊的三大驚奇世界：5米高巨型機器人兵（天空之庭）、懷舊昭和風「南街」以及貓巴士房間。',
+                tip: '機器人兵常需排隊 20 分鐘合照；「南街」則有實體書店與模型鋪可購買復古周邊；特別注意「貓巴士房間」僅限國小以下兒童進入攀爬遊玩。'
+            },
+            '5': {
+                title: '兒童城 & 小矮人花園',
+                level: '1F 綠框',
+                levelClass: 'bg-green-100 text-green-800 border-green-200',
+                cx: 720, cy: 110, r: 20,
+                desc: '帶領遊客體驗《借物少女艾莉緹》視角的世界。在這裡您將變身僅有 10 公分高的小人族，穿梭在巨型蒲公英與溫室花卉中。',
+                tip: '艾莉緹之家的細節（1:10放大比例）令人驚嘆，抽屜、郵票床與植物盆栽等都能讓您拍出如童話般的照片！'
+            },
+            '6': {
+                title: '牛奶小站 Siberi*An',
+                level: '1F 綠框',
+                levelClass: 'bg-green-100 text-green-800 border-green-200',
+                cx: 320, cy: 80, r: 18,
+                desc: '大倉庫後方的溫馨美食站。提供《風起》中男主角二郎購買的傳統紅豆蛋糕甜點「Siberia」與濃郁在地常滑牛乳。',
+                tip: '走到這裡腳應該有點酸了，強烈推薦買一份紅豆蛋糕和一瓶用玻璃瓶裝的冰鮮奶（瓶身印有龍貓圖樣超可愛），補充熱量最對味！'
+            },
+            '7': {
+                title: '大倉庫見學路 & 中央階梯',
+                level: 'B1/1F 混合',
+                levelClass: 'bg-gradient-to-r from-green-100 to-yellow-100 text-slate-800 border-orange-200',
+                cx: 260, cy: 180, r: 20,
+                desc: '順著高空見學走廊漫步，可以前往位於 B1 地下一樓的「倉庫展示區」，以及觀賞鋪滿七彩磁磚的壯觀中央大階梯。',
+                tip: '地下的「開放式倉庫展示區」堆滿了吉卜力歷年在全日本展覽中使用過的精美道具與立體偶！階梯一旁還隱藏著《魔法公主》的小精靈，別忘了尋找看看。'
+            },
+            '8': {
+                title: '紀念品旗艦店「冒險飛行團」',
+                level: '1F 綠框',
+                levelClass: 'bg-green-100 text-green-800 border-green-200',
+                cx: 120, cy: 120, r: 22,
+                desc: '全園區最受矚目、品項最豐富齊全的吉卜力官方紀念品旗艦店，鄰近最終出口。',
+                tip: '🌟 <strong>黃金密技</strong>：解析血拼排在最後，是為了<strong>避免您提著大包小包重物逛展</strong>！在大倉庫體驗結束、離場前一次購齊，買完直接大滿足離館，是最完美的閉環路線！'
             }
-            return el;
-        }
+        };
 
-        // ================= 3. 地圖動態繪製與定位核心邏輯 =================
+        // ================= 3.1 大倉庫 SVG 精準路線連線 =================
+        // 將不規則的貝茲曲線改為「起終點數據驅動 + 相對於中點的控制偏移量」
+        // 當 warehouseSteps 的點座標移動時，這條線的彎曲與不規則走向會完美地跟著移動，永不歪斜！
+        const warehouseLines = [
+            { from: '0', to: '1', type: 'Q', controlOffset: { x: -10, y: 120 } },
+            { from: '1', to: '2', type: 'Q', controlOffset: { x: 220, y: 80 } }, // 👈 大範圍向左下繞過動畫展大樓
+            { from: '2', to: '3', type: 'Q', controlOffset: { x: 30, y: 5 } },
+            { from: '3', to: '4', type: 'Q', controlOffset: { x: 20, y: -200 } },
+            { from: '4', to: '5', type: 'C', controlOffsets: [{ x: 190, y: 220 }, { x: -260, y: 220 }] }, // 👈 完美逆時針繞過貓巴士房大迴旋
+            { from: '5', to: '6', type: 'Q', controlOffset: { x: 30, y: -100 } },
+            { from: '6', to: '7', type: 'Q', controlOffset: { x: -20, y: -10 } },
+            { from: '7', to: '8', type: 'Q', controlOffset: { x: -40, y: 30 } }
+        ];
+
+
+        // ================= 4. 地圖動態繪製與定位核心邏輯 =================
         function renderMap() {
             const landmarksGroup = document.getElementById('landmarks-group');
             if (!landmarksGroup) return;
             landmarksGroup.innerHTML = '';
 
-            // 3.1 繪製所有地標點 (圓形/長方形) 及名稱標籤
+            // 4.1 繪製主地圖所有地標點 (圓形/長方形) 及名稱標籤
             for (const [key, item] of Object.entries(landmarks)) {
+                // 當點選主地圖的「吉卜力大倉庫」時，自動展開與滾動至下方大倉庫深度專區，不強制拉低主圖資訊
+                const clickHandler = key === 'ghibli-warehouse' 
+                    ? `selectZone('${key}', false); expandWarehouseAndScroll();` 
+                    : `selectZone('${key}')`;
+
                 const g = createSVGElement('g', {
                     'id': `landmark-${key}`,
                     'class': 'cursor-pointer group',
-                    'onclick': `selectZone('${key}')`
+                    'onclick': clickHandler
                 });
 
                 if (item.isRect) {
@@ -674,7 +901,7 @@
                         'r': item.r,
                         'fill': item.color,
                         'stroke': '#ffffff',
-                        'stroke-width': item.key === 'elevator-tower' ? 2 : 2.5
+                        'stroke-width': (key === 'elevator-tower' ? 2 : 2.5)
                     });
                     g.appendChild(circle);
 
@@ -704,13 +931,13 @@
                 landmarksGroup.appendChild(g);
             }
 
-            // 3.2 繪製所有交通路線與時間標記
+            // 4.2 繪製主地圖所有交通路線與時間標記
             for (const [type, list] of Object.entries(routes)) {
                 const group = document.getElementById(`route-${type}`);
                 if (!group) continue;
                 group.innerHTML = '';
 
-                list.forEach(route => {
+                list.forEach((route) => {
                     const fromPt = landmarks[route.from];
                     const toPt = landmarks[route.to];
                     if (!fromPt || !toPt) return;
@@ -783,17 +1010,201 @@
                     }
                     group.appendChild(path);
 
-                    // 繪製交通時間標籤
+                    // 繪製交通時間時間標籤
                     const text = createSVGElement('text', {
                         'x': textX,
                         'y': textY,
                         'fill': type === 'walk' ? '#1e293b' : (type === 'bus' ? '#ef4444' : '#d97706'),
                         'class': 'text-xs font-bold',
-                        'filter': 'url(#bg-white)'
+                        'filter': 'url(#bg-white)',
+                        'text-anchor': 'middle'
                     });
                     text.textContent = route.text;
                     group.appendChild(text);
                 });
+            }
+        }
+
+        // ================= 4.3 吉卜力大倉庫 UI 元件繪製 =================
+        function renderWarehouseMap() {
+            // 1. 繪製推薦遊覽不規則路線
+            const linesGroup = document.getElementById('warehouse-route-lines');
+            linesGroup.innerHTML = '';
+            
+            warehouseLines.forEach(line => {
+                const fromPt = warehouseSteps[line.from];
+                const toPt = warehouseSteps[line.to];
+                if (!fromPt || !toPt) return;
+
+                const midX = (fromPt.cx + toPt.cx) / 2;
+                const midY = (fromPt.cy + toPt.cy) / 2;
+                let d = '';
+
+                if (line.type === 'Q') {
+                    const ctrlX = midX + line.controlOffset.x;
+                    const ctrlY = midY + line.controlOffset.y;
+                    d = `M ${fromPt.cx} ${fromPt.cy} Q ${ctrlX} ${ctrlY} ${toPt.cx} ${toPt.cy}`;
+                } else if (line.type === 'C') {
+                    const ctrl1X = midX + line.controlOffsets[0].x;
+                    const ctrl1Y = midY + line.controlOffsets[0].y;
+                    const ctrl2X = midX + line.controlOffsets[1].x;
+                    const ctrl2Y = midY + line.controlOffsets[1].y;
+                    d = `M ${fromPt.cx} ${fromPt.cy} C ${ctrl1X} ${ctrl1Y}, ${ctrl2X} ${ctrl2Y}, ${toPt.cx} ${toPt.cy}`;
+                }
+
+                const path = createSVGElement('path', {
+                    'd': d,
+                    'stroke': '#dc2626',
+                    'stroke-width': '5',
+                    'stroke-dasharray': '2, 6',
+                    'stroke-linecap': 'round',
+                    'fill': 'none'
+                });
+                linesGroup.appendChild(path);
+            });
+
+            // 2. 繪製與餐廳關聯的黃色虛線
+            const cafeLineGroup = document.getElementById('warehouse-cafe-line');
+            cafeLineGroup.innerHTML = '';
+
+            // 2. 繪製各點按鈕
+            const nodesGroup = document.getElementById('warehouse-nodes-group');
+            nodesGroup.innerHTML = '';
+            
+            for (const [key, step] of Object.entries(warehouseSteps)) {
+                const g = createSVGElement('g', {
+                    'id': `wh-node-${key}`,
+                    'class': 'cursor-pointer group',
+                    'onclick': `selectWarehouseStep('${key}')`
+                });
+
+                // 繪製樓層外圈：B1黃色、1F綠色、混合為橘色
+                const glowColor = key === 'cafe' ? '#eab308' : (key === '1' || key === '7' ? '#f97316' : '#22c55e');
+                const glow = createSVGElement('circle', {
+                    'cx': step.cx,
+                    'cy': step.cy,
+                    'r': step.r + 5,
+                    'fill': 'none',
+                    'stroke': glowColor,
+                    'stroke-width': '2.5',
+                    'stroke-opacity': '0.7',
+                    'stroke-dasharray': key === 'cafe' ? '2,2' : 'none'
+                });
+                g.appendChild(glow);
+
+                // 本體圓圈
+                const circle = createSVGElement('circle', {
+                    'cx': step.cx,
+                    'cy': step.cy,
+                    'r': step.r,
+                    'fill': key === 'cafe' ? '#eab308' : '#dc2626',
+                    'stroke': '#ffffff',
+                    'stroke-width': '2'
+                });
+                g.appendChild(circle);
+
+                // 數字或餐廳標記
+                const text = createSVGElement('text', {
+                    'x': step.cx,
+                    'y': step.cy + (key === 'cafe' ? 4 : 5),
+                    'fill': 'white',
+                    'class': `${key === 'cafe' ? 'text-[10px]' : 'text-sm'} font-bold`,
+                    'text-anchor': 'middle'
+                });
+                text.textContent = key === 'cafe' ? '餐' : key;
+                g.appendChild(text);
+
+                nodesGroup.appendChild(g);
+            }
+
+            // 3. 繪製右側步驟時間軸
+            const timelineList = document.getElementById('timeline-list');
+            timelineList.innerHTML = '';
+            
+            const keysOrdered = ['0', '1', '2', '3', '4', '5', '6', '7', '8'];
+            keysOrdered.forEach(key => {
+                const step = warehouseSteps[key];
+                const itemDiv = document.createElement('div');
+                itemDiv.id = `wh-timeline-item-${key}`;
+                itemDiv.className = 'relative pl-2 cursor-pointer group/item hover:translate-x-1 transition-transform py-1';
+                itemDiv.setAttribute('onclick', `selectWarehouseStep('${key}')`);
+                
+                itemDiv.innerHTML = `
+                    <span class="absolute -left-[30px] top-2.5 w-3.5 h-3.5 rounded-full bg-red-500 border-2 border-white group-hover/item:scale-125 transition-transform"></span>
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold text-slate-800 group-hover/item:text-orange-700 transition-colors">
+                            步驟 ${key} - ${step.title}
+                        </span>
+                        <span class="text-[9px] font-medium text-slate-400 scale-90">${step.level.split(' ')[0]}</span>
+                    </div>
+                `;
+                timelineList.appendChild(itemDiv);
+            });
+        }
+
+        // ================= 4.4 大倉庫深度互動聚焦 =================
+        function selectWarehouseStep(stepKey) {
+            const step = warehouseSteps[stepKey];
+            if (!step) return;
+
+            // 1. 切換時間軸高亮狀態
+            document.querySelectorAll('#timeline-list > div').forEach(el => {
+                el.classList.remove('bg-orange-50/70', 'border-l-4', 'border-orange-500', 'p-2', 'rounded-lg');
+            });
+            const activeItem = document.getElementById(`wh-timeline-item-${stepKey}`);
+            if (activeItem) {
+                activeItem.classList.add('bg-orange-50/70', 'border-l-4', 'border-orange-500', 'p-2', 'rounded-lg');
+            }
+
+            // 2. 切換 SVG 節點 active 呼吸狀態
+            document.querySelectorAll('#warehouse-nodes-group > g').forEach(el => el.classList.remove('active'));
+            const activeNode = document.getElementById(`wh-node-${stepKey}`);
+            if (activeNode) {
+                activeNode.classList.add('active');
+            }
+
+            // 3. 更新詳情版面內容
+            document.getElementById('wh-step-badge').innerText = stepKey === 'cafe' ? '☕' : stepKey;
+            document.getElementById('wh-step-title').innerText = step.title;
+            
+            const levelBadge = document.getElementById('wh-step-level');
+            levelBadge.innerText = step.level;
+            levelBadge.className = `text-[10px] font-bold px-2.5 py-0.5 rounded-full border ${step.levelClass}`;
+
+            document.getElementById('wh-step-desc').innerText = step.desc;
+            document.getElementById('wh-step-tip').innerHTML = step.tip;
+        }
+
+        // 摺疊/展開大倉庫面版
+        function toggleWarehouseAccordion(forceState = null) {
+            const accordion = document.getElementById('warehouse-accordion-content');
+            const arrow = document.getElementById('warehouse-arrow');
+            if (!accordion || !arrow) return;
+
+            let shouldOpen = accordion.classList.contains('hidden');
+            if (forceState !== null) {
+                shouldOpen = (forceState === 'open');
+            }
+
+            if (shouldOpen) {
+                accordion.classList.remove('hidden');
+                arrow.style.transform = 'rotate(180deg)';
+                // 預設高亮步驟 1 名場面
+                selectWarehouseStep('1');
+            } else {
+                accordion.classList.add('hidden');
+                arrow.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        // 當點擊主圖大倉庫時，自動拉開大倉庫專區並滾動聚焦
+        function expandWarehouseAndScroll() {
+            toggleWarehouseAccordion('open');
+            const depthSection = document.getElementById('warehouse-depth-section');
+            if (depthSection) {
+                setTimeout(() => {
+                    depthSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 150); // 確保高度撐開後滑順滾動
             }
         }
 
@@ -827,10 +1238,32 @@
             }
         }
 
-        // 園區地標選取與聚焦
-        function selectZone(zoneKey) {
+        // 大倉庫圖層顯示與隱藏切換
+        function toggleWarehouseLayer(type) {
+            const checkbox = document.getElementById(`toggle-wh-${type}`);
+            let element;
+            if (type === 'nodes') {
+                element = document.getElementById('warehouse-nodes-group');
+            } else if (type === 'route') {
+                element = document.getElementById('warehouse-route-lines');
+            } else if (type === 'cafe') {
+                element = document.getElementById('warehouse-cafe-line');
+            }
+            
+            if (checkbox && element) {
+                if (checkbox.checked) {
+                    element.style.opacity = '1';
+                    element.style.pointerEvents = 'auto';
+                } else {
+                    element.style.opacity = '0';
+                    element.style.pointerEvents = 'none';
+                }
+            }
+        }
+
+        // 園區地標選取與聚焦 (支援 shouldScroll 參數，避免主地圖大倉庫被點選時發生雙重滾動衝突)
+        function selectZone(zoneKey, shouldScroll = true) {
             const data = zoneData[zoneKey];
-            const item = landmarks[zoneKey];
             if (!data) return;
 
             // 1. 切換 active 地標狀態，產生優雅呼吸縮放效果
@@ -899,14 +1332,17 @@
             lucide.createIcons();
 
             // 7. 平滑滾動讓遊客更易閱讀
-            const detailPanel = document.getElementById('detail-panel');
-            if (detailPanel) detailPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            if (shouldScroll) {
+                const detailPanel = document.getElementById('detail-panel');
+                if (detailPanel) detailPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
         }
 
-        // 網頁載入完成後渲染地圖並自動優先聚焦「吉卜力大倉庫」
+        // 網頁載入完成後渲染地圖，預設高亮吉卜力大倉庫 (不強制滾動)
         window.addEventListener('DOMContentLoaded', () => {
             renderMap();
-            selectZone('ghibli-warehouse');
+            renderWarehouseMap();
+            selectZone('ghibli-warehouse', false);
         });
     </script>
 </body>
