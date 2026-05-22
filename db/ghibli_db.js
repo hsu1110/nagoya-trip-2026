@@ -340,3 +340,239 @@ window.ghibliWarehouseLines = [
   { from: '6', to: '7', type: 'Q', controlOffset: { x: -20, y: -10 } },
   { from: '7', to: '8', type: 'Q', controlOffset: { x: -40, y: 30 } }
 ];
+
+// 6. 使用者吉卜力一日完美實戰路線資料庫
+window.ghibliOneDayItinerary = [
+  {
+    time: "10:00 - 12:00",
+    zoneId: "valley-witches",
+    title: "魔女之谷",
+    icon: "🪄",
+    transport: "🚶 走路 6 分鐘前往魔法之里",
+    foods: ["青蛙燒", "貓掌熱狗麵包", "琪琪的麵包店黑咖哩麵包", "飛天烤箱餐廳鹹派"],
+    desc: "最大型歐風戶外園區，朝朝霍爾的移動城堡與魔女宅急便經典場景。"
+  },
+  {
+    time: "12:06 - 12:20",
+    zoneId: "valley-mononoke",
+    title: "幽靈之谷 (魔法之里)",
+    icon: "🐗",
+    transport: "🚌 搭乘巴士 15 分鐘前往動動力森林",
+    foods: [],
+    desc: "親見巨大的乙事主滑梯，體驗山林村落的古樸風格。"
+  },
+  {
+    time: "12:35 - 13:40",
+    zoneId: "dondoko-forest",
+    title: "龍貓之森 (動動力森林)",
+    icon: "🌳",
+    transport: "🚌 搭乘巴士 20 分鐘前往青春之丘",
+    foods: [],
+    desc: "尋找小梅與小月的家，山頂朝聖 5 米高木造大龍貓。"
+  },
+  {
+    time: "14:00 - 14:20",
+    zoneId: "youth-hill",
+    title: "青春之丘",
+    icon: "🎻",
+    transport: "🚶 走路 4 分鐘前往大倉庫",
+    foods: [],
+    desc: "走進心之谷的古董玩具地球屋，從小窗戶窺探貓的事務所。"
+  },
+  {
+    time: "14:24 - 17:00",
+    zoneId: "ghibli-warehouse",
+    title: "吉卜力大倉庫",
+    icon: "🏰",
+    transport: "🏁 17:00 滿載而歸結束遊園",
+    foods: ["西伯利亞蛋糕", "常滑牛奶", "大陸橫斷飛行餐廳-炸蝦披薩/三明治"],
+    desc: "大飽眼福的名場面合照、天空之城機器兵與紀念品冒險飛行團旗艦店！"
+  }
+];
+
+// 7. 魔女之谷獨立地標座標與詳情資料庫
+window.valleyLandmarks = {
+    'howl-castle': {
+        name: '霍爾的移動城堡',
+        short: '🏰',
+        cx: 610,
+        cy: 210,
+        r: 22,
+        category: 'premium',
+        badge: 'Premium 核心建物',
+        badgeColor: 'bg-amber-600',
+        spots: [
+            { name: '20米巍峨城堡主體', desc: '巨型城堡坐落在綠丘中，定時還會像劇中一樣噴出白色的蒸汽煙霧！' },
+            { name: '霍爾的臥室與客廳', desc: '在二樓，放滿奇珍異寶、色彩斑斕卻雜亂的夢幻空間，100%還原劇照。' },
+            { name: '卡西法的壁爐與廚房', desc: '一樓可欣賞生動爐灶火魔「卡西法」的壁爐與琪琪和卡爾西法煎蛋的廚房道具。' }
+        ],
+        premiumTip: '👑 <strong>尊榮福利</strong>：持 Premium 的遊客，建議一入園先朝城堡移動！在城堡一樓與二樓能完全觸摸到復古餐具、精美布料與霍爾的護身符，感受劇中的魔力。'
+    },
+    'okino-house': {
+        name: '歐其諾之家',
+        short: '🏡',
+        cx: 210,
+        cy: 190,
+        r: 22,
+        category: 'premium',
+        badge: 'Premium 核心建物',
+        badgeColor: 'bg-amber-600',
+        spots: [
+            { name: '琪琪的綠意溫馨老家', desc: '100%還原兩層樓的高挑半木屋，被大片香草植物與繁花環繞，洋溢春意。' },
+            { name: '媽媽可琪莉的草藥調配室', desc: '一樓設有媽媽調配香草藥草的工作坊，一走進去就能聞到天然的花草芳香。' },
+            { name: '琪琪出發前的粉紅臥室', desc: '二樓展示了琪琪出發前居住的少女房，床頭與裝飾精巧無比。' }
+        ],
+        premiumTip: '👑 <strong>尊榮福利</strong>：歐其諾之家室內佈滿了可以打開的抽屜！裡面的手稿、香料瓶都歡迎遊客親手拉開摸摸看，是普通大散步票無法參觀的極佳福利！'
+    },
+    'witch-house': {
+        name: '魔女之家',
+        short: '🔮',
+        cx: 590,
+        cy: 410,
+        r: 22,
+        category: 'premium',
+        badge: 'Premium 核心建物',
+        badgeColor: 'bg-amber-600',
+        spots: [
+            { name: '貝拉·雅加的奇幻魔藥坊', desc: '《魔女與安雅》中充滿藥水瓶、蝙蝠乾和複雜咒術儀器的工作房，極富魔幻神祕感。' },
+            { name: '安雅的小睡房', desc: '擺有俏皮裝飾與玩具的精緻木造閣樓，窗外能望向整個魔女之谷。' }
+        ],
+        premiumTip: '👑 <strong>尊榮福利</strong>：魔女之家的室內擺設了許多帶有精緻魔法特效的調劑罐，在 Premium 參觀路線中可以親自上前觀察魔女的調配細節！'
+    },
+    'flying-oven': {
+        name: '飛天烤箱餐廳',
+        short: '🍔',
+        cx: 650,
+        cy: 600,
+        r: 20,
+        category: 'food',
+        badge: '特色歐風主餐廳',
+        badgeColor: 'bg-red-600',
+        spots: [
+            { name: '古典歐風紅磚挑高大樓', desc: '魔女之谷最主要的獨立餐廳，擁有歐式大教堂般華麗的採光天窗。' },
+            { name: '魔法與鹹食烘焙美食', desc: '提供烤派、義大利麵、限定魔法風味烤雞等極致歐風暖胃料理。' }
+        ],
+        premiumTip: '🍴 <strong>午餐推薦</strong>：飛天烤箱餐廳在中午 11:30~13:30 是排隊高峰期！建議下午 14:00 後去享受英式午茶或提早至 11:00 入座，避開人潮最舒服。'
+    },
+    'bakery-kiki': {
+        name: '魔女宅急便麵包店',
+        short: '🍞',
+        cx: 360,
+        cy: 320,
+        r: 20,
+        category: 'food',
+        badge: '現烤歐式點心',
+        badgeColor: 'bg-red-600',
+        spots: [
+            { name: 'Gutiokipanja 歐式麵包鋪', desc: '完美複製琪琪與黑貓吉吉寄宿的古典歐風麵包坊，二樓還有琪琪的寄宿閣樓外觀。' },
+            { name: '經典現烘現售麵包', desc: '販售與劇中外觀一模一樣的傳統法式長棍、圓麵包，排隊時能聞到滿滿的麥香味。' }
+        ],
+        premiumTip: '🥐 <strong>人氣爆棚</strong>：麵包店排隊常需 30~50 分鐘，且下午兩點後部分人氣麵包（如琪琪頭繩造型麵包）容易售罄，建議入園後提早過來買一份作為體力補給！'
+    },
+    'hotdog-stand': {
+        name: '鐵皮屋頂熱狗攤',
+        short: '🌭',
+        cx: 230,
+        cy: 430,
+        r: 18,
+        category: 'food',
+        badge: '輕食速食補給站',
+        badgeColor: 'bg-red-600',
+        spots: [
+            { name: '美式鐵皮屋頂快餐車', desc: '位於魔女之家與歐其諾家中間的綠色走道旁，售賣熱狗和冰涼飲料。' },
+            { name: '常滑啤酒與現烤熱狗', desc: '大推這條路線限定的愛知縣常滑本地精釀啤酒，沁涼消暑（限成年人搭乘）。' }
+        ],
+        premiumTip: '🌭 <strong>快速補給</strong>：如果您不想浪費一兩個小時在餐廳大排長龍，熱狗攤是免排隊、快速買完在噴泉長椅上享用午餐的黃金替代方案！'
+    },
+    'witches-13': {
+        name: '13人魔女團 (紀念品旗艦)',
+        short: '🛍️',
+        cx: 360,
+        cy: 550,
+        r: 20,
+        category: 'shop',
+        badge: '限定購物旗艦店',
+        badgeColor: 'bg-purple-600',
+        spots: [
+            { name: '園區最大官方紀念品店', desc: '販售「魔女之谷」限定的極多古典娃娃、盲盒、手帕與宮崎駿手稿文具。' },
+            { name: '絕美挑高玻璃圓頂設計', desc: '店內裝飾精緻，中央是一棵巨大的魔女樹，結滿奇異的魔法果實。' }
+        ],
+        premiumTip: '⚠️ <strong>玩偶特別公告（7月出遊必讀）</strong>：人氣玩偶「菌菌」位置已暫停販售，可以將心力放在魔女之谷限定的手工黑貓馬克杯 or 魔女帆布手提包上，品項同樣非常豐富！'
+    },
+    'sophie-hats': {
+        name: '蘇菲帽子店',
+        short: '👒',
+        cx: 290,
+        cy: 380,
+        r: 20,
+        category: 'shop',
+        badge: '特色英式帽子商店',
+        badgeColor: 'bg-purple-600',
+        spots: [
+            { name: '哈達帽子店外牆與櫥窗', desc: '《霍爾的移動城堡》中蘇菲工作並引退的街邊英風小帽子鋪，擺有大量精美英式呢帽。' },
+            { name: '帽子店限定商品與帽子販售', desc: '遊客真的可以在店內試戴並購買專屬設計的草帽或復古圓帽！還有霍爾刺繡周邊。' }
+        ],
+        premiumTip: '👒 <strong>清涼一夏</strong>：7月炎炎夏日，建議可以直接在蘇菲帽子店為自己挑選一頂防曬草帽！店內冷氣很足，是非常優雅的夏日避暑購物點。'
+    },
+    'witch-mouth': {
+        name: '魔女的嘴 (入口)',
+        short: '👄',
+        cx: 650,
+        cy: 850,
+        r: 18,
+        category: 'attraction',
+        badge: '魔女之谷起點地標',
+        badgeColor: 'bg-blue-600',
+        spots: [
+            { name: '張嘴的巨大魔女雕像', desc: '位於東南角，造型魔幻俏皮，是魔女之谷的大門地標，所有人進園必合拍照！' },
+            { name: '魔女的噴水池廣場', desc: '一進去就可以看到鋪滿青瓷磚的童話感水池，水滴折射陽光，極富夏日生氣。' }
+        ],
+        premiumTip: '📸 <strong>必拍點位</strong>：魔女的嘴在開園前半小時或閉園前半小時人潮最少，若遇到大排長龍，可以先越過，出園時再慢條斯理地排隊合照！'
+    },
+    'carousel': {
+        name: '古典旋轉木馬',
+        short: '🎠',
+        cx: 280,
+        cy: 260,
+        r: 20,
+        category: 'attraction',
+        badge: '戶外大型遊樂設施',
+        badgeColor: 'bg-blue-600',
+        spots: [
+            { name: '吉卜力角色大集結旋轉台', desc: '古典宮廷風的木馬旋轉台。木馬上騎乘的是《龍貓》、《魔女宅急便》等超多角色！' },
+            { name: '華麗風琴樂演奏', desc: '旋轉時會自動演奏宮崎駿動畫名曲，充滿夢幻治癒的嘉年華童趣。' }
+        ],
+        premiumTip: '🎟️ <strong>付費與限制</strong>：本遊具不包含在 Premium 門票中，需在現場旁邊投幣式自動售票機購票，成人 ¥1,000 / 孩童 ¥500，2歲以下幼童免費搭乘。'
+    },
+    'flying-machine': {
+        name: '飛行器設施',
+        short: '🛸',
+        cx: 520,
+        cy: 340,
+        r: 18,
+        category: 'attraction',
+        badge: '自費腳踏飛行設施',
+        badgeColor: 'bg-blue-600',
+        spots: [
+            { name: '巴魯的雙翼旋轉飛行具', desc: '《天空之城》巴魯發明的飛行載具，多架飛行器圍繞著中央的主塔旋轉。' },
+            { name: '腳踏控制升降體驗', desc: '搭乘時，只要您用力踩腳踏板，飛行器就會徐徐上升；放慢速度則會下降。' }
+        ],
+        premiumTip: '🎟️ <strong>付費與限制</strong>：成人 ¥500 / 孩童 ¥500。特別注意：<strong>本設施身高 120cm 以下兒童必須有成人陪同方可乘車！</strong>'
+    },
+    'ruin-street': {
+        name: '廢墟街道和鐘樓',
+        short: '🔔',
+        cx: 490,
+        cy: 260,
+        r: 18,
+        category: 'attraction',
+        badge: '龐克廢墟遺址打卡點',
+        badgeColor: 'bg-blue-600',
+        spots: [
+            { name: '殘垣斷壁英風大道', desc: '完美還原中世紀荒廢小鎮遺址，石磚上攀爬著綠意苔蘚，極富神祕荒涼美學。' },
+            { name: '機械蒸氣龐克鐘樓', desc: '可以登上鐘樓頂部平台，眺望整個魔女之谷城堡與中央大池塘的宏偉美景！' }
+        ],
+        premiumTip: '🔔 <strong>眺望絕佳點</strong>：登上鐘樓平台是俯瞰「霍爾移動城堡」定時噴煙與旋轉木馬全景的絕佳秘密機位，不容錯過。'
+    }
+};
+

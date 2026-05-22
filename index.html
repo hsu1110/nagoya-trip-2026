@@ -302,27 +302,24 @@
     </div> <!-- End of main-travel-view -->
 
     <!-- Ghibli Park Guide View Container -->
-    <div id="ghibli-guide-view" class="hidden transition-opacity duration-500">
-        <!-- 頂部導航欄 (吉卜力風格) -->
-        <header class="bg-emerald-800 text-white shadow-md">
-            <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-                <div class="flex items-center space-x-2">
-                    <span class="text-2xl">🍃</span>
+    <div id="ghibli-guide-view" class="hidden transition-opacity duration-500 min-h-screen bg-stone-50">
+        <!-- 頂部與主導航欄對齊之呼吸空間 -->
+        <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-12 space-y-6">
+            <!-- 一體化原生風格 Header -->
+            <div class="mb-8 pb-6 border-b border-stone-200 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <div class="flex items-center gap-4">
+                    <button onclick="switchView('main')" class="bg-white hover:bg-stone-100 text-stone-700 font-bold px-4 py-2 rounded-2xl border border-stone-200 shadow-sm transition-all flex items-center gap-1.5 text-xs shrink-0">
+                        <i class="fa-solid fa-arrow-left"></i> 返回行程
+                    </button>
+                    <div class="w-px h-8 bg-stone-300 hidden md:block"></div>
                     <div>
-                        <h1 class="text-lg md:text-xl font-bold tracking-wider">吉卜力公園互動導覽大補帖</h1>
-                        <p class="text-[10px] text-emerald-200">實景地圖精準標點與路線互通版</p>
+                        <h1 class="text-2xl md:text-3xl font-extrabold text-stone-900 flex items-center gap-2 tracking-tight">
+                            <span class="text-emerald-600">🍃</span> 吉卜力公園互動導覽大補帖
+                        </h1>
+                        <p class="text-xs md:text-sm text-stone-500 mt-1 font-medium">實景地圖精準標點與路線互通版 · 愛知縣地球博紀念公園內 · 2026 最新改訂</p>
                     </div>
                 </div>
-                <div class="flex items-center gap-2">
-                    <span class="hidden sm:inline-block text-xs bg-emerald-700 px-3 py-1.5 rounded-full border border-emerald-600">
-                        愛知縣地球博紀念公園內
-                    </span>
-                    <span class="text-xs bg-amber-500 text-emerald-950 font-bold px-2.5 py-1 rounded-md">2026最新改訂</span>
-                </div>
             </div>
-        </header>
-
-        <main class="max-w-7xl mx-auto px-3 py-6 space-y-6">
             <!-- 一、核心互動區：地圖與景點資訊 -->
             <section class="bg-white rounded-3xl shadow-sm border border-emerald-100 p-4 md:p-6">
                 <!-- 區塊標題與路線控制選項 -->
@@ -463,7 +460,7 @@
                     </div>
                 </button>
 
-                <div id="warehouse-accordion-content" class="hidden border-t border-orange-100 p-4 md:p-6 space-y-6">
+                <div id="warehouse-accordion-content" class="hidden border-t border-orange-100 p-4 md:p-6 space-y-6 bg-[#faf6f0]">
                     <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 border-b border-orange-50 pb-4">
                         <p class="text-xs text-slate-500 max-w-xl">
                             💡 <strong>如何使用大倉庫地圖</strong>：點擊地圖上的【圓圈數字步序】或是點擊右側【黃金步驟時間軸】，即可即時觸發高亮導航與優雅呼吸動畫，查看特色景點與過關秘笈！
@@ -471,12 +468,12 @@
                         <div class="flex flex-wrap items-center gap-2 bg-orange-50 p-2 rounded-2xl border border-orange-100 text-xs w-full lg:w-auto shadow-inner overflow-x-auto">
                             <span class="text-orange-400 font-bold shrink-0">顯示控制：</span>
                             <label class="flex items-center gap-1.5 bg-white px-2.5 py-1 rounded-xl border border-orange-200 cursor-pointer hover:bg-slate-100 transition-colors shrink-0">
-                                <input type="checkbox" id="toggle-wh-nodes" checked class="rounded text-orange-600 focus:ring-orange-500" onchange="toggleWarehouseLayer('nodes')">
+                                <input type="checkbox" id="toggle-wh-nodes" checked class="rounded text-orange-600 focus:ring-orange-500" onchange="toggleMapLayer('toggle-wh-nodes', 'warehouse-nodes-group')">
                                 <span class="w-2.5 h-2.5 rounded-full bg-orange-600 inline-block"></span>
                                 <span class="font-bold text-orange-800">📍 步驟節點與標籤</span>
                             </label>
                             <label class="flex items-center gap-1.5 bg-white px-2.5 py-1 rounded-xl border border-orange-200 cursor-pointer hover:bg-slate-100 transition-colors shrink-0">
-                                <input type="checkbox" id="toggle-wh-route" checked class="rounded text-red-600 focus:ring-red-500" onchange="toggleWarehouseLayer('route')">
+                                <input type="checkbox" id="toggle-wh-route" checked class="rounded text-red-600 focus:ring-red-500" onchange="toggleMapLayer('toggle-wh-route', 'warehouse-route-lines')">
                                 <span class="w-3.5 h-0.5 border-t-2 border-dashed border-red-500 inline-block"></span>
                                 <span class="font-bold text-red-700">🚩 推薦遊覽路線</span>
                             </label>
@@ -530,6 +527,204 @@
                                         <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> 黃金密技 / 亮點
                                     </span>
                                     <p id="wh-step-tip" class="text-xs text-slate-700 font-medium mt-1 leading-relaxed"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 三、核心深度摺疊區：魔女之谷深度導覽 -->
+            <section id="valley-depth-section" class="bg-white rounded-3xl shadow-sm border border-amber-100 overflow-hidden mt-6">
+                <button onclick="toggleValleyAccordion()" class="w-full px-6 py-5 bg-gradient-to-r from-amber-50 to-orange-50/30 flex justify-between items-center text-left focus:outline-none hover:from-amber-100/50 transition-colors">
+                    <div class="flex items-center gap-3">
+                        <span class="text-2xl bg-amber-500 text-white p-2 rounded-2xl shadow-sm">🔮</span>
+                        <div>
+                            <h2 class="text-lg font-bold text-amber-950 flex items-center gap-2">
+                                魔女之谷 (Valley of Witches) 深度導覽
+                            </h2>
+                            <p class="text-xs text-amber-800/80 mt-0.5 font-medium">
+                                12 大彩色地標深度探索與 7 月夏季避暑全攻略
+                            </p>
+                        </div>
+                    </div>
+                    <span class="text-stone-400 transition-transform duration-300" id="valley-arrow" style="transform: rotate(0deg);">
+                        <i class="fa-solid fa-chevron-down text-lg"></i>
+                    </span>
+                </button>
+
+                <div id="valley-accordion-content" class="hidden border-t border-amber-100 p-4 md:p-6 space-y-6 bg-[#faf6f0]">
+                    <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 border-b border-amber-100 pb-4">
+                        <p class="text-xs text-slate-500 max-w-xl">
+                            💡 <strong>如何使用魔女之谷地圖</strong>：點擊地圖上的【彩色地標圈圈】或是點擊右側【熱門見學地標】，即可即時觸發高亮導航與優雅呼吸動畫，查看特色景點與深度參觀祕笈！
+                        </p>
+                        <div class="flex flex-wrap items-center gap-2 bg-amber-50 p-2 rounded-2xl border border-amber-100 text-xs w-full lg:w-auto shadow-inner overflow-x-auto">
+                            <span class="text-amber-500 font-bold shrink-0">顯示控制：</span>
+                            <label class="flex items-center gap-1.5 bg-white px-2.5 py-1 rounded-xl border border-amber-200 cursor-pointer hover:bg-slate-100 transition-colors shrink-0">
+                                <input type="checkbox" id="toggle-valley-nodes" checked class="rounded text-amber-600 focus:ring-amber-500" onchange="toggleMapLayer('toggle-valley-nodes', 'valley-landmarks-group')">
+                                <span class="w-2.5 h-2.5 rounded-full bg-amber-500 inline-block"></span>
+                                <span class="font-bold text-amber-800">📍 景點地標與標籤</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- 一、核心互動區：地圖與景點資訊 (與大倉庫同款之極致雙欄佈局) -->
+                    <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+                        <!-- 左欄：地圖互動盤 (2/3 寬) -->
+                        <div class="xl:col-span-2 relative bg-slate-50 rounded-2xl overflow-hidden border border-slate-200 p-1">
+                            <!-- 手機版提示滑動小手勢 -->
+                            <div class="md:hidden absolute top-3 right-3 z-10 bg-[#5c3d2e]/90 text-white text-[10px] px-2 py-1 rounded-full flex items-center gap-1 pointer-events-none">
+                                <i data-lucide="move-horizontal" class="w-3 h-3 animate-bounce"></i> 左右滑動檢視完整地圖
+                            </div>
+
+                            <div class="w-full overflow-auto map-container">
+                                <div class="min-w-[700px] md:min-w-[800px] xl:min-w-full aspect-[850/1000] relative mx-auto bg-[#e2f0d9] rounded-2xl overflow-hidden">
+                                    <!-- 高畫質底圖 -->
+                                    <img 
+                                        src="./data/ghibli_tour_valley_map.jpg" 
+                                        alt="魔女之谷地圖底圖" 
+                                        class="absolute inset-0 w-full h-full object-contain select-none pointer-events-none sharp-img rounded-2xl" 
+                                        id="valley-bg-image"
+                                        onerror="this.src='data/ghibli_tour_valley_map.jpg'"
+                                    />
+
+                                    <!-- 完全透明的 SVG 互動標點層 -->
+                                    <svg viewBox="0 0 850 1000" class="absolute inset-0 w-full h-full select-none" id="valley-map-svg">
+                                        <defs>
+                                            <filter x="-0.1" y="-0.1" width="1.2" height="1.2" id="valley-bg-white">
+                                                <feFlood flood-color="white" flood-opacity="0.88"/>
+                                                <feComposite in="SourceGraphic" operator="over"/>
+                                            </filter>
+                                        </defs>
+                                        <g id="valley-landmarks-group"></g>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 右欄：時間軸與詳情卡片 (1/3 寬，完美對齊大倉庫) -->
+                        <div class="xl:col-span-1 flex flex-col justify-between space-y-4">
+                            <!-- 推薦見學地標清單 (大倉庫時間軸同款，高度完全展開) -->
+                            <div class="bg-gradient-to-br from-slate-50 to-amber-50/10 p-4 rounded-2xl border border-slate-100">
+                                <h3 class="text-sm font-bold text-amber-950 mb-3 flex items-center gap-1.5 border-b border-amber-100 pb-2">
+                                    <i data-lucide="list-ordered" class="w-4 h-4 text-amber-600"></i>
+                                    魔女之谷熱門見學地標
+                                </h3>
+                                <div class="relative pl-6 border-l border-amber-200/60 space-y-3.5" id="valley-timeline-list"></div>
+                            </div>
+
+                            <!-- 景點動態展示面板 (大倉庫詳情框同款) -->
+                            <div class="bg-white p-5 rounded-2xl border border-orange-200 shadow-md transition-all duration-300 flex-1 flex flex-col justify-between min-h-[300px]" id="valley-detail-panel">
+                                <div class="text-center py-8 text-slate-400 my-auto" id="valley-empty-state">
+                                    <i data-lucide="info" class="w-12 h-12 mx-auto text-slate-300 mb-2"></i>
+                                    <p class="font-medium text-xs">請點擊左側地圖彩色標點</p>
+                                    <p class="text-[10px] mt-1 pl-1 pr-1">或上方清單，即時為您揭曉景點特色與深度參觀祕笈！</p>
+                                </div>
+
+                                <!-- 景點內容呈現區 -->
+                                <div id="valley-content-area" class="hidden h-full flex flex-col justify-between space-y-4">
+                                    <div>
+                                        <div class="flex items-center justify-between mb-3 border-b border-orange-50 pb-2">
+                                            <div class="flex items-center gap-2">
+                                                <span id="valley-zone-badge" class="bg-amber-600 text-white font-bold rounded-xl text-xs w-6 h-6 flex items-center justify-center">1</span>
+                                                <h4 id="valley-zone-title" class="font-bold text-slate-900 text-sm md:text-base"></h4>
+                                            </div>
+                                            <span id="valley-zone-type" class="text-[9px] font-bold px-2 py-0.5 rounded-full border border-orange-100 bg-orange-50/50 text-orange-700"></span>
+                                        </div>
+                                        
+                                        <div>
+                                            <span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider flex items-center gap-1 mb-1.5">
+                                                <i data-lucide="compass" class="w-3.5 h-3.5 text-amber-600"></i> 內部特搜指南
+                                            </span>
+                                            <ul id="valley-spot-list" class="space-y-1.5 text-xs text-slate-600 max-h-[160px] overflow-y-auto pr-1"></ul>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="bg-orange-50/50 rounded-xl p-3 border border-orange-100">
+                                        <span class="text-[10px] uppercase font-bold text-orange-800 tracking-wider flex items-center gap-1">
+                                            <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> 過關秘技 / 深度見學祕笈
+                                        </span>
+                                        <p id="valley-premium-tip-box" class="text-xs text-slate-700 font-medium mt-1 leading-relaxed"></p>
+                                        <div id="valley-summer-alert-box" class="text-[10px] text-red-800 bg-red-50 p-2.5 rounded-lg border border-red-100 mt-2 hidden"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 7月出遊核心筆記與付費遊具說明 -->
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <!-- 夏季遊園筆記 -->
+                        <div class="bg-white rounded-2xl shadow-sm border border-orange-100 p-5 flex flex-col justify-between">
+                            <div>
+                                <h3 class="text-base md:text-lg font-bold text-amber-950 mb-4 flex items-center gap-2 border-b border-slate-100 pb-2">
+                                    <i data-lucide="alert-triangle" class="w-5 h-5 text-amber-600"></i>
+                                    7 月夏季遊園·核心筆記
+                                </h3>
+                                <div class="space-y-3 text-xs leading-relaxed text-slate-600">
+                                    <div class="p-3 bg-red-50/50 rounded-xl border border-red-100 text-red-950">
+                                        <span class="font-bold text-xs text-red-800 flex items-center gap-1 mb-1">
+                                            <i data-lucide="alert-circle" class="w-4 h-4"></i> 玩偶停售公告
+                                        </span>
+                                        7月至10月夏季期間，園內超人氣的<strong>「菌菌」玩偶</strong>已暫停販售，如果預計購買此周邊記得調整預算到其他限定盲盒或提包喔！
+                                    </div>
+                                    <div class="p-3 bg-amber-50/50 rounded-xl border border-amber-100 text-amber-950">
+                                        <span class="font-bold text-xs text-amber-800 flex items-center gap-1 mb-1">
+                                            <i data-lucide="sun" class="w-4 h-4"></i> 夏季高溫避暑提示
+                                        </span>
+                                        魔女之谷屬於戶外面積較大的園區，且高點遮蔭物較少，7月愛知縣高溫炎熱。建議隨身攜帶陽傘並多加利用「蘇菲帽子店」與「飛天烤箱」室內冷氣吹拂避暑。
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-6 pt-4 border-t border-slate-100 text-[10px] text-slate-400 text-center">
+                                修訂版本：2026年5月更新
+                            </div>
+                        </div>
+
+                        <!-- 付費遊樂設施 -->
+                        <div class="bg-white rounded-2xl shadow-sm border border-orange-100 p-5 lg:col-span-2">
+                            <div class="border-b border-slate-100 pb-3 mb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+                                <h3 class="text-base md:text-lg font-bold text-amber-950 flex items-center gap-2">
+                                    <i data-lucide="ticket" class="w-5 h-5 text-amber-700"></i>
+                                    魔女之谷·遊樂設施搭乘規則
+                                </h3>
+                                <span class="text-xs bg-amber-100 text-amber-700 px-2.5 py-1 rounded-full font-bold">⚠️ 本區設施皆需現場額外購票搭乘</span>
+                            </div>
+                            <p class="text-xs text-slate-500 mb-4 leading-relaxed">
+                                📢 <strong>重要提醒</strong>：吉卜力公園各類門票（大散步券等）均不包含魔女之谷內部的兩大戶外特色遊具。欲搭乘者請於設施旁的自動售票機自費購票並排隊乘車：
+                            </p>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100 flex flex-col justify-between">
+                                    <div>
+                                        <span class="text-xs bg-pink-100 text-pink-700 px-2 py-0.5 rounded-full font-bold">遊樂設施 1</span>
+                                        <h4 class="font-bold text-slate-900 text-sm mt-1.5 flex items-center gap-1.5">
+                                            🎠 旋轉木馬 (Merry-Go-Round)
+                                        </h4>
+                                        <p class="text-xs text-slate-500 mt-2 leading-relaxed">
+                                            裝飾了大量吉卜力作品角色（包含琪琪的掃帚、亞克路、霍爾的飛行器等）的古典華麗旋轉木馬！搭乘時還會播放魔女宅急便的配樂。
+                                        </p>
+                                    </div>
+                                    <div class="mt-4 pt-3 border-t border-slate-200/60 flex justify-between items-center text-xs font-bold text-slate-700">
+                                        <span>票價：成人 ¥1,000 / 孩童 ¥500</span>
+                                        <span class="text-[10px] text-amber-700 bg-amber-50 px-2 py-0.5 rounded-md">2歲以下免費</span>
+                                    </div>
+                                </div>
+
+                                <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100 flex flex-col justify-between">
+                                    <div>
+                                        <span class="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-bold">遊樂設施 2</span>
+                                        <h4 class="font-bold text-slate-900 text-sm mt-1.5 flex items-center gap-1.5">
+                                            🛸 飛行器設施 (Flying Machine)
+                                        </h4>
+                                        <p class="text-xs text-slate-500 mt-2 leading-relaxed">
+                                            以《天空之城》劇中那台巴魯發明的雙翼旋轉飛行具為造型，遊客可以手動腳踏控制車體的高低升降，非常受家庭和小朋友歡迎。
+                                        </p>
+                                    </div>
+                                    <div class="mt-4 pt-3 border-t border-slate-200/60 flex justify-between items-center text-xs font-bold text-slate-700">
+                                        <span>票價：成人 ¥500 / 孩童 ¥500</span>
+                                        <span class="text-[10px] text-blue-700 bg-blue-50 px-2 py-0.5 rounded-md">120cm以下需成人陪同</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>

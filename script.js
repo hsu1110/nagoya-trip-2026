@@ -252,10 +252,11 @@ function openModal(item) {
   let ghibliLinkHtml = '';
   if (item.id === 38) {
     ghibliLinkHtml = `
-      <button onclick="closeModal(); switchView('ghibli');" class="w-full mb-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 rounded-2xl transition-all shadow-lg flex items-center justify-center gap-2 group animate-pulse">
+      <button onclick="closeModal(); switchView('ghibli'); setTimeout(() => selectGhibliItineraryStep('ghibli-warehouse'), 300);" class="w-full mb-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 rounded-2xl transition-all shadow-lg flex items-center justify-center gap-2 group animate-pulse">
           <span class="text-lg">🍃</span>
           開啟「吉卜力大補帖」互動導覽專區
       </button>
+
     `;
   }
 
@@ -359,33 +360,35 @@ function switchView(viewName) {
     ghibliView.classList.remove("hidden");
     body.className = "text-slate-800 antialiased ghibli-theme";
     initGhibliView();
+  } else if (viewName === "valley") {
+    // 容錯防呆：如果調用 valley，自動重定向至 ghibli 視圖，並拉開魔女之谷折疊區平滑滾動聚焦
+    mainView.classList.add("hidden");
+    ghibliView.classList.remove("hidden");
+    body.className = "text-slate-800 antialiased ghibli-theme";
+    initGhibliView();
+    setTimeout(() => {
+      expandValleyAndScroll();
+    }, 150);
   } else {
     ghibliView.classList.add("hidden");
     mainView.classList.remove("hidden");
-    body.className = "bg-stone-50 text-stone-800 font-sans antialiased selection:bg-rose-500 selection:text-white";
+    body.className = "bg-stone-50 text-stone-800 antialiased selection:bg-rose-200 selection:text-rose-900 transition-colors duration-500";
   }
 
   // 同步導覽列 Active 狀態
   updateNavbarActive(viewName);
 }
 
+
 function updateNavbarActive(viewName) {
-  const navBtns = document.querySelectorAll("nav button, #mobile-menu button");
-  navBtns.forEach(btn => {
-    const isGhibliBtn = btn.innerText.includes("吉卜力");
-    if (viewName === "ghibli") {
-      if (isGhibliBtn) {
-        btn.className = "block w-full md:w-auto text-left md:text-center px-4 py-2 rounded-xl text-sm font-bold text-emerald-600 bg-emerald-50 border border-emerald-100 transition-all";
+  const ghibliBtn = document.getElementById("nav-ghibli-btn");
+  if (ghibliBtn) {
+      if (viewName === "ghibli" || viewName === "valley") {
+          ghibliBtn.className = "px-3.5 py-1.5 rounded-full text-xs font-bold text-emerald-800 bg-emerald-100 border border-emerald-200 shadow-sm transition-all duration-300 flex items-center gap-1.5";
       } else {
-        btn.className = "block w-full md:w-auto text-left md:text-center px-4 py-2 rounded-xl text-sm font-medium text-stone-700 hover:text-rose-500 hover:bg-stone-50 transition-all";
+          ghibliBtn.className = "px-3.5 py-1.5 rounded-full text-xs font-bold text-emerald-700 bg-emerald-50 border border-emerald-100 hover:bg-emerald-100 hover:text-emerald-800 shadow-sm transition-all duration-300 flex items-center gap-1.5";
       }
-    } else {
-      if (isGhibliBtn) {
-        btn.className = "block w-full md:w-auto text-left md:text-center px-4 py-2 rounded-xl text-sm font-bold text-emerald-600 hover:bg-emerald-50 transition-all";
-      }
-      // 其他按鈕狀態保持原樣，或在點選中處理
-    }
-  });
+  }
 }
 
 // 輔助函式：動態創建帶有 XML Namespace 的 SVG 元素
@@ -401,6 +404,7 @@ function createSVGElement(tagName, attributes = {}) {
 let isGhibliInitialized = false;
 
 function initGhibliView() {
+  renderGhibliOneDayItinerary();
   if (!isGhibliInitialized) {
     renderGhibliMap();
     renderWarehouseMap();
@@ -411,6 +415,7 @@ function initGhibliView() {
     lucide.createIcons();
   }
 }
+
 
 // 繪製吉卜力公園主實景地圖
 function renderGhibliMap() {
@@ -425,7 +430,9 @@ function renderGhibliMap() {
   for (const [key, item] of Object.entries(landmarks)) {
     const clickHandler = key === 'ghibli-warehouse' 
         ? `selectZone('${key}', false); expandWarehouseAndScroll();` 
-        : `selectZone('${key}')`;
+        : (key === 'valley-witches' 
+            ? `selectZone('${key}', false); expandValleyAndScroll();` 
+            : `selectZone('${key}')`);
 
     const g = createSVGElement('g', {
         'id': `landmark-${key}`,
@@ -777,27 +784,10 @@ function toggleRouteLayer(type) {
 }
 
 // 地標圖層顯示開關
-function toggleLandmarkLayer() {
-  const checkbox = document.getElementById('toggle-landmarks');
-  const layer = document.getElementById('landmarks-layer');
-  if (checkbox && layer) {
-      layer.style.opacity = checkbox.checked ? '1' : '0';
-      layer.style.pointerEvents = checkbox.checked ? 'auto' : 'none';
-  }
-}
-
-// 大倉庫圖層顯示開關
-function toggleWarehouseLayer(type) {
-  const checkbox = document.getElementById(`toggle-wh-${type}`);
-  let element;
-  if (type === 'nodes') {
-      element = document.getElementById('warehouse-nodes-group');
-  } else if (type === 'route') {
-      element = document.getElementById('warehouse-route-lines');
-  } else if (type === 'cafe') {
-      element = document.getElementById('warehouse-cafe-line');
-  }
-  
+// 通用圖層顯示與滑鼠事件開關 (DRY 原則優化)
+function toggleMapLayer(checkboxId, elementId) {
+  const checkbox = document.getElementById(checkboxId);
+  const element = document.getElementById(elementId);
   if (checkbox && element) {
       element.style.opacity = checkbox.checked ? '1' : '0';
       element.style.pointerEvents = checkbox.checked ? 'auto' : 'none';
@@ -869,6 +859,21 @@ function selectZone(zoneKey, shouldScroll = true) {
       });
   }
 
+  // 魔女之谷專屬深度導覽連動
+  const deepLink = document.getElementById('valley-deep-link-container');
+  if (deepLink) {
+    if (zoneKey === 'valley-witches') {
+      deepLink.classList.remove('hidden');
+      deepLink.innerHTML = `
+          <button onclick="expandValleyAndScroll()" class="w-full bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white font-bold py-3.5 px-4 rounded-2xl text-xs flex items-center justify-center gap-2 shadow-lg transform hover:-translate-y-0.5 transition-all animate-pulse border border-amber-500/30">
+            🔮 點擊查看下方「魔女之谷」深度互動地圖 ➔
+          </button>
+      `;
+    } else {
+      deepLink.classList.add('hidden');
+    }
+  }
+
   lucide.createIcons();
 
   if (shouldScroll) {
@@ -907,3 +912,313 @@ window.addEventListener("scroll", () => {
 function scrollToTop() {
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
+
+// ==========================================
+// 📅 吉卜力一日黃金踩點實戰路線渲染與互動邏輯
+// ==========================================
+function renderGhibliOneDayItinerary() {
+  const container = document.getElementById("ghibli-itinerary-timeline");
+  if (!container) return;
+
+  const steps = window.ghibliOneDayItinerary || [];
+  container.innerHTML = steps.map((step, idx) => {
+    // 必吃美食標籤
+    let foodHtml = '';
+    if (step.foods && step.foods.length > 0) {
+      foodHtml = `
+        <div class="mt-2 text-[10px]">
+          <div class="text-[9px] font-bold text-emerald-700 bg-emerald-50/80 px-2 py-0.5 rounded inline-block mb-1">🍭 必吃美食推薦</div>
+          <div class="flex flex-wrap gap-1">
+            ${step.foods.map(f => `<span class="bg-amber-50 text-amber-800 border border-amber-200/50 text-[9px] px-1.5 py-0.5 rounded font-bold">${f}</span>`).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    return `
+      <div 
+        onclick="selectGhibliItineraryStep('${step.zoneId}', this)" 
+        class="ghibli-step-card bg-slate-50/50 hover:bg-emerald-50/30 border border-slate-100/80 hover:border-emerald-300 p-4 rounded-2xl cursor-pointer transition-all duration-300 transform hover:-translate-y-1 shadow-sm flex flex-col justify-between relative group"
+        id="ghibli-step-${step.zoneId}"
+      >
+        <div>
+          <div class="flex justify-between items-center mb-2">
+            <span class="text-[10px] font-bold font-mono text-emerald-700 bg-emerald-50/80 px-2 py-0.5 rounded-full">${step.time}</span>
+            <span class="text-base group-hover:scale-125 transition-transform duration-300">${step.icon}</span>
+          </div>
+          <h4 class="font-bold text-slate-800 text-sm group-hover:text-emerald-800 transition-colors">${step.title}</h4>
+          <p class="text-[10px] text-slate-500 mt-1 leading-relaxed">${step.desc}</p>
+          ${foodHtml}
+        </div>
+        
+        <div class="mt-4 pt-2 border-t border-slate-100/60 text-[9px] text-slate-400 group-hover:text-emerald-600 transition-colors flex items-center gap-1 font-bold">
+          <i class="fa-solid fa-arrow-up-right-from-square text-[8px]"></i> 點擊地圖定位與詳情
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function selectGhibliItineraryStep(zoneId, element) {
+  // 1. 移除所有步驟卡片的高亮樣式
+  document.querySelectorAll('.ghibli-step-card').forEach(card => {
+    card.classList.remove('border-emerald-500', 'bg-emerald-50/40', 'ring-2', 'ring-emerald-100');
+    card.classList.add('border-slate-100/80', 'bg-slate-50/50');
+  });
+
+  // 2. 為當前選中的卡片加上高亮樣式
+  let activeCard = element;
+  if (!activeCard) {
+    activeCard = document.getElementById(`ghibli-step-${zoneId}`);
+  }
+  if (activeCard) {
+    activeCard.classList.remove('border-slate-100/80', 'bg-slate-50/50');
+    activeCard.classList.add('border-emerald-500', 'bg-emerald-50/40', 'ring-2', 'ring-emerald-100');
+  }
+
+  // 3. 調用原本的 selectZone 進行地圖連動高亮與滾動聚焦！
+  selectZone(zoneId, true);
+}
+
+// ==========================================
+// 🔮 魔女之谷 (Valley of Witches) 獨立見學互動邏輯
+// ==========================================
+let currentValleyFilter = 'all';
+
+function initValleyView() {
+  renderValleyMap();
+  // 預先選取霍爾的移動城堡
+  setTimeout(() => selectValleyZone('howl-castle', false), 100);
+}
+
+// 輔助函式：動態創建帶有 XML Namespace 的 SVG 元素
+function createValleySVGElement(tagName, attributes = {}) {
+    const el = document.createElementNS("http://www.w3.org/2000/svg", tagName);
+    for (const [key, value] of Object.entries(attributes)) {
+        el.setAttribute(key, value);
+    }
+    return el;
+}
+
+function renderValleyMap() {
+    const group = document.getElementById('valley-landmarks-group');
+    if (!group) return;
+    group.innerHTML = '';
+
+    const valleyLandmarks = window.valleyLandmarks || {};
+
+    for (const [key, item] of Object.entries(valleyLandmarks)) {
+        const g = createValleySVGElement('g', {
+            'id': `valley-landmark-${key}`,
+            'class': 'cursor-pointer group transition-all duration-300 opacity-100',
+            'onclick': `selectValleyZone('${key}', true)`
+        });
+
+        // 核心地標圓圈
+        const circle = createValleySVGElement('circle', {
+            'cx': item.cx,
+            'cy': item.cy,
+            'r': item.r,
+            'fill': item.category === 'premium' ? '#d97706' : (item.category === 'food' ? '#ef4444' : (item.category === 'shop' ? '#a855f7' : '#3b82f6')),
+            'stroke': '#ffffff',
+            'stroke-width': 2.5
+        });
+        g.appendChild(circle);
+
+        // 內部符號/文字
+        const text = createValleySVGElement('text', {
+            'x': item.cx,
+            'y': item.cy + (item.short === '🐾' || item.short === '🏰' || item.short === '🏡' || item.short === '🔮' || item.short === '🍿' ? 4.5 : 4),
+            'fill': 'white',
+            'class': 'text-xs font-bold',
+            'text-anchor': 'middle'
+        });
+        text.textContent = item.short;
+        g.appendChild(text);
+
+        // 名稱標籤
+        const nameText = createValleySVGElement('text', {
+            'x': item.cx,
+            'y': item.cy + item.r + 15,
+            'fill': item.category === 'premium' ? '#78350f' : (item.category === 'food' ? '#991b1b' : (item.category === 'shop' ? '#6b21a8' : '#1e3a8a')),
+            'class': 'text-[11px] font-bold',
+            'text-anchor': 'middle',
+            'filter': 'url(#valley-bg-white)'
+        });
+        nameText.textContent = item.name;
+        g.appendChild(nameText);
+
+        group.appendChild(g);
+    }
+
+    // 繪製右側魔女之谷步驟清單
+    const valleyTimelineList = document.getElementById('valley-timeline-list');
+    if (valleyTimelineList) {
+        valleyTimelineList.innerHTML = '';
+        for (const [key, item] of Object.entries(valleyLandmarks)) {
+            const itemDiv = document.createElement('div');
+            itemDiv.id = `valley-timeline-item-${key}`;
+            itemDiv.className = 'relative pl-2 cursor-pointer group/item hover:translate-x-1 transition-transform py-1';
+            itemDiv.setAttribute('onclick', `selectValleyZone('${key}', true)`);
+            
+            itemDiv.className += ' opacity-100';
+
+            const dotColor = item.category === 'premium' ? 'bg-amber-600' : (item.category === 'food' ? 'bg-red-500' : (item.category === 'shop' ? 'bg-purple-500' : 'bg-blue-500'));
+
+            itemDiv.innerHTML = `
+                <span class="absolute -left-[30px] top-2.5 w-3 h-3 rounded-full ${dotColor} border-2 border-white group-hover/item:scale-125 transition-transform"></span>
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold text-slate-800 group-hover/item:text-amber-800 transition-colors">
+                        ${item.short} ${item.name}
+                    </span>
+                    <span class="text-[9px] font-medium text-slate-400 scale-90">
+                        ${item.category === 'premium' ? '核心' : (item.category === 'food' ? '美食' : (item.category === 'shop' ? '購物' : '遊樂'))}
+                    </span>
+                </div>
+            `;
+            valleyTimelineList.appendChild(itemDiv);
+        }
+    }
+}
+
+// 點擊地標
+function selectValleyZone(zoneKey, shouldScroll = true) {
+    const valleyLandmarks = window.valleyLandmarks || {};
+    const data = valleyLandmarks[zoneKey];
+    if (!data) return;
+    // 2. 切換 active 地標狀態，高亮顯示
+    document.querySelectorAll('#valley-landmarks-group > g').forEach(el => el.classList.remove('active'));
+    const activeG = document.getElementById(`valley-landmark-${zoneKey}`);
+    if (activeG) {
+        activeG.classList.add('active');
+    }
+
+    // 2.2 同步高亮右側清單選項
+    document.querySelectorAll('#valley-timeline-list > div').forEach(el => {
+        el.className = el.className
+            .replace(' bg-amber-50/70 border-l-4 border-amber-600 p-2 rounded-lg', '')
+            .replace(' p-2 rounded-lg', '');
+    });
+    const activeItem = document.getElementById(`valley-timeline-item-${zoneKey}`);
+    if (activeItem) {
+        activeItem.className += ' bg-amber-50/70 border-l-4 border-amber-600 p-2 rounded-lg';
+    }
+
+    // 3. 隱藏空狀態提示，顯露內容區
+    const emptyState = document.getElementById('valley-empty-state');
+    if (emptyState) emptyState.classList.add('hidden');
+    const contentArea = document.getElementById('valley-content-area');
+    if (contentArea) contentArea.classList.remove('hidden');
+
+    // 4. 渲染 Badge 與標題
+    const badge = document.getElementById('valley-zone-badge');
+    if (badge) {
+        badge.innerText = data.short;
+        badge.className = `w-6 h-6 flex items-center justify-center font-bold rounded-xl text-xs text-white ${data.badgeColor}`;
+    }
+    
+    const zoneTitle = document.getElementById('valley-zone-title');
+    if (zoneTitle) zoneTitle.innerText = data.name;
+
+    const zoneType = document.getElementById('valley-zone-type');
+    if (zoneType) {
+        const typeText = data.category === 'premium' ? '🏛️ 核心見學建築' : (data.category === 'food' ? '🍔 美食餐飲' : (data.category === 'shop' ? '🛍️ 限定購物官方店' : '🎡 戶外特色遊樂'));
+        zoneType.innerHTML = `
+            <i data-lucide="tag" class="w-3 h-3"></i>
+            <span>${typeText}</span>
+        `;
+    }
+
+    // 5. 渲染景點列表
+    const spotList = document.getElementById('valley-spot-list');
+    if (spotList) {
+        spotList.innerHTML = '';
+        data.spots.forEach(spot => {
+            const li = document.createElement('li');
+            li.className = 'p-2 bg-slate-50/80 rounded-xl border border-slate-100/60 hover:border-amber-200 transition-all';
+            li.innerHTML = `
+                <div class="font-bold text-slate-800 text-xs flex items-center gap-1">
+                    <span class="text-amber-600">✦</span> ${spot.name}
+                </div>
+                <div class="text-[10px] text-slate-500 mt-0.5 pl-3 leading-relaxed">${spot.desc}</div>
+            `;
+            spotList.appendChild(li);
+        });
+    }
+
+    // 6. 渲染見學祕笈 (過濾掉 excessive Premium 詞彙)
+    const premiumTipBox = document.getElementById('valley-premium-tip-box');
+    if (premiumTipBox) {
+        let cleanedTip = data.premiumTip
+            .replace(/👑 <strong>尊榮福利<\/strong>：/g, '✦ <strong>見學祕笈<\/strong>：')
+            .replace(/持 Premium 的遊客，/g, '')
+            .replace(/Premium 參觀路線中/g, '參觀內部時')
+            .replace(/普通大散步票無法參觀的極佳福利/g, '極富教育與參觀價值的體驗');
+
+        premiumTipBox.innerHTML = cleanedTip;
+    }
+
+    // 7. 若為 13 人魔女團，顯示 7 月夏季玩偶停售警報，其他則隱藏
+    const alertBox = document.getElementById('valley-summer-alert-box');
+    if (alertBox) {
+        if (zoneKey === 'witches-13') {
+            alertBox.classList.remove('hidden');
+            alertBox.innerHTML = `
+                <span class="font-bold text-red-800 flex items-center gap-1 mb-1 text-[10px]">
+                    <i data-lucide="alert-circle" class="w-3 h-3"></i> 7 月出遊特別提醒
+                </span>
+                人氣周邊「菌菌」玩偶夏季期間（7~10月）暫停售賣！可轉為收藏店內限定、帶有13人魔女章印的馬克杯或精緻刺繡托特包。
+            `;
+        } else {
+            alertBox.classList.add('hidden');
+        }
+    }
+
+    // 重新刷新 Lucide 圖標
+    if (window.lucide) {
+      window.lucide.createIcons();
+    }
+
+    // 平滑滾動讓遊客更易閱讀
+    if (shouldScroll) {
+      const detailPanel = document.getElementById('valley-detail-panel');
+      if (detailPanel) detailPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+}
+
+// 摺疊與展開魔女之谷面版
+function toggleValleyAccordion(forceState = null) {
+  const accordion = document.getElementById('valley-accordion-content');
+  const arrow = document.getElementById('valley-arrow');
+  if (!accordion || !arrow) return;
+
+  let shouldOpen = accordion.classList.contains('hidden');
+  if (forceState !== null) {
+      shouldOpen = (forceState === 'open');
+  }
+
+  if (shouldOpen) {
+      accordion.classList.remove('hidden');
+      arrow.style.transform = 'rotate(180deg)';
+      initValleyView();
+  } else {
+      accordion.classList.add('hidden');
+      arrow.style.transform = 'rotate(0deg)';
+  }
+}
+
+// 當點擊主圖魔女之谷時，自動拉開魔女之谷專區並滾動聚焦
+function expandValleyAndScroll() {
+  toggleValleyAccordion('open');
+  const depthSection = document.getElementById('valley-depth-section');
+  if (depthSection) {
+      setTimeout(() => {
+          depthSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 150);
+  }
+}
+
+
+
+
+
