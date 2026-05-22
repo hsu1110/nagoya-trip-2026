@@ -1,5 +1,5 @@
 // ==========================================
-// 🪙 Currency Calculator Logic
+// Currency Calculator Logic
 // ==========================================
 const rateInput = document.getElementById("exchangeRate");
 const twdInput = document.getElementById("inputTWD");
