@@ -575,4 +575,3 @@ window.valleyLandmarks = {
         premiumTip: '🔔 <strong>眺望絕佳點</strong>：登上鐘樓平台是俯瞰「霍爾移動城堡」定時噴煙與旋轉木馬全景的絕佳秘密機位，不容錯過。'
     }
 };
-

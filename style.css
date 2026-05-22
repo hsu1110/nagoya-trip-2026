@@ -8,14 +8,14 @@ body {
   height: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #f5f5f4; 
+  background: #f5f5f4;
 }
 ::-webkit-scrollbar-thumb {
-  background: #d6d3d1; 
+  background: #d6d3d1;
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #a8a29e; 
+  background: #a8a29e;
 }
 
 .hide-scrollbar::-webkit-scrollbar {
@@ -77,9 +77,15 @@ input[type="number"] {
 }
 
 @keyframes float {
-  0% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
-  100% { transform: translateY(0px); }
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
 }
 
 .animate-float {
@@ -87,8 +93,13 @@ input[type="number"] {
 }
 
 @keyframes pulseGlow {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(244, 63, 94, 0.4); }
-  50% { box-shadow: 0 0 0 10px rgba(244, 63, 94, 0); }
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(244, 63, 94, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(244, 63, 94, 0);
+  }
 }
 
 .animate-pulse-glow {
@@ -105,16 +116,21 @@ input[type="number"] {
   transition: background-color 0.5s ease;
 }
 
-
-
 /* 地標被選中 (active) 時的呼吸放大動畫 */
 @keyframes active-pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.15); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
-.group.active circle, .group.active rect {
+.group.active circle,
+.group.active rect {
   animation: active-pulse 2s infinite ease-in-out;
   stroke: #ffffff !important;
   stroke-width: 3.5px !important;
@@ -127,12 +143,14 @@ input[type="number"] {
 }
 
 /* 解決 SVG 地標懸停放大時因基準點偏差導致的抖動問題 */
-.group circle, .group rect {
+.group circle,
+.group rect {
   transform-origin: center;
   transform-box: fill-box;
   transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
-.group:hover circle, .group:hover rect {
+.group:hover circle,
+.group:hover rect {
   transform: scale(1.1);
 }
 
@@ -146,6 +164,7 @@ input[type="number"] {
 
 /* 展開摺疊的過渡效果 */
 .accordion-content {
-  transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+  transition:
+    max-height 0.3s ease-out,
+    padding 0.3s ease-out;
 }
-

@@ -40,7 +40,6 @@ if (jpyInput) jpyInput.addEventListener("input", () => updateCalc("jpy"));
 const itineraryData = window.itineraryData || [];
 const db = window.db || window.travelDb || [];
 
-
 // ==========================================
 // 📅 Itinerary Rendering Logic
 // ==========================================
@@ -343,7 +342,6 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
-
 // ==========================================
 // 🍃 Ghibli Park SPA Integration Logic
 // ==========================================
@@ -378,7 +376,6 @@ function switchView(viewName) {
   // 同步導覽列 Active 狀態
   updateNavbarActive(viewName);
 }
-
 
 function updateNavbarActive(viewName) {
   const ghibliBtn = document.getElementById("nav-ghibli-btn");
@@ -1221,8 +1218,3 @@ function expandValleyAndScroll() {
       }, 150);
   }
 }
-
-
-
-
-
