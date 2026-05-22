@@ -639,19 +639,6 @@ function renderWarehouseMap() {
             'onclick': `selectWarehouseStep('${key}')`
         });
 
-        const glowColor = key === 'cafe' ? '#eab308' : (key === '1' || key === '7' ? '#f97316' : '#22c55e');
-        const glow = createSVGElement('circle', {
-            'cx': step.cx,
-            'cy': step.cy,
-            'r': step.r + 5,
-            'fill': 'none',
-            'stroke': glowColor,
-            'stroke-width': '2.5',
-            'stroke-opacity': '0.7',
-            'stroke-dasharray': key === 'cafe' ? '2,2' : 'none'
-        });
-        g.appendChild(glow);
-
         const circle = createSVGElement('circle', {
             'cx': step.cx,
             'cy': step.cy,
@@ -676,7 +663,7 @@ function renderWarehouseMap() {
     }
   }
 
-  // 3. 繪製右側步驟時間軸
+  // 3. 繪製地圖下方步驟時間軸 (改為精美 Pill 響應式卡片)
   const timelineList = document.getElementById('timeline-list');
   if (timelineList) {
     timelineList.innerHTML = '';
@@ -685,17 +672,13 @@ function renderWarehouseMap() {
         const step = warehouseSteps[key];
         const itemDiv = document.createElement('div');
         itemDiv.id = `wh-timeline-item-${key}`;
-        itemDiv.className = 'relative pl-2 cursor-pointer group/item hover:translate-x-1 transition-transform py-1';
+        itemDiv.className = 'cursor-pointer px-2 py-2 rounded-xl border border-slate-100 bg-slate-50/30 hover:border-orange-300 hover:bg-orange-50/20 transition-all flex flex-col justify-center text-center gap-0.5 shadow-sm';
         itemDiv.setAttribute('onclick', `selectWarehouseStep('${key}')`);
         
         itemDiv.innerHTML = `
-            <span class="absolute -left-[30px] top-2.5 w-3.5 h-3.5 rounded-full bg-red-500 border-2 border-white group-hover/item:scale-125 transition-transform"></span>
-            <div class="flex items-center justify-between">
-                <span class="text-xs font-bold text-slate-800 group-hover/item:text-orange-700 transition-colors">
-                    步驟 ${key} - ${step.title}
-                </span>
-                <span class="text-[9px] font-medium text-slate-400 scale-90">${step.level.split(' ')[0]}</span>
-            </div>
+            <div class="text-[9px] font-bold text-orange-600 font-mono tracking-wider">STEP ${key}</div>
+            <div class="text-xs font-bold text-slate-800 truncate">${step.title}</div>
+            <div class="text-[9px] text-slate-400 font-medium">${step.level.split(' ')[0]}</div>
         `;
         timelineList.appendChild(itemDiv);
     });
@@ -709,11 +692,25 @@ function selectWarehouseStep(stepKey) {
   if (!step) return;
 
   document.querySelectorAll('#timeline-list > div').forEach(el => {
-      el.className = 'relative pl-2 cursor-pointer group/item hover:translate-x-1 transition-transform py-1';
+      el.className = 'cursor-pointer px-2 py-2 rounded-xl border border-slate-100 bg-slate-50/30 hover:border-orange-300 hover:bg-orange-50/20 transition-all flex flex-col justify-center text-center gap-0.5 shadow-sm';
+      // 恢復常規狀態的文字顏色
+      const stepTxt = el.querySelector('.truncate');
+      if (stepTxt) stepTxt.className = 'text-xs font-bold text-slate-800 truncate';
+      const stepLvl = el.querySelector('.font-medium');
+      if (stepLvl) stepLvl.className = 'text-[9px] text-slate-400 font-medium';
+      const stepMono = el.querySelector('.font-mono');
+      if (stepMono) stepMono.className = 'text-[9px] font-bold text-orange-600 font-mono tracking-wider';
   });
   const activeItem = document.getElementById(`wh-timeline-item-${stepKey}`);
   if (activeItem) {
-      activeItem.className = 'relative pl-2 cursor-pointer group/item hover:translate-x-1 transition-transform py-1 bg-orange-50/70 border-l-4 border-orange-500 p-2 rounded-lg';
+      activeItem.className = 'cursor-pointer px-2 py-2 rounded-xl border border-orange-500 bg-orange-500 text-white transition-all flex flex-col justify-center text-center gap-0.5 shadow-md transform scale-102';
+      // 高亮狀態下的文字顏色
+      const stepTxt = activeItem.querySelector('.truncate');
+      if (stepTxt) stepTxt.className = 'text-xs font-bold text-white truncate';
+      const stepLvl = activeItem.querySelector('.font-medium');
+      if (stepLvl) stepLvl.className = 'text-[9px] text-orange-100 font-medium';
+      const stepMono = activeItem.querySelector('.font-mono');
+      if (stepMono) stepMono.className = 'text-[9px] font-bold text-orange-50 font-mono tracking-wider';
   }
 
   document.querySelectorAll('#warehouse-nodes-group > g').forEach(el => el.classList.remove('active'));
@@ -1051,30 +1048,22 @@ function renderValleyMap() {
         group.appendChild(g);
     }
 
-    // 繪製右側魔女之谷步驟清單
+    // 繪製地圖下方魔女之谷步驟清單 (改為精美 Pill 響應式卡片)
     const valleyTimelineList = document.getElementById('valley-timeline-list');
     if (valleyTimelineList) {
         valleyTimelineList.innerHTML = '';
         for (const [key, item] of Object.entries(valleyLandmarks)) {
             const itemDiv = document.createElement('div');
             itemDiv.id = `valley-timeline-item-${key}`;
-            itemDiv.className = 'relative pl-2 cursor-pointer group/item hover:translate-x-1 transition-transform py-1';
+            itemDiv.className = 'cursor-pointer px-2 py-2 rounded-xl border border-slate-100 bg-slate-50/30 hover:border-amber-300 hover:bg-amber-50/20 transition-all flex flex-col justify-center text-center gap-0.5 shadow-sm';
             itemDiv.setAttribute('onclick', `selectValleyZone('${key}', true)`);
             
-            itemDiv.className += ' opacity-100';
-
-            const dotColor = item.category === 'premium' ? 'bg-amber-600' : (item.category === 'food' ? 'bg-red-500' : (item.category === 'shop' ? 'bg-purple-500' : 'bg-blue-500'));
+            const badgeColorText = item.category === 'premium' ? 'text-amber-600' : (item.category === 'food' ? 'text-red-500' : (item.category === 'shop' ? 'text-purple-500' : 'text-blue-500'));
+            const catLabel = item.category === 'premium' ? '核心' : (item.category === 'food' ? '美食' : (item.category === 'shop' ? '購物' : '遊樂'));
 
             itemDiv.innerHTML = `
-                <span class="absolute -left-[30px] top-2.5 w-3 h-3 rounded-full ${dotColor} border-2 border-white group-hover/item:scale-125 transition-transform"></span>
-                <div class="flex items-center justify-between">
-                    <span class="text-xs font-bold text-slate-800 group-hover/item:text-amber-800 transition-colors">
-                        ${item.short} ${item.name}
-                    </span>
-                    <span class="text-[9px] font-medium text-slate-400 scale-90">
-                        ${item.category === 'premium' ? '核心' : (item.category === 'food' ? '美食' : (item.category === 'shop' ? '購物' : '遊樂'))}
-                    </span>
-                </div>
+                <div class="text-[9px] font-bold ${badgeColorText} font-mono tracking-wider">${item.short} ${catLabel}</div>
+                <div class="text-xs font-bold text-slate-800 truncate">${item.name}</div>
             `;
             valleyTimelineList.appendChild(itemDiv);
         }
@@ -1095,13 +1084,28 @@ function selectValleyZone(zoneKey, shouldScroll = true) {
 
     // 2.2 同步高亮右側清單選項
     document.querySelectorAll('#valley-timeline-list > div').forEach(el => {
-        el.className = el.className
-            .replace(' bg-amber-50/70 border-l-4 border-amber-600 p-2 rounded-lg', '')
-            .replace(' p-2 rounded-lg', '');
+        el.className = 'cursor-pointer px-2 py-2 rounded-xl border border-slate-100 bg-slate-50/30 hover:border-amber-300 hover:bg-amber-50/20 transition-all flex flex-col justify-center text-center gap-0.5 shadow-sm';
+        // 恢復常規狀態的文字顏色
+        const stepTxt = el.querySelector('.truncate');
+        if (stepTxt) stepTxt.className = 'text-xs font-bold text-slate-800 truncate';
+        const stepCat = el.querySelector('.font-mono');
+        if (stepCat) {
+            const key = el.id.replace('valley-timeline-item-', '');
+            const item = valleyLandmarks[key];
+            if (item) {
+                const badgeColorText = item.category === 'premium' ? 'text-amber-600' : (item.category === 'food' ? 'text-red-500' : (item.category === 'shop' ? 'text-purple-500' : 'text-blue-500'));
+                stepCat.className = `text-[9px] font-bold ${badgeColorText} font-mono tracking-wider`;
+            }
+        }
     });
     const activeItem = document.getElementById(`valley-timeline-item-${zoneKey}`);
     if (activeItem) {
-        activeItem.className += ' bg-amber-50/70 border-l-4 border-amber-600 p-2 rounded-lg';
+        activeItem.className = 'cursor-pointer px-2 py-2 rounded-xl border border-amber-500 bg-amber-500 text-white transition-all flex flex-col justify-center text-center gap-0.5 shadow-md transform scale-102';
+        // 高亮狀態下的文字顏色
+        const stepTxt = activeItem.querySelector('.truncate');
+        if (stepTxt) stepTxt.className = 'text-xs font-bold text-white truncate';
+        const stepCat = activeItem.querySelector('.font-mono');
+        if (stepCat) stepCat.className = 'text-[9px] font-bold text-amber-100 font-mono tracking-wider';
     }
 
     // 3. 隱藏空狀態提示，顯露內容區

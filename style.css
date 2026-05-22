@@ -105,16 +105,7 @@ input[type="number"] {
   transition: background-color 0.5s ease;
 }
 
-/* 吉卜力森林綠捲軸過渡 */
-.ghibli-theme::-webkit-scrollbar-track {
-  background: #f1f5f9;
-}
-.ghibli-theme::-webkit-scrollbar-thumb {
-  background: #a7f3d0;
-}
-.ghibli-theme::-webkit-scrollbar-thumb:hover {
-  background: #059669;
-}
+
 
 /* 地標被選中 (active) 時的呼吸放大動畫 */
 @keyframes active-pulse {
