@@ -5,27 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>2026 名古屋自由行：吉卜力、飛驒牛、爆買全攻略</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons for Ghibli Guide -->
+    <script src="https://unpkg.com/lucide@latest"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
-<body class="bg-stone-50 text-stone-800 antialiased selection:bg-rose-200 selection:text-rose-900">
+<body class="bg-stone-50 text-stone-800 antialiased selection:bg-rose-200 selection:text-rose-900 transition-colors duration-500">
 
     <!-- Navigation -->
-    <nav class="sticky top-0 z-50 bg-stone-50/90 backdrop-blur-md border-b border-stone-200 shadow-sm">
+    <nav class="sticky top-0 z-50 bg-stone-50/90 backdrop-blur-md border-b border-stone-200 shadow-sm transition-colors duration-500" id="main-nav">
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16 items-center">
-                <div class="flex-shrink-0 flex items-center gap-2">
-                    <span class="text-2xl">🇯🇵</span>
-                    <span class="font-bold text-xl tracking-tight text-stone-900">NAGOYA 2026</span>
+                <div class="flex-shrink-0 flex items-center gap-2 cursor-pointer" onclick="switchView('main')">
+                    <span class="text-2xl" id="nav-logo-icon">🇯🇵</span>
+                    <span class="font-bold text-xl tracking-tight text-stone-900" id="nav-logo-text">NAGOYA 2026</span>
                 </div>
-                <div class="hidden md:flex space-x-6">
-                    <button onclick="scrollToSection('logistics')" class="text-stone-600 hover:text-rose-500 transition-colors text-sm font-medium">交通住宿</button>
-                    <button onclick="scrollToSection('itinerary')" class="text-stone-600 hover:text-rose-500 transition-colors text-sm font-medium">每日行程</button>
-                    <button onclick="scrollToSection('interactive-gallery')" class="text-rose-600 hover:text-rose-700 font-bold transition-colors text-sm">景點與美食</button>
-                    <button onclick="scrollToSection('tools')" class="text-stone-600 hover:text-rose-500 transition-colors text-sm font-medium">實用工具</button>
+                <div class="hidden md:flex space-x-6 items-center">
+                    <button onclick="switchView('main'); scrollToSection('logistics')" class="nav-link text-stone-600 hover:text-rose-500 transition-colors text-sm font-medium">交通住宿</button>
+                    <button onclick="switchView('main'); scrollToSection('itinerary')" class="nav-link text-stone-600 hover:text-rose-500 transition-colors text-sm font-medium">每日行程</button>
+                    <button onclick="switchView('main'); scrollToSection('interactive-gallery')" class="nav-link text-stone-600 hover:text-rose-500 transition-colors text-sm font-medium">景點與美食</button>
+                    <button onclick="switchView('main'); scrollToSection('tools')" class="nav-link text-stone-600 hover:text-rose-500 transition-colors text-sm font-medium">實用工具</button>
+                    <button id="nav-ghibli-btn" onclick="switchView('ghibli')" class="px-3.5 py-1.5 rounded-full text-xs font-bold text-emerald-700 bg-emerald-50 border border-emerald-100 hover:bg-emerald-100 hover:text-emerald-800 shadow-sm transition-all duration-300 flex items-center gap-1.5"><span class="animate-bounce inline-block">🍃</span>吉卜力大補帖</button>
                 </div>
-                <div class="text-xs text-stone-400 font-mono hidden md:block">2026/07/01 - 07/06</div>
+                <div class="text-xs text-stone-400 font-mono hidden md:block" id="nav-date-tag">2026/07/01 - 07/06</div>
                 <!-- Mobile menu button -->
                 <div class="md:hidden flex items-center">
                     <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="text-stone-600 hover:text-stone-900 focus:outline-none p-2" aria-label="Menu">
@@ -37,16 +40,21 @@
         <!-- Mobile Menu -->
         <div id="mobile-menu" class="hidden md:hidden bg-stone-50 border-b border-stone-200">
             <div class="px-4 pt-2 pb-4 space-y-1">
-                <button onclick="scrollToSection('logistics'); document.getElementById('mobile-menu').classList.add('hidden');" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-stone-700 hover:text-rose-500 hover:bg-stone-100">交通住宿</button>
-                <button onclick="scrollToSection('itinerary'); document.getElementById('mobile-menu').classList.add('hidden');" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-stone-700 hover:text-rose-500 hover:bg-stone-100">每日行程</button>
-                <button onclick="scrollToSection('interactive-gallery'); document.getElementById('mobile-menu').classList.add('hidden');" class="block w-full text-left px-3 py-2 rounded-md text-base font-bold text-rose-600 hover:bg-rose-50">景點與美食</button>
-                <button onclick="scrollToSection('tools'); document.getElementById('mobile-menu').classList.add('hidden');" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-stone-700 hover:text-rose-500 hover:bg-stone-100">實用工具</button>
+                <button onclick="switchView('main'); scrollToSection('logistics'); document.getElementById('mobile-menu').classList.add('hidden');" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-stone-700 hover:text-rose-500 hover:bg-stone-100">交通住宿</button>
+                <button onclick="switchView('main'); scrollToSection('itinerary'); document.getElementById('mobile-menu').classList.add('hidden');" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-stone-700 hover:text-rose-500 hover:bg-stone-100">每日行程</button>
+                <button onclick="switchView('main'); scrollToSection('interactive-gallery'); document.getElementById('mobile-menu').classList.add('hidden');" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-stone-700 hover:text-rose-500 hover:bg-stone-100">景點與美食</button>
+                <button onclick="switchView('main'); scrollToSection('tools'); document.getElementById('mobile-menu').classList.add('hidden');" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-stone-700 hover:text-rose-500 hover:bg-stone-100">實用工具</button>
+                <button onclick="switchView('ghibli'); document.getElementById('mobile-menu').classList.add('hidden');" class="block w-full text-left px-3 py-2 rounded-md text-base font-bold text-emerald-600 hover:bg-emerald-50"><span class="animate-pulse">🍃</span> 吉卜力大補帖</button>
             </div>
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <div class="border-b border-stone-100">
+
+    <!-- Main Travel View Container -->
+    <div id="main-travel-view" class="transition-opacity duration-500">
+
+        <!-- Hero Section -->
+        <div class="border-b border-stone-100">
         <div class="max-w-5xl mx-auto px-4 py-16 sm:px-6 lg:px-8 text-center relative z-10">
             <div class="animate-fade-in-up" style="animation-delay: 0.1s">
                 <span class="inline-block px-4 py-1.5 rounded-full bg-white/60 backdrop-blur-md border border-rose-100 text-rose-600 text-xs font-bold tracking-widest uppercase mb-6 shadow-sm"><i class="fa-solid fa-plane mr-2"></i>Ghibli & Wagyu Trip</span>
@@ -291,6 +299,380 @@
         <p>© 2026 Nagoya Efficient Travel Planner. </p>
     </footer>
 
+    </div> <!-- End of main-travel-view -->
+
+    <!-- Ghibli Park Guide View Container -->
+    <div id="ghibli-guide-view" class="hidden transition-opacity duration-500">
+        <!-- 頂部導航欄 (吉卜力風格) -->
+        <header class="bg-emerald-800 text-white shadow-md">
+            <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <span class="text-2xl">🍃</span>
+                    <div>
+                        <h1 class="text-lg md:text-xl font-bold tracking-wider">吉卜力公園互動導覽大補帖</h1>
+                        <p class="text-[10px] text-emerald-200">實景地圖精準標點與路線互通版</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="hidden sm:inline-block text-xs bg-emerald-700 px-3 py-1.5 rounded-full border border-emerald-600">
+                        愛知縣地球博紀念公園內
+                    </span>
+                    <span class="text-xs bg-amber-500 text-emerald-950 font-bold px-2.5 py-1 rounded-md">2026最新改訂</span>
+                </div>
+            </div>
+        </header>
+
+        <main class="max-w-7xl mx-auto px-3 py-6 space-y-6">
+            <!-- 一、核心互動區：地圖與景點資訊 -->
+            <section class="bg-white rounded-3xl shadow-sm border border-emerald-100 p-4 md:p-6">
+                <!-- 區塊標題與路線控制選項 -->
+                <div class="border-b border-slate-100 pb-4 mb-6 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
+                    <div>
+                        <h2 class="text-lg font-bold text-emerald-950 flex items-center gap-2">
+                            <i data-lucide="map" class="w-5 h-5 text-emerald-600"></i>
+                            吉卜力公園實景地圖路線導覽
+                        </h2>
+                        <p class="text-xs text-slate-500 mt-1">點擊地圖上的【彩色地標圈圈】，下方會自動切換顯示該區塊的完整景點清單與詳細路徑導航！</p>
+                    </div>
+                    
+                    <!-- 地圖路線篩選與圖例控制器 -->
+                    <div class="flex flex-wrap sm:flex-nowrap items-center gap-2 bg-slate-50 p-2 rounded-2xl border border-slate-100 text-xs w-full lg:w-auto shadow-inner overflow-x-auto">
+                        <span class="text-slate-400 font-bold mr-1 shrink-0">顯示控制：</span>
+                        
+                        <label class="flex items-center gap-1.5 bg-white px-2.5 py-1 rounded-xl border border-slate-200 cursor-pointer hover:bg-slate-100 transition-colors shrink-0">
+                            <input type="checkbox" id="toggle-landmarks" checked class="rounded text-emerald-600 focus:ring-emerald-500" onchange="toggleLandmarkLayer()">
+                            <span class="w-2.5 h-2.5 rounded-full bg-emerald-600 inline-block"></span>
+                            <span class="font-bold text-emerald-800">📍 景點標點與名稱</span>
+                        </label>
+
+                        <label class="flex items-center gap-1.5 bg-white px-2.5 py-1 rounded-xl border border-slate-200 cursor-pointer hover:bg-slate-100 transition-colors shrink-0">
+                            <input type="checkbox" id="toggle-walk" checked class="rounded text-slate-800 focus:ring-slate-500" onchange="toggleRouteLayer('walk')">
+                            <span class="w-3.5 h-0.5 border-t-2 border-dashed border-slate-800 inline-block"></span>
+                            <span class="font-bold">🚶 徒步走路</span>
+                        </label>
+                        
+                        <label class="flex items-center gap-1.5 bg-white px-2.5 py-1 rounded-xl border border-slate-200 cursor-pointer hover:bg-slate-100 transition-colors shrink-0">
+                            <input type="checkbox" id="toggle-bus" checked class="rounded text-red-600 focus:ring-red-500" onchange="toggleRouteLayer('bus')">
+                            <span class="w-3.5 h-0.5 border-t-2 border-red-500 inline-block"></span>
+                            <span class="font-bold text-red-600">🚌 免費接駁公車</span>
+                        </label>
+                        
+                        <label class="flex items-center gap-1.5 bg-white px-2.5 py-1 rounded-xl border border-slate-200 cursor-pointer hover:bg-slate-100 transition-colors shrink-0">
+                            <input type="checkbox" id="toggle-catbus" checked class="rounded text-amber-500 focus:ring-amber-500" onchange="toggleRouteLayer('catbus')">
+                            <span class="w-3.5 h-0.5 border-t-2 border-dashed border-amber-500 inline-block"></span>
+                            <span class="font-bold text-amber-600">🐾 貓巴士</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 地圖本體 -->
+                <div id="map-wrapper" class="relative w-full bg-[#e9f3df] rounded-2xl overflow-hidden border border-emerald-100 flex flex-col items-center p-1 md:p-2 shadow-inner transition-all duration-300">
+                    <!-- 手機版提示滑動小手勢 -->
+                    <div class="md:hidden absolute top-3 right-3 z-10 bg-emerald-950/80 text-white text-[10px] px-2 py-1 rounded-full flex items-center gap-1 pointer-events-none">
+                        <i data-lucide="move-horizontal" class="w-3 h-3 animate-bounce"></i> 左右滑動檢視完整地圖
+                    </div>
+
+                    <div class="w-full overflow-auto map-container">
+                        <!-- 響應式包裝容器 -->
+                        <div class="min-w-[760px] md:min-w-[900px] xl:min-w-full aspect-[1000/850] relative mx-auto bg-[#e2f0d9] rounded-2xl overflow-hidden">
+                            <!-- GPU 硬體加速的底圖 -->
+                            <img 
+                                src="./data/ghibli_tour_map.jpg" 
+                                alt="吉卜力公園地圖底圖" 
+                                class="absolute inset-0 w-full h-full object-contain select-none pointer-events-none sharp-img rounded-2xl" 
+                                id="ghibli-bg-image"
+                            />
+
+                            <!-- 完全透明的 SVG -->
+                            <svg viewBox="0 0 1000 850" class="absolute inset-0 w-full h-full select-none" id="map-svg">
+                                <defs>
+                                    <filter x="-0.1" y="-0.1" width="1.2" height="1.2" id="bg-white">
+                                        <feFlood flood-color="white" flood-opacity="0.85"/>
+                                        <feComposite in="SourceGraphic" operator="over"/>
+                                    </filter>
+                                </defs>
+                                <g id="route-walk" class="transition-opacity duration-300"></g>
+                                <g id="route-bus" class="transition-opacity duration-300"></g>
+                                <g id="route-catbus" class="transition-opacity duration-300"></g>
+                                <g id="landmarks-layer" class="transition-opacity duration-300">
+                                    <g id="landmarks-group"></g>
+                                </g>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 景點動態展示面板 -->
+                <div class="mt-6 bg-slate-50 border border-emerald-50 rounded-2xl p-5" id="detail-panel">
+                    <div class="text-center py-8 text-slate-400" id="empty-state">
+                        <i data-lucide="info" class="w-12 h-12 mx-auto text-slate-300 mb-2"></i>
+                        <p class="font-medium">請點擊上方地圖上的任意「數字或交通」地標</p>
+                        <p class="text-xs mt-1">即時為您揭曉該區域特色設施、限定小景點與交通時間！</p>
+                    </div>
+
+                    <div id="content-area" class="hidden">
+                        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-slate-200 pb-4 mb-4">
+                            <div class="flex items-center gap-3">
+                                <span id="zone-badge" class="px-3 py-1 text-xs font-bold rounded-full text-white animate-pulse"></span>
+                                <h3 id="zone-title" class="text-lg md:text-xl font-bold text-slate-900"></h3>
+                            </div>
+                            <div id="zone-transport" class="text-xs text-slate-600 bg-white px-3 py-1.5 rounded-xl border border-slate-100 shadow-sm flex items-center gap-1.5 font-medium"></div>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                            <div class="lg:col-span-2">
+                                <h4 class="text-sm font-bold text-slate-700 mb-3 flex items-center gap-1.5">
+                                    <i data-lucide="map-pin" class="w-4 h-4 text-emerald-600"></i>
+                                    內部特色設施、景點列表
+                                </h4>
+                                <ul id="spot-list" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></ul>
+                            </div>
+                            
+                            <div class="bg-white p-5 rounded-2xl border border-slate-100 space-y-4 shadow-sm flex flex-col justify-between">
+                                <div>
+                                    <h4 class="text-sm font-bold text-slate-400 tracking-wider uppercase border-b border-slate-100 pb-2 mb-3">
+                                        🗺️ 由此區域出發的步行/交通時間
+                                    </h4>
+                                    <div id="navigation-list" class="space-y-2 text-xs text-slate-600"></div>
+                                </div>
+                                <div class="text-[10px] text-slate-400 mt-4 bg-slate-50 p-2 rounded-lg border border-slate-100">
+                                    💡 建議：點擊地圖上的其他地標，即可即時比對不同區域之間的穿梭路程！
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 二、核心深度摺疊區：吉卜力大倉庫深度導覽 -->
+            <section id="warehouse-depth-section" class="bg-white rounded-3xl shadow-sm border border-orange-100 overflow-hidden">
+                <button onclick="toggleWarehouseAccordion()" class="w-full px-6 py-5 bg-gradient-to-r from-orange-50 to-amber-50/30 flex justify-between items-center text-left focus:outline-none hover:from-orange-100/50 transition-colors">
+                    <div class="flex items-center gap-3">
+                        <span class="text-2xl bg-orange-500 text-white p-2 rounded-2xl shadow-sm">🏭</span>
+                        <div>
+                            <h2 class="text-lg font-bold text-orange-950 flex items-center gap-2">
+                                吉卜力大倉庫 (ジブリの大倉庫) 深度導覽
+                            </h2>
+                            <p class="text-xs text-orange-800/80 mt-0.5 font-medium">
+                                極清晰中文版底圖 ➔ 網友力薦 0~8 號黃金不走回頭路玩遊路線
+                            </p>
+                        </div>
+                    </div>
+                    <div id="warehouse-arrow" class="text-orange-900 bg-white p-2 rounded-full border border-orange-200 shadow-sm transition-transform duration-300">
+                        <i data-lucide="chevron-down" class="w-5 h-5"></i>
+                    </div>
+                </button>
+
+                <div id="warehouse-accordion-content" class="hidden border-t border-orange-100 p-4 md:p-6 space-y-6">
+                    <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 border-b border-orange-50 pb-4">
+                        <p class="text-xs text-slate-500 max-w-xl">
+                            💡 <strong>如何使用大倉庫地圖</strong>：點擊地圖上的【圓圈數字步序】或是點擊右側【黃金步驟時間軸】，即可即時觸發高亮導航與優雅呼吸動畫，查看特色景點與過關秘笈！
+                        </p>
+                        <div class="flex flex-wrap items-center gap-2 bg-orange-50 p-2 rounded-2xl border border-orange-100 text-xs w-full lg:w-auto shadow-inner overflow-x-auto">
+                            <span class="text-orange-400 font-bold shrink-0">顯示控制：</span>
+                            <label class="flex items-center gap-1.5 bg-white px-2.5 py-1 rounded-xl border border-orange-200 cursor-pointer hover:bg-slate-100 transition-colors shrink-0">
+                                <input type="checkbox" id="toggle-wh-nodes" checked class="rounded text-orange-600 focus:ring-orange-500" onchange="toggleWarehouseLayer('nodes')">
+                                <span class="w-2.5 h-2.5 rounded-full bg-orange-600 inline-block"></span>
+                                <span class="font-bold text-orange-800">📍 步驟節點與標籤</span>
+                            </label>
+                            <label class="flex items-center gap-1.5 bg-white px-2.5 py-1 rounded-xl border border-orange-200 cursor-pointer hover:bg-slate-100 transition-colors shrink-0">
+                                <input type="checkbox" id="toggle-wh-route" checked class="rounded text-red-600 focus:ring-red-500" onchange="toggleWarehouseLayer('route')">
+                                <span class="w-3.5 h-0.5 border-t-2 border-dashed border-red-500 inline-block"></span>
+                                <span class="font-bold text-red-700">🚩 推薦遊覽路線</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+                        <div class="xl:col-span-2 relative bg-slate-50 rounded-2xl overflow-hidden border border-slate-200 p-1">
+                            <div class="w-full overflow-auto map-container">
+                                <div class="min-w-[700px] aspect-[1000/760] relative bg-[#fafafa]">
+                                    <img 
+                                        src="./data/ghibli_tour_detail_map.jpg" 
+                                        alt="吉卜力大倉庫清晰版地圖" 
+                                        class="absolute inset-0 w-full h-full object-contain sharp-img rounded-xl"
+                                    />
+                                    <svg viewBox="0 0 1000 760" class="absolute inset-0 w-full h-full select-none" id="warehouse-svg">
+                                        <defs>
+                                            <filter x="-0.1" y="-0.1" width="1.2" height="1.2" id="bg-white">
+                                                <feFlood flood-color="white" flood-opacity="0.85"/>
+                                                <feComposite in="SourceGraphic" operator="over"/>
+                                            </filter>
+                                        </defs>
+                                        <g id="warehouse-route-lines" class="transition-opacity duration-300"></g>
+                                        <g id="warehouse-cafe-line" class="transition-opacity duration-300"></g>
+                                        <g id="warehouse-nodes-group" class="transition-opacity duration-300"></g>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="xl:col-span-1 flex flex-col justify-between space-y-4">
+                            <div class="bg-gradient-to-br from-slate-50 to-orange-50/10 p-4 rounded-2xl border border-slate-100 max-h-[520px] overflow-y-auto">
+                                <h3 class="text-sm font-bold text-orange-950 mb-3 flex items-center gap-1.5 border-b border-orange-100 pb-2">
+                                    <i data-lucide="list-ordered" class="w-4 h-4 text-orange-600"></i>
+                                    黃金不走回頭路時間軸
+                                </h3>
+                                <div class="relative pl-6 border-l border-orange-200/60 space-y-4" id="timeline-list"></div>
+                            </div>
+
+                            <div class="bg-white p-5 rounded-2xl border border-orange-200 shadow-md transition-all duration-300" id="warehouse-detail-box">
+                                <div class="flex items-center justify-between mb-2">
+                                    <div class="flex items-center gap-2">
+                                        <span id="wh-step-badge" class="bg-orange-600 text-white font-bold rounded-xl text-xs w-6 h-6 flex items-center justify-center">1</span>
+                                        <h4 id="wh-step-title" class="font-bold text-slate-900 text-base"></h4>
+                                    </div>
+                                    <span id="wh-step-level" class="text-[10px] font-bold px-2 py-0.5 rounded-full"></span>
+                                </div>
+                                <p id="wh-step-desc" class="text-xs text-slate-500 leading-relaxed mb-3"></p>
+                                <div class="bg-orange-50/50 rounded-xl p-3 border border-orange-100">
+                                    <span class="text-[10px] uppercase font-bold text-orange-800 tracking-wider flex items-center gap-1">
+                                        <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> 黃金密技 / 亮點
+                                    </span>
+                                    <p id="wh-step-tip" class="text-xs text-slate-700 font-medium mt-1 leading-relaxed"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 三、交通方案與巴士資訊總覽 -->
+            <section class="grid grid-cols-1 lg:grid-cols-3 gap-6 animate-fade-in-up">
+                <div class="bg-white rounded-3xl shadow-sm border border-emerald-100 p-5 flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-lg font-bold text-emerald-950 mb-4 flex items-center gap-2 border-b border-slate-100 pb-2">
+                            <i data-lucide="info" class="w-5 h-5 text-emerald-600"></i>
+                            遊園交通必知大補帖
+                        </h3>
+                        <div class="space-y-3.5 text-sm">
+                            <div class="bg-emerald-50/40 p-3.5 rounded-2xl border border-emerald-100">
+                                <h4 class="font-bold text-emerald-900 text-xs mb-1.5 flex items-center gap-1.5">
+                                    <span class="text-sm">🚇</span> 外部地鐵交通串聯
+                                </h4>
+                                <ul class="space-y-1.5 text-xs text-emerald-950 list-disc list-inside">
+                                    <li>從 <strong>藤之丘站</strong>（東山線）搭 Linimo ➔ 約 <strong>13 分鐘</strong>抵達園區。</li>
+                                    <li>從 <strong>八草站</strong>（愛知環狀鐵道）搭 Linimo ➔ 約 <strong>4 分鐘</strong>抵達園區。</li>
+                                </ul>
+                            </div>
+                            <div class="bg-red-50/30 p-3.5 rounded-2xl border border-red-100">
+                                <h4 class="font-bold text-red-900 text-xs mb-1.5 flex items-center gap-1.5">
+                                    <span class="text-sm">🚌</span> 免費接駁公車重要規則
+                                </h4>
+                                <ul class="space-y-1.5 text-xs text-red-950 list-disc list-inside">
+                                    <li class="text-red-700 font-bold">每週二（火曜日）停駛（遇休館亦不營運）。</li>
+                                    <li>全程免費搭乘，直接上車。</li>
+                                    <li>車內禁止飲食、禁止吸菸。</li>
+                                    <li>全園有 4 種不同吉卜力主題外觀塗裝的巴士。</li>
+                                </ul>
+                            </div>
+                            <div class="bg-amber-50/40 p-3.5 rounded-2xl border border-amber-100">
+                                <h4 class="font-bold text-amber-900 text-xs mb-1.5 flex items-center gap-1.5">
+                                    <span class="text-sm">🐾</span> APM 貓巴士乘車體驗
+                                </h4>
+                                <ul class="space-y-1.5 text-xs text-amber-950 list-disc list-inside">
+                                    <li>運行區間：<strong>魔女之谷與魔法之里中間 ⇄ 動動力森林</strong></li>
+                                    <li>單程約 <strong>10 分鐘</strong>，需額外購買貓巴士乘車券。</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-100 text-[10px] text-slate-400 text-center">
+                        修訂版本：2026年5月最新改訂版
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-3xl shadow-sm border border-emerald-100 p-5 lg:col-span-2">
+                    <div class="border-b border-slate-100 pb-3 mb-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+                        <h3 class="text-lg font-bold text-emerald-950 flex items-center gap-2">
+                            <i data-lucide="clock" class="w-5 h-5 text-emerald-600"></i>
+                            E 東路線 完整站點與發車時刻參考
+                        </h3>
+                        <span class="text-xs bg-red-100 text-red-700 px-2 py-0.5 rounded-full font-bold">每日行駛 (週二除外)</span>
+                    </div>
+                    <p class="text-xs text-slate-500 mb-4">
+                        📢 東路線（E線）約每 <strong>16～17 分鐘一班</strong>。各站點抵達與折返相對時間對照：
+                    </p>
+                    <div class="overflow-x-auto rounded-2xl border border-slate-100">
+                        <table class="w-full text-left border-collapse text-xs">
+                            <thead>
+                                <tr class="bg-slate-100 text-slate-700 font-bold border-b border-slate-200">
+                                    <th class="p-3">編號</th>
+                                    <th class="p-3">站名 (日文原名)</th>
+                                    <th class="p-3">對應吉卜力園區位置</th>
+                                    <th class="p-3">去程發車分</th>
+                                    <th class="p-3">回程發車分</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100">
+                                <tr class="hover:bg-emerald-50/20 transition-colors">
+                                    <td class="p-3 font-bold text-slate-400">E1</td>
+                                    <td class="p-3 font-medium">地球市民交流センター</td>
+                                    <td class="p-3 text-emerald-800 font-medium">公園北口 / 青春之丘附近</td>
+                                    <td class="p-3 text-emerald-600 font-bold">每小時 00 分</td>
+                                    <td class="p-3 text-slate-500">每小時 37 分 (終點)</td>
+                                </tr>
+                                <tr class="hover:bg-emerald-50/20 transition-colors">
+                                    <td class="p-3 font-bold text-slate-400">E2</td>
+                                    <td class="p-3 font-medium">もののけの里</td>
+                                    <td class="p-3 text-purple-700 font-medium">魔法之里</td>
+                                    <td class="p-3 text-emerald-600 font-bold">每小時 03 分</td>
+                                    <td class="p-3 text-slate-500">每小時 35 分</td>
+                                </tr>
+                                <tr class="hover:bg-emerald-50/20 transition-colors">
+                                    <td class="p-3 font-bold text-slate-400">E3</td>
+                                    <td class="p-3 font-medium">魔女之谷</td>
+                                    <td class="p-3 text-pink-600 font-medium font-bold">魔女之谷 (大芝生廣場)</td>
+                                    <td class="p-3 text-emerald-600 font-bold">每小時 05 分</td>
+                                    <td class="p-3 text-slate-500">每小時 33 分</td>
+                                </tr>
+                                <tr class="hover:bg-emerald-50/20 transition-colors">
+                                    <td class="p-3 font-bold text-slate-400">E4</td>
+                                    <td class="p-3 font-medium">ジブリの大倉庫</td>
+                                    <td class="p-3 text-orange-600 font-medium font-bold">吉卜力大倉庫 (滑冰場)</td>
+                                    <td class="p-3 text-emerald-600 font-bold">每小時 07 分</td>
+                                    <td class="p-3 text-slate-500">每小時 31 分</td>
+                                </tr>
+                                <tr class="hover:bg-emerald-50/20 transition-colors">
+                                    <td class="p-3 font-bold text-slate-400">E5</td>
+                                    <td class="p-3 font-medium">西口広場</td>
+                                    <td class="p-3 text-slate-600">西口廣場</td>
+                                    <td class="p-3 text-emerald-600 font-bold">09分抵達 / 11分發車</td>
+                                    <td class="p-3 text-slate-500">27分抵達 / 29分發車</td>
+                                </tr>
+                                <tr class="hover:bg-emerald-50/20 transition-colors">
+                                    <td class="p-3 font-bold text-slate-400">E6</td>
+                                    <td class="p-3 font-medium">日本庭園</td>
+                                    <td class="p-3 text-slate-600">日本庭園 / 茶室</td>
+                                    <td class="p-3 text-emerald-600 font-bold">每小時 14 分</td>
+                                    <td class="p-3 text-slate-500">每小時 24 分</td>
+                                </tr>
+                                <tr class="hover:bg-emerald-50/20 transition-colors bg-lime-50/10">
+                                    <td class="p-3 font-bold text-lime-700">E7</td>
+                                    <td class="p-3 font-medium text-lime-900">どんどこ森</td>
+                                    <td class="p-3 text-lime-700 font-bold">動動力森林 (最深處)</td>
+                                    <td class="p-3 text-lime-600 font-bold">每小時 17 分抵達</td>
+                                    <td class="p-3 text-lime-600 font-bold">每小時 21 分折返</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="mt-3 flex items-start gap-2 bg-amber-50 p-2.5 rounded-xl border border-amber-100 text-[11px] text-amber-800">
+                        <i data-lucide="info" class="w-4 h-4 text-amber-600 shrink-0 mt-0.5"></i>
+                        <span>小提示：E7 動動力森林抵達後，會折返朝北口方向行駛。如果走累了，極力建議搭巴士返回！</span>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="bg-emerald-950 text-emerald-300 text-xs py-10 border-t border-emerald-900">
+            <div class="max-w-7xl mx-auto px-4 text-center space-y-3">
+                <p class="text-emerald-100 font-bold text-sm tracking-wider">🍃 吉卜力公園遊園交通大補帖 🍂</p>
+                <p class="text-[10px] text-emerald-400/80">&copy; 2026 Ghibli Park Travel Guide. Built with Love for Ghibli Fans.</p>
+            </div>
+        </footer>
+    </div> <!-- End of ghibli-guide-view -->
+
     <!-- Modal Background -->
     <div id="modal-bg" class="fixed inset-0 bg-stone-900/60 backdrop-blur-sm hidden z-[100] flex justify-center items-center p-4 opacity-0 transition-opacity duration-300">
         <!-- Modal Content -->
@@ -311,6 +693,9 @@
         </svg>
     </button>
 
+    <!-- JavaScript Databases -->
+    <script src="db/travel_db.js"></script>
+    <script src="db/ghibli_db.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

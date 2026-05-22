@@ -94,3 +94,67 @@ input[type="number"] {
 .animate-pulse-glow {
   animation: pulseGlow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
+
+/* ==========================================
+ * 吉卜力公園互動導覽專屬樣式 (Ghibli Theme)
+ * ========================================== */
+
+/* 當切換為吉卜力專區時，整個網頁的背景與選取效果過渡 */
+.ghibli-theme {
+  background-color: #f4f8f0 !important; /* 溫馨森林淡綠色 */
+  transition: background-color 0.5s ease;
+}
+
+/* 吉卜力森林綠捲軸過渡 */
+.ghibli-theme::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+.ghibli-theme::-webkit-scrollbar-thumb {
+  background: #a7f3d0;
+}
+.ghibli-theme::-webkit-scrollbar-thumb:hover {
+  background: #059669;
+}
+
+/* 地標被選中 (active) 時的呼吸放大動畫 */
+@keyframes active-pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+.group.active circle, .group.active rect {
+  animation: active-pulse 2s infinite ease-in-out;
+  stroke: #ffffff !important;
+  stroke-width: 3.5px !important;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.25));
+}
+
+/* 行動端地圖滾動容器 */
+.map-container {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* 解決 SVG 地標懸停放大時因基準點偏差導致的抖動問題 */
+.group circle, .group rect {
+  transform-origin: center;
+  transform-box: fill-box;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.group:hover circle, .group:hover rect {
+  transform: scale(1.1);
+}
+
+/* 銳利化地圖底圖 */
+.sharp-img {
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: o-crisp-edges;
+}
+
+/* 展開摺疊的過渡效果 */
+.accordion-content {
+  transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+}
+

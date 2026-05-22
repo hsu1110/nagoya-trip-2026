@@ -1,16 +1,16 @@
-// Currency Calculator Logic
+// ==========================================
+// 🪙 Currency Calculator Logic
+// ==========================================
 const rateInput = document.getElementById("exchangeRate");
 const twdInput = document.getElementById("inputTWD");
 const jpyInput = document.getElementById("inputJPY");
 const displayRateText = document.getElementById("displayRateText");
 
-// 匯率方向：1 JPY = X TWD
 function updateCalc(source) {
   const rate = parseFloat(rateInput.value) || 0;
-  displayRateText.innerText = rate;
+  if (displayRateText) displayRateText.innerText = rate;
 
   if (source === "jpy") {
-    // 輸入日幣 → 計算台幣
     const jpy = parseFloat(jpyInput.value);
     if (!isNaN(jpy)) {
       twdInput.value = (jpy * rate).toFixed(0);
@@ -18,7 +18,6 @@ function updateCalc(source) {
       twdInput.value = "";
     }
   } else if (source === "twd") {
-    // 輸入台幣 → 計算日幣
     const twd = parseFloat(twdInput.value);
     if (!isNaN(twd) && rate > 0) {
       jpyInput.value = (twd / rate).toFixed(0);
@@ -26,7 +25,6 @@ function updateCalc(source) {
       jpyInput.value = "";
     }
   } else if (source === "rate") {
-    // 匯率變更時以日幣為伸手重新計算
     if (jpyInput.value) {
       const jpy = parseFloat(jpyInput.value);
       twdInput.value = (jpy * rate).toFixed(0);
@@ -38,117 +36,24 @@ if (rateInput) rateInput.addEventListener("input", () => updateCalc("rate"));
 if (twdInput) twdInput.addEventListener("input", () => updateCalc("twd"));
 if (jpyInput) jpyInput.addEventListener("input", () => updateCalc("jpy"));
 
-const itineraryData = [
-  {
-    day: 1,
-    date: "7/01 (三)",
-    title: "Day 1: 紅眼直衝，歷史避暑與頂級燒肉",
-    focus: "名古屋城、馬喰一代燒肉、名站商圈、拉麵與炸雞翅宵夜",
-    logistics: "樂桃 MM722 (02:45 TPE ➔ 06:20 NGO)，名鐵 μ-SKY 至名古屋站（28 分鐘，1,250 日圓）",
-    meals: "早餐：客美多或地下街<br>午餐：飛驒牛一頭家 馬喰一代（WEST店）<br>晚餐：麵家獅子丸 或 味仙拉麵<br>宵夜：世界的山將",
-    warnings: "紅眼班機體力負荷大，捨棄午睡直接開逛，請量力而為。平日馬喰一代極易客滿，強烈建議出發前一個月上網預約！",
-    details: [
-      { time: "06:20", icon: "🛬", title: "抵達中部國際機場", desc: "樂桃 MM722 降落。搭名鐵 μ-SKY 特急直達名古屋站（約 28 分鐘）。" },
-      { time: "08:00", icon: "🏨", title: "VIA INN 寄放行李", desc: "先至飯店前台寄放行李，在地下街簡單吃個早餐墊胃。" },
-      { time: "09:30", icon: "🏯", title: "名古屋城 ＆ 本丸御殿", dbId: 27, desc: "趁早上體力最好、氣溫涼爽時先去逛，欣賞耗資百億復原的華麗壁畫與建築。" },
-      { time: "13:00", icon: "🥩", title: "午餐：馬喰一代 WEST店", dbId: 5, desc: "<strong>必吃：頂級和牛炭火燒肉！</strong>平日商業午餐超高CP值，就在飯店旁邊，吃完剛好 Check-in。" },
-      { time: "15:00", icon: "🛍️", title: "飯店 Check-in ＆ 名站尋寶", dbId: 1, desc: "不補眠，直接攻略名站西口的 Bic Camera 買電器，或去 Animate 與地下街尋寶。" },
-      { time: "18:30", icon: "🍜", title: "晚餐：麵家獅子丸 / 味仙", dbId: 8, desc: "吃獅子丸的泡系白湯拉麵，或是重口味爆汗的味仙台灣拉麵（二選一）。" },
-      { time: "20:00", icon: "🍗", title: "宵夜：世界的山將", dbId: 13, desc: "買招牌胡椒炸雞翅帶回飯店，舒舒服服地洗完澡啃雞翅配啤酒！" }
-    ]
-  },
-  {
-    day: 2,
-    date: "7/02 (四)",
-    title: "Day 2: 童話世界與榮商圈大口吃肉",
-    focus: "吉卜力公園、和牛たんじ、綠洲21夜景",
-    logistics: "地鐵東山線轉乘 Linimo 至「愛・地球博紀念公園」。回程搭東山線直達「榮站」。",
-    meals: "午餐：園區內美食或自備<br>晚餐：和牛たんじ（榮錦店）",
-    warnings: "吉卜力門票需提前兩個月於官網搶票。和牛たんじ為高人氣名店，必須事先網路預約。",
-    details: [
-      { time: "09:00", icon: "🌳", title: "吉卜力公園", dbId: 38, desc: "平日人少好拍照，進入吉卜力大倉庫盡情沉浸動畫世界，拍無臉男與貓巴士。" },
-      { time: "16:00", icon: "🚇", title: "返回市區", desc: "搭乘 Linimo 轉東山線，完美順路從藤之丘直達「榮站」下車。" },
-      { time: "19:00", icon: "👅", title: "晚餐：和牛たんじ", dbId: 21, desc: "<strong>厚切仙台牛舌與和牛大腹肉壽司吃到飽！</strong>限時 100 分鐘的終極和牛饗宴。" },
-      { time: "20:30", icon: "🗼", title: "綠洲 21 ＆ 電視塔夜景", dbId: 20, desc: "吃飽後在榮商圈散步消化，欣賞浪漫的水之宇宙船點燈，隨後搭地鐵回飯店。" }
-    ]
-  },
-  {
-    day: 3,
-    date: "7/03 (五)",
-    title: "Day 3: 京都錯峰戰略，反向避暑",
-    focus: "伏見稻荷大社、清水寺、京都車站美食",
-    logistics: "名古屋搭乘新幹線直達京都（約 35 分鐘）。市區利用計程車或京阪本線。",
-    meals: "午餐：清水順正 Okabe 家 或 祢ざめ家<br>晚餐：京都勝牛 或 東洋亭",
-    warnings: "伏見稻荷務必早上 8:30 前抵達。前往清水寺建議直接從車站攔計程車到松原通順坡而下，避開夏日酷暑爬坡。",
-    details: [
-      { time: "08:00", icon: "🚄", title: "搭乘新幹線前往京都", desc: "搭乘新幹線直達京都，展開跨縣市的古都一日遊。" },
-      { time: "09:00", icon: "⛩️", title: "伏見稻荷大社", dbId: 40, desc: "趁早上避開人潮拍攝千本鳥居。" },
-      { time: "10:30", icon: "🦊", title: "點心：祢ざめ家", dbId: 44, desc: "參拜完順路吃個近 500 年歷史老店的豆皮壽司 (稻荷壽司) 補充體力。" },
-      { time: "11:30", icon: "🥢", title: "午餐：清水順正 Okabe 家", dbId: 41, desc: "庭園氛圍極佳的湯豆腐定食，建議事先網路預約避開中午人潮。" },
-      { time: "13:00", icon: "🏯", title: "清水寺 ＆ 二年坂", dbId: 40, desc: "搭計程車直上清水寺，參拜後順著二年坂/三年坂往下逛，體驗京都古樸風情。" },
-      { time: "18:00", icon: "🥩", title: "晚餐：京都勝牛", dbId: 42, desc: "吃經典和牛炸牛排定食，吃完直接進京都車站買伴手禮搭新幹線回名古屋。" }
-    ]
-  },
-  {
-    day: 4,
-    date: "7/04 (六)",
-    title: "Day 4: 神聖森林、次文化與極致燒鳥",
-    focus: "熱田神宮、熱田蓬萊軒、大須商店街、千亀燒鳥",
-    logistics: "搭乘名鐵或地鐵至熱田神宮，下午利用地鐵移動至大須與榮商圈。",
-    meals: "午餐：熱田蓬萊軒（神宮店）<br>晚餐：にぎりの徳兵衛<br>宵夜：やきとり千亀",
-    warnings: "蓬萊軒不接受預約，到神宮務必「先去門口登記拿時間單」！千亀為預約極困難店，需提早規劃。",
-    details: [
-      { time: "09:00", icon: "📝", title: "熱田蓬萊軒登記", dbId: 33, desc: "抵達熱田神宮後，<strong>立刻直奔南門的蓬萊軒登記午餐時段</strong>，拿好時間單。" },
-      { time: "09:30", icon: "🌲", title: "參拜熱田神宮", dbId: 31, desc: "悠哉逛神宮、看三大神器「草薙劍」相關展覽，吸收神木芬多精，抵銷排隊時間。" },
-      { time: "11:30", icon: "🍱", title: "午餐：熱田蓬萊軒", dbId: 33, desc: "<strong>神級鰻魚飯三吃！</strong>品嚐傳承 150 年秘傳醬汁與備長炭直火烤製的絕品美味。" },
-      { time: "13:30", icon: "👾", title: "大須商店街尋寶", dbId: 18, desc: "搭地鐵直奔大須，狂逛高階電腦零組件、古著、二手公仔與品嚐街頭小吃。" },
-      { time: "18:00", icon: "🍣", title: "晚餐：にぎりの徳兵衛", dbId: 22, desc: "榮商圈 Oasis 21 店，動線極佳的中高級迴轉壽司，用平板點餐吃得精緻舒服。" },
-      { time: "21:30", icon: "🍢", title: "宵夜：やきとり千亀", dbId: 23, desc: "榮商圈巷弄內的 Tabelog 燒鳥百名店！炭火烤功出神入化，<strong>必點爆漿提燈</strong>。" }
-    ]
-  },
-  {
-    day: 5,
-    date: "7/05 (日)",
-    title: "Day 5: 優雅壽喜燒與彈性自由發揮",
-    focus: "馬喰一代壽喜燒、長島三井 Outlet / 名古屋市區採買",
-    logistics: "若前往 Outlet，從名鐵巴士中心搭乘直達高速巴士（約 50 分鐘）。",
-    meals: "午餐：飛驒牛一頭家 馬喰一代（名古屋店）<br>晚餐：Outlet 內美食或市區百貨餐廳",
-    warnings: "今天是行程緩衝日。可根據前幾天的戰利品狀況與體力，自由決定是否前往 Outlet。",
-    details: [
-      { time: "11:30", icon: "🍲", title: "午餐：馬喰一代 名古屋店", dbId: 6, desc: "位於名站東口，享用<strong>關西風壽喜燒 / 涮涮鍋</strong>。吃完剛好在交通樞紐決定下午行程。" },
-      { time: "13:30", icon: "🚌", title: "分歧路線 A：出發 Outlet", dbId: 39, desc: "走到旁邊名鐵巴士中心，搭直達車殺去長島三井 Outlet 發揮 46kg 托運實力。" },
-      { time: "13:30", icon: "🏬", title: "分歧路線 B：市區巡禮", dbId: 3, desc: "若不去 Outlet，則留在 JR Gate Tower 雙塔百貨、名鐵百貨逛街，補齊還沒買到的藥妝或動漫商品。" },
-      { time: "19:00", icon: "🛍️", title: "晚餐與最後打包", desc: "回到市區或直接在 Outlet 解決晚餐，回飯店整理爆滿的戰利品與行李。" }
-    ]
-  },
-  {
-    day: 6,
-    date: "7/06 (一)",
-    title: "Day 6: 滿載而歸，最後的伴手禮衝刺",
-    focus: "機場採買、蝦仙貝之里",
-    logistics: "搭乘名鐵 μ-SKY 特急前往中部國際機場（約 28 分鐘）。",
-    meals: "早餐：飯店周邊或地下街<br>午餐：機場內或機上",
-    warnings: "蝦仙貝體積大但輕，強烈建議最後在機場買，直接當手提行李上機，不佔行李箱空間！",
-    details: [
-      { time: "08:30", icon: "🧳", title: "起床與最後整理", desc: "享受沒有時間壓力的早晨，完成退房手續。" },
-      { time: "09:30", icon: "🚆", title: "出發前往機場", desc: "帶著行李搭乘名鐵 μ-SKY 特急，輕鬆離開名古屋市區。" },
-      { time: "10:30", icon: "🍘", title: "機場採買：蝦仙貝之里", dbId: 47, desc: "在中部國際機場 4 樓購買超人氣蝦餅，完美保留行李載重額度。" },
-      { time: "12:20", icon: "✈️", title: "搭機返台", desc: "搭乘班機滿載而歸，結束鐵人又充實的 6 天 5 夜自由行！" }
-    ]
-  }
-];
+// 引用外部資料庫
+const itineraryData = window.itineraryData || [];
+const db = window.db || window.travelDb || [];
 
-// Itinerary Rendering Logic
+
+// ==========================================
+// 📅 Itinerary Rendering Logic
+// ==========================================
 let currentDayIndex = 0;
 
 function renderDayTabs() {
   const tabsContainer = document.getElementById("dayTabs");
+  if (!tabsContainer) return;
   tabsContainer.innerHTML = "";
 
   itineraryData.forEach((day, index) => {
     const isSelected = index === currentDayIndex;
     const btn = document.createElement("button");
-    // Updated Button Styling
     btn.className = `flex-shrink-0 px-6 py-4 rounded-xl text-left transition-all duration-200 border-2 min-w-[120px] ${
       isSelected
         ? "bg-rose-500 border-rose-500 text-white shadow-lg transform -translate-y-1"
@@ -169,9 +74,10 @@ function renderDayTabs() {
 
 function renderItineraryContent() {
   const contentContainer = document.getElementById("itineraryContent");
+  if (!contentContainer) return;
   const data = itineraryData[currentDayIndex];
+  if (!data) return;
 
-  // 標題區塊
   let html = `
     <div class="p-6 sm:p-8 bg-gradient-to-r from-stone-50 to-white border-b border-stone-100">
       <div class="flex items-center justify-between">
@@ -190,7 +96,6 @@ function renderItineraryContent() {
       <div class="relative pl-10 space-y-8">
   `;
 
-  // 時間軸內容
   data.details.forEach((item, index) => {
     const isLast = index === data.details.length - 1;
     html += `
@@ -199,14 +104,16 @@ function renderItineraryContent() {
         <div class="absolute w-9 h-9 rounded-full bg-white border-2 border-stone-300 z-10 flex items-center justify-center text-base shadow-sm" style="left:-2.75rem;top:0;">${item.icon}</div>
         <div class="space-y-1.5">
           <span class="text-xs font-mono font-bold text-rose-500 tracking-wider">${item.time}</span>
-          <div class="flex items-center flex-wrap gap-2"><h4 class="font-bold text-stone-900">${item.title}</h4>${item.dbId ? `<button onclick="openModal(db.find(x => x.id === ${item.dbId}))" class="text-[10px] sm:text-xs bg-rose-50 text-rose-600 border border-rose-200 px-2 py-0.5 rounded-md hover:bg-rose-100 hover:shadow-sm transition-all shadow-sm"><i class="fa-solid fa-map-location-dot mr-1"></i>查看地圖</button>` : ""}</div>
+          <div class="flex items-center flex-wrap gap-2">
+            <h4 class="font-bold text-stone-900">${item.title}</h4>
+            ${item.dbId ? `<button onclick="openModal(db.find(x => x.id === ${item.dbId}))" class="text-[10px] sm:text-xs bg-rose-50 text-rose-600 border border-rose-200 px-2 py-0.5 rounded-md hover:bg-rose-100 hover:shadow-sm transition-all shadow-sm"><i class="fa-solid fa-map-location-dot mr-1"></i>查看地圖</button>` : ""}
+          </div>
           <div class="text-stone-500 text-sm leading-relaxed bg-stone-50 rounded-xl p-3 border border-stone-100 hover:bg-white hover:shadow-sm transition-all duration-200">${item.desc}</div>
         </div>
       </div>
     `;
   });
 
-  // footer
   const footerParts = [];
   if (data.logistics) {
     footerParts.push(`
@@ -242,15 +149,14 @@ function renderItineraryContent() {
 
 function toggleMobileMenu() {
   const menu = document.getElementById('mobile-menu');
-  menu.classList.toggle('hidden');
+  if (menu) menu.classList.toggle('hidden');
 }
 
-// Scroll helper
 function scrollToSection(id) {
-  document.getElementById(id).scrollIntoView({ behavior: "smooth" });
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: "smooth" });
 }
 
-// Address Copy
 function copyAddress() {
   const address =
     "VIA INN 名古屋站前椿町\n\n〒453-0015 愛知県名古屋市中村区椿町7-23\nhttps://maps.app.goo.gl/yQ3q89xQYq89xQYq8";
@@ -263,250 +169,741 @@ function copyAddress() {
   alert("✅ 地址與地圖連結已複製！\n\n" + address);
 }
 
-// Initialize
+// ==========================================
+// 🗺️ Attractions & Food Gallery Logic
+// ==========================================
+function renderCards(filter = 'All') {
+  const attractionsGrid = document.getElementById('attractions-grid');
+  const foodGrid = document.getElementById('food-grid');
+  if (!attractionsGrid || !foodGrid) return;
+  
+  attractionsGrid.innerHTML = '';
+  foodGrid.innerHTML = '';
+
+  const filteredData = filter === 'All' ? db : db.filter(item => item.area === filter);
+
+  filteredData.forEach((item, i) => {
+    const card = document.createElement('div');
+    card.className = "bg-white p-5 rounded-2xl shadow-sm border border-stone-100 cursor-pointer hover:shadow-xl hover:border-stone-200 hover:-translate-y-1 transition-all duration-300 flex items-start space-x-4 group animate-fade-in-up opacity-0";
+    card.style.animationDelay = `${i * 0.05}s`;
+    card.onclick = () => openModal(item);
+
+    const iconDiv = document.createElement('div');
+    iconDiv.className = `w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0 ${item.color} transform group-hover:scale-110 transition-transform duration-300`;
+    iconDiv.innerHTML = `<i class="fa-solid ${item.icon} text-2xl"></i>`;
+
+    const contentDiv = document.createElement('div');
+    contentDiv.className = "flex-1";
+    contentDiv.innerHTML = `
+        <div class="text-xs font-bold text-stone-400 mb-1 uppercase tracking-wider">${item.area}</div>
+        <h3 class="text-lg font-bold text-stone-800 leading-tight mb-2 group-hover:text-rose-600 transition-colors">${item.name}</h3>
+        <p class="text-sm text-stone-500 line-clamp-2">${item.notes}</p>
+    `;
+
+    card.appendChild(iconDiv);
+    card.appendChild(contentDiv);
+
+    if (item.type === 'attraction') {
+        attractionsGrid.appendChild(card);
+    } else {
+        foodGrid.appendChild(card);
+    }
+  });
+
+  if(attractionsGrid.innerHTML === '') attractionsGrid.innerHTML = '<p class="text-stone-400 text-sm py-4 col-span-full">此區域目前無景點資料</p>';
+  if(foodGrid.innerHTML === '') foodGrid.innerHTML = '<p class="text-stone-400 text-sm py-4 col-span-full">此區域目前無美食資料</p>';
+}
+
+function filterByArea(area) {
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    if (btn.getAttribute('data-area') === area) {
+      btn.classList.add('active-filter');
+      btn.classList.remove('text-stone-600', 'bg-white');
+    } else {
+      btn.classList.remove('active-filter');
+      btn.classList.add('text-stone-600', 'bg-white');
+    }
+  });
+  renderCards(area);
+}
+
+function openModal(item) {
+  if (!item) return;
+  const modalBg = document.getElementById('modal-bg');
+  const modalContent = document.getElementById('modal-content');
+  const modalBody = document.getElementById('modal-body');
+  const exactQuery = item.mapQuery || item.name;
+  const mapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(exactQuery)}`;
+  
+  let extraDetails = '';
+  if (item.type === 'attraction') {
+    extraDetails = `
+      <div class="mb-3 flex"><span class="font-bold text-stone-700 w-20 shrink-0"><i class="fa-regular fa-clock mr-2 text-stone-400"></i>時間:</span> <span class="text-stone-600">${item.hours}</span></div>
+      <div class="mb-3 flex"><span class="font-bold text-stone-700 w-20 shrink-0"><i class="fa-solid fa-train mr-2 text-stone-400"></i>交通:</span> <span class="text-stone-600">${item.transport}</span></div>
+    `;
+  } else {
+    extraDetails = `
+      <div class="mb-3 flex"><span class="font-bold text-stone-700 w-20 shrink-0"><i class="fa-solid fa-tag mr-2 text-stone-400"></i>分類:</span> <span class="text-rose-600 bg-rose-50 px-2 py-0.5 rounded text-sm font-medium">${item.category}</span></div>
+      <div class="mb-3 flex"><span class="font-bold text-stone-700 w-20 shrink-0"><i class="fa-regular fa-clock mr-2 text-stone-400"></i>時間:</span> <span class="text-stone-600">${item.hours}</span></div>
+    `;
+  }
+
+  // 吉卜力專屬高亮導覽按鈕
+  let ghibliLinkHtml = '';
+  if (item.id === 38) {
+    ghibliLinkHtml = `
+      <button onclick="closeModal(); switchView('ghibli');" class="w-full mb-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 rounded-2xl transition-all shadow-lg flex items-center justify-center gap-2 group animate-pulse">
+          <span class="text-lg">🍃</span>
+          開啟「吉卜力大補帖」互動導覽專區
+      </button>
+    `;
+  }
+
+    const mapHtml = `
+      <div class="mb-6 rounded-2xl overflow-hidden shadow-inner border border-stone-200 relative animate-fade-in-up" style="animation-delay: 0.2s">
+        <iframe 
+          width="100%" 
+          height="250" 
+          style="border:0;" 
+          loading="lazy" 
+          allowfullscreen 
+          src="https://maps.google.com/maps?q=${encodeURIComponent(exactQuery)}&t=&z=15&ie=UTF8&iwloc=&output=embed">
+        </iframe>
+      </div>
+    `;
+
+    modalBody.innerHTML = `
+      <div class="flex items-center space-x-4 mb-6">
+        <div class="w-14 h-14 rounded-2xl flex items-center justify-center ${item.color}">
+          <i class="fa-solid ${item.icon} text-2xl"></i>
+        </div>
+        <div>
+          <span class="text-xs font-bold text-rose-500 uppercase tracking-wider bg-rose-50 px-2 py-1 rounded-md mb-1 inline-block">${item.area}</span>
+          <h2 class="text-2xl font-extrabold text-stone-900 leading-snug">${item.name}</h2>
+        </div>
+      </div>
+      
+      ${ghibliLinkHtml}
+
+      <div class="bg-stone-50 p-5 rounded-2xl mb-6 text-sm border border-stone-100">
+        <div class="mb-3 flex"><span class="font-bold text-stone-700 w-20 shrink-0"><i class="fa-solid fa-location-dot mr-2 text-stone-400"></i>地點:</span> <span class="text-stone-600">${item.location}</span></div>
+        ${extraDetails}
+      </div>
+
+      <div class="mb-8 relative">
+        <div class="absolute -left-3 top-0 bottom-0 w-1 bg-gradient-to-b from-yellow-300 to-yellow-500 rounded-full"></div>
+        <h4 class="font-bold text-stone-900 mb-2 flex items-center">專家筆記 <i class="fa-solid fa-pen-to-square text-yellow-500 ml-2"></i></h4>
+        <p class="text-stone-600 leading-relaxed bg-yellow-50/50 p-4 rounded-xl border border-yellow-100/50">${item.notes}</p>
+      </div>
+
+      ${mapHtml}
+
+
+
+    <a href="${mapUrl}" target="_blank" rel="noopener noreferrer" class="block w-full bg-stone-900 hover:bg-rose-500 text-white text-center font-bold py-4 rounded-2xl transition-colors shadow-md flex items-center justify-center gap-2 group animate-fade-in-up" style="animation-delay: 0.3s">
+      <i class="fa-solid fa-map-location-dot transform group-hover:scale-110 transition-transform"></i>
+      開啟 Google Maps App 導航
+    </a>
+  `;
+  
+  modalBg.classList.remove('hidden');
+  void modalBg.offsetWidth; // trigger reflow
+  modalBg.classList.remove('opacity-0');
+  modalContent.classList.remove('scale-95', 'opacity-0');
+  modalContent.classList.add('scale-100', 'opacity-100');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  const modalBg = document.getElementById('modal-bg');
+  const modalContent = document.getElementById('modal-content');
+  if (!modalBg || !modalContent) return;
+  modalBg.classList.add('opacity-0');
+  modalContent.classList.remove('scale-100', 'opacity-100');
+  modalContent.classList.add('scale-95', 'opacity-0');
+  
+  setTimeout(() => {
+    modalBg.classList.add('hidden');
+    document.body.style.overflow = '';
+  }, 300);
+}
+
+document.addEventListener('click', (e) => {
+  const modalBg = document.getElementById('modal-bg');
+  if (modalBg && e.target === modalBg) {
+    closeModal();
+  }
+});
+
+document.addEventListener('keydown', (e) => {
+  const modalBg = document.getElementById('modal-bg');
+  if (modalBg && e.key === 'Escape' && !modalBg.classList.contains('hidden')) {
+    closeModal();
+  }
+});
+
+
+// ==========================================
+// 🍃 Ghibli Park SPA Integration Logic
+// ==========================================
+
+// SPA 視圖切換機制
+function switchView(viewName) {
+  const mainView = document.getElementById("main-travel-view");
+  const ghibliView = document.getElementById("ghibli-guide-view");
+  const body = document.body;
+  if (!mainView || !ghibliView) return;
+
+  if (viewName === "ghibli") {
+    mainView.classList.add("hidden");
+    ghibliView.classList.remove("hidden");
+    body.className = "text-slate-800 antialiased ghibli-theme";
+    initGhibliView();
+  } else {
+    ghibliView.classList.add("hidden");
+    mainView.classList.remove("hidden");
+    body.className = "bg-stone-50 text-stone-800 font-sans antialiased selection:bg-rose-500 selection:text-white";
+  }
+
+  // 同步導覽列 Active 狀態
+  updateNavbarActive(viewName);
+}
+
+function updateNavbarActive(viewName) {
+  const navBtns = document.querySelectorAll("nav button, #mobile-menu button");
+  navBtns.forEach(btn => {
+    const isGhibliBtn = btn.innerText.includes("吉卜力");
+    if (viewName === "ghibli") {
+      if (isGhibliBtn) {
+        btn.className = "block w-full md:w-auto text-left md:text-center px-4 py-2 rounded-xl text-sm font-bold text-emerald-600 bg-emerald-50 border border-emerald-100 transition-all";
+      } else {
+        btn.className = "block w-full md:w-auto text-left md:text-center px-4 py-2 rounded-xl text-sm font-medium text-stone-700 hover:text-rose-500 hover:bg-stone-50 transition-all";
+      }
+    } else {
+      if (isGhibliBtn) {
+        btn.className = "block w-full md:w-auto text-left md:text-center px-4 py-2 rounded-xl text-sm font-bold text-emerald-600 hover:bg-emerald-50 transition-all";
+      }
+      // 其他按鈕狀態保持原樣，或在點選中處理
+    }
+  });
+}
+
+// 輔助函式：動態創建帶有 XML Namespace 的 SVG 元素
+function createSVGElement(tagName, attributes = {}) {
+  const el = document.createElementNS("http://www.w3.org/2000/svg", tagName);
+  for (const [key, value] of Object.entries(attributes)) {
+    el.setAttribute(key, value);
+  }
+  return el;
+}
+
+// 初始化吉卜力專區
+let isGhibliInitialized = false;
+
+function initGhibliView() {
+  if (!isGhibliInitialized) {
+    renderGhibliMap();
+    renderWarehouseMap();
+    selectZone('ghibli-warehouse', false);
+    isGhibliInitialized = true;
+  } else {
+    // 每次進入時重新刷新圖標，以防 SPA 動態結構丟失
+    lucide.createIcons();
+  }
+}
+
+// 繪製吉卜力公園主實景地圖
+function renderGhibliMap() {
+  const landmarksGroup = document.getElementById('landmarks-group');
+  if (!landmarksGroup) return;
+  landmarksGroup.innerHTML = '';
+
+  const landmarks = window.ghibliLandmarks || {};
+  const routes = window.ghibliRoutes || {};
+
+  // 1. 繪製所有地標點 (圓形/長方形) 及名稱標籤
+  for (const [key, item] of Object.entries(landmarks)) {
+    const clickHandler = key === 'ghibli-warehouse' 
+        ? `selectZone('${key}', false); expandWarehouseAndScroll();` 
+        : `selectZone('${key}')`;
+
+    const g = createSVGElement('g', {
+        'id': `landmark-${key}`,
+        'class': 'cursor-pointer group',
+        'onclick': clickHandler
+    });
+
+    if (item.isRect) {
+        const x = item.cx - item.width / 2;
+        const y = item.cy - item.height / 2;
+        const rect = createSVGElement('rect', {
+            'x': x,
+            'y': y,
+            'width': item.width,
+            'height': item.height,
+            'rx': 5,
+            'fill': item.color,
+            'stroke': '#ffffff',
+            'stroke-width': 2
+        });
+        g.appendChild(rect);
+
+        const shortText = createSVGElement('text', {
+            'x': item.cx,
+            'y': item.cy + 3,
+            'fill': 'white',
+            'class': 'text-[9px] font-bold',
+            'text-anchor': 'middle'
+        });
+        shortText.textContent = item.short;
+        g.appendChild(shortText);
+    } else {
+        const circle = createSVGElement('circle', {
+            'cx': item.cx,
+            'cy': item.cy,
+            'r': item.r,
+            'fill': item.color,
+            'stroke': '#ffffff',
+            'stroke-width': (key === 'elevator-tower' ? 2 : 2.5)
+        });
+        g.appendChild(circle);
+
+        const shortText = createSVGElement('text', {
+            'x': item.cx,
+            'y': item.cy + 4,
+            'fill': 'white',
+            'class': `${item.r <= 15 ? 'text-[10px]' : (item.r >= 26 ? 'text-base' : 'text-sm')} font-bold`,
+            'text-anchor': 'middle'
+        });
+        shortText.textContent = item.short;
+        g.appendChild(shortText);
+    }
+
+    const nameText = createSVGElement('text', {
+        'x': item.cx + item.textOffset.x,
+        'y': item.cy + item.textOffset.y,
+        'fill': item.color,
+        'class': 'text-xs font-bold',
+        'text-anchor': 'middle',
+        'filter': 'url(#bg-white)'
+    });
+    nameText.textContent = item.name;
+    g.appendChild(nameText);
+
+    landmarksGroup.appendChild(g);
+  }
+
+  // 2. 繪製所有交通路線與時間標記
+  for (const [type, list] of Object.entries(routes)) {
+    const group = document.getElementById(`route-${type}`);
+    if (!group) continue;
+    group.innerHTML = '';
+
+    list.forEach((route) => {
+        const fromPt = landmarks[route.from];
+        const toPt = landmarks[route.to];
+        if (!fromPt || !toPt) return;
+
+        let d = '';
+        const midX = (fromPt.cx + toPt.cx) / 2;
+        const midY = (fromPt.cy + toPt.cy) / 2;
+        let textX = 0;
+        let textY = 0;
+
+        const stroke = type === 'walk' ? '#1e293b' : (type === 'bus' ? '#ef4444' : '#d97706');
+        const strokeWidth = type === 'walk' ? '4.5' : (type === 'bus' ? '3.5' : '4.5');
+        const strokeDash = type === 'walk' ? '6,6' : (type === 'catbus' ? '2, 8' : 'none');
+
+        if (route.isQuad) {
+            const ctrlX = midX + route.controlOffset.x;
+            const ctrlY = midY + route.controlOffset.y;
+            d = `M ${fromPt.cx} ${fromPt.cy} Q ${ctrlX} ${ctrlY} ${toPt.cx} ${toPt.cy}`;
+            textX = ctrlX + route.textOffset.x;
+            textY = ctrlY + route.textOffset.y;
+
+            if (route.hasSpot) {
+                const spotG = createSVGElement('g');
+                const spotCircle = createSVGElement('circle', {
+                    'cx': ctrlX,
+                    'cy': ctrlY,
+                    'r': 6,
+                    'fill': '#475569',
+                    'stroke': '#ffffff',
+                    'stroke-width': 1.5
+                });
+                spotG.appendChild(spotCircle);
+
+                const spotName = createSVGElement('text', {
+                    'x': ctrlX + route.hasSpot.textOffset.x,
+                    'y': ctrlY + route.hasSpot.textOffset.y,
+                    'fill': '#334155',
+                    'class': 'text-[10px] font-bold',
+                    'filter': 'url(#bg-white)'
+                });
+                spotName.textContent = route.hasSpot.text;
+                spotG.appendChild(spotName);
+
+                group.appendChild(spotG);
+            }
+        } else {
+            d = `M ${fromPt.cx} ${fromPt.cy} L ${toPt.cx} ${toPt.cy}`;
+            textX = midX + route.textOffset.x;
+            textY = midY + route.textOffset.y;
+        }
+
+        const path = createSVGElement('path', {
+            'd': d,
+            'stroke': stroke,
+            'stroke-width': strokeWidth,
+            'fill': 'none'
+        });
+        if (strokeDash !== 'none') {
+            path.setAttribute('stroke-dasharray', strokeDash);
+        }
+        if (type === 'catbus') {
+            path.setAttribute('stroke-linecap', 'round');
+        }
+        group.appendChild(path);
+
+        const text = createSVGElement('text', {
+            'x': textX,
+            'y': textY,
+            'fill': type === 'walk' ? '#1e293b' : (type === 'bus' ? '#ef4444' : '#d97706'),
+            'class': 'text-xs font-bold',
+            'filter': 'url(#bg-white)',
+            'text-anchor': 'middle'
+        });
+        text.textContent = route.text;
+        group.appendChild(text);
+    });
+  }
+}
+
+// 繪製吉卜力大倉庫深度導覽
+function renderWarehouseMap() {
+  const linesGroup = document.getElementById('warehouse-route-lines');
+  if (!linesGroup) return;
+  linesGroup.innerHTML = '';
+  
+  const warehouseSteps = window.ghibliWarehouseSteps || {};
+  const warehouseLines = window.ghibliWarehouseLines || [];
+
+  // 1. 繪製路線
+  warehouseLines.forEach(line => {
+      const fromPt = warehouseSteps[line.from];
+      const toPt = warehouseSteps[line.to];
+      if (!fromPt || !toPt) return;
+
+      const midX = (fromPt.cx + toPt.cx) / 2;
+      const midY = (fromPt.cy + toPt.cy) / 2;
+      let d = '';
+
+      if (line.type === 'Q') {
+          const ctrlX = midX + line.controlOffset.x;
+          const ctrlY = midY + line.controlOffset.y;
+          d = `M ${fromPt.cx} ${fromPt.cy} Q ${ctrlX} ${ctrlY} ${toPt.cx} ${toPt.cy}`;
+      } else if (line.type === 'C') {
+          const ctrl1X = midX + line.controlOffsets[0].x;
+          const ctrl1Y = midY + line.controlOffsets[0].y;
+          const ctrl2X = midX + line.controlOffsets[1].x;
+          const ctrl2Y = midY + line.controlOffsets[1].y;
+          d = `M ${fromPt.cx} ${fromPt.cy} C ${ctrl1X} ${ctrl1Y}, ${ctrl2X} ${ctrl2Y}, ${toPt.cx} ${toPt.cy}`;
+      }
+
+      const path = createSVGElement('path', {
+          'd': d,
+          'stroke': '#dc2626',
+          'stroke-width': '5',
+          'stroke-dasharray': '2, 6',
+          'stroke-linecap': 'round',
+          'fill': 'none'
+      });
+      linesGroup.appendChild(path);
+  });
+
+  // 2. 繪製節點
+  const nodesGroup = document.getElementById('warehouse-nodes-group');
+  if (nodesGroup) {
+    nodesGroup.innerHTML = '';
+    for (const [key, step] of Object.entries(warehouseSteps)) {
+        const g = createSVGElement('g', {
+            'id': `wh-node-${key}`,
+            'class': 'cursor-pointer group',
+            'onclick': `selectWarehouseStep('${key}')`
+        });
+
+        const glowColor = key === 'cafe' ? '#eab308' : (key === '1' || key === '7' ? '#f97316' : '#22c55e');
+        const glow = createSVGElement('circle', {
+            'cx': step.cx,
+            'cy': step.cy,
+            'r': step.r + 5,
+            'fill': 'none',
+            'stroke': glowColor,
+            'stroke-width': '2.5',
+            'stroke-opacity': '0.7',
+            'stroke-dasharray': key === 'cafe' ? '2,2' : 'none'
+        });
+        g.appendChild(glow);
+
+        const circle = createSVGElement('circle', {
+            'cx': step.cx,
+            'cy': step.cy,
+            'r': step.r,
+            'fill': key === 'cafe' ? '#eab308' : '#dc2626',
+            'stroke': '#ffffff',
+            'stroke-width': '2'
+        });
+        g.appendChild(circle);
+
+        const text = createSVGElement('text', {
+            'x': step.cx,
+            'y': step.cy + (key === 'cafe' ? 4 : 5),
+            'fill': 'white',
+            'class': `${key === 'cafe' ? 'text-[10px]' : 'text-sm'} font-bold`,
+            'text-anchor': 'middle'
+        });
+        text.textContent = key === 'cafe' ? '餐' : key;
+        g.appendChild(text);
+
+        nodesGroup.appendChild(g);
+    }
+  }
+
+  // 3. 繪製右側步驟時間軸
+  const timelineList = document.getElementById('timeline-list');
+  if (timelineList) {
+    timelineList.innerHTML = '';
+    const keysOrdered = ['0', '1', '2', '3', '4', '5', '6', '7', '8'];
+    keysOrdered.forEach(key => {
+        const step = warehouseSteps[key];
+        const itemDiv = document.createElement('div');
+        itemDiv.id = `wh-timeline-item-${key}`;
+        itemDiv.className = 'relative pl-2 cursor-pointer group/item hover:translate-x-1 transition-transform py-1';
+        itemDiv.setAttribute('onclick', `selectWarehouseStep('${key}')`);
+        
+        itemDiv.innerHTML = `
+            <span class="absolute -left-[30px] top-2.5 w-3.5 h-3.5 rounded-full bg-red-500 border-2 border-white group-hover/item:scale-125 transition-transform"></span>
+            <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-slate-800 group-hover/item:text-orange-700 transition-colors">
+                    步驟 ${key} - ${step.title}
+                </span>
+                <span class="text-[9px] font-medium text-slate-400 scale-90">${step.level.split(' ')[0]}</span>
+            </div>
+        `;
+        timelineList.appendChild(itemDiv);
+    });
+  }
+}
+
+// 大倉庫詳情聚焦
+function selectWarehouseStep(stepKey) {
+  const warehouseSteps = window.ghibliWarehouseSteps || {};
+  const step = warehouseSteps[stepKey];
+  if (!step) return;
+
+  document.querySelectorAll('#timeline-list > div').forEach(el => {
+      el.className = 'relative pl-2 cursor-pointer group/item hover:translate-x-1 transition-transform py-1';
+  });
+  const activeItem = document.getElementById(`wh-timeline-item-${stepKey}`);
+  if (activeItem) {
+      activeItem.className = 'relative pl-2 cursor-pointer group/item hover:translate-x-1 transition-transform py-1 bg-orange-50/70 border-l-4 border-orange-500 p-2 rounded-lg';
+  }
+
+  document.querySelectorAll('#warehouse-nodes-group > g').forEach(el => el.classList.remove('active'));
+  const activeNode = document.getElementById(`wh-node-${stepKey}`);
+  if (activeNode) {
+      activeNode.classList.add('active');
+  }
+
+  const badge = document.getElementById('wh-step-badge');
+  if (badge) badge.innerText = stepKey === 'cafe' ? '☕' : stepKey;
+  
+  const title = document.getElementById('wh-step-title');
+  if (title) title.innerText = step.title;
+  
+  const levelBadge = document.getElementById('wh-step-level');
+  if (levelBadge) {
+    levelBadge.innerText = step.level;
+    levelBadge.className = `text-[10px] font-bold px-2.5 py-0.5 rounded-full border ${step.levelClass}`;
+  }
+
+  const desc = document.getElementById('wh-step-desc');
+  if (desc) desc.innerText = step.desc;
+
+  const tip = document.getElementById('wh-step-tip');
+  if (tip) tip.innerHTML = step.tip;
+}
+
+// 摺疊與展開大倉庫面版
+function toggleWarehouseAccordion(forceState = null) {
+  const accordion = document.getElementById('warehouse-accordion-content');
+  const arrow = document.getElementById('warehouse-arrow');
+  if (!accordion || !arrow) return;
+
+  let shouldOpen = accordion.classList.contains('hidden');
+  if (forceState !== null) {
+      shouldOpen = (forceState === 'open');
+  }
+
+  if (shouldOpen) {
+      accordion.classList.remove('hidden');
+      arrow.style.transform = 'rotate(180deg)';
+      selectWarehouseStep('1');
+  } else {
+      accordion.classList.add('hidden');
+      arrow.style.transform = 'rotate(0deg)';
+  }
+}
+
+// 當點擊主圖大倉庫時，自動拉開大倉庫專區並滾動聚焦
+function expandWarehouseAndScroll() {
+  toggleWarehouseAccordion('open');
+  const depthSection = document.getElementById('warehouse-depth-section');
+  if (depthSection) {
+      setTimeout(() => {
+          depthSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 150);
+  }
+}
+
+// 路線圖層顯示開關
+function toggleRouteLayer(type) {
+  const checkbox = document.getElementById(`toggle-${type}`);
+  const layer = document.getElementById(`route-${type}`);
+  if (checkbox && layer) {
+      layer.style.opacity = checkbox.checked ? '1' : '0';
+      layer.style.pointerEvents = checkbox.checked ? 'auto' : 'none';
+  }
+}
+
+// 地標圖層顯示開關
+function toggleLandmarkLayer() {
+  const checkbox = document.getElementById('toggle-landmarks');
+  const layer = document.getElementById('landmarks-layer');
+  if (checkbox && layer) {
+      layer.style.opacity = checkbox.checked ? '1' : '0';
+      layer.style.pointerEvents = checkbox.checked ? 'auto' : 'none';
+  }
+}
+
+// 大倉庫圖層顯示開關
+function toggleWarehouseLayer(type) {
+  const checkbox = document.getElementById(`toggle-wh-${type}`);
+  let element;
+  if (type === 'nodes') {
+      element = document.getElementById('warehouse-nodes-group');
+  } else if (type === 'route') {
+      element = document.getElementById('warehouse-route-lines');
+  } else if (type === 'cafe') {
+      element = document.getElementById('warehouse-cafe-line');
+  }
+  
+  if (checkbox && element) {
+      element.style.opacity = checkbox.checked ? '1' : '0';
+      element.style.pointerEvents = checkbox.checked ? 'auto' : 'none';
+  }
+}
+
+// 園區地標聚焦與景點渲染
+function selectZone(zoneKey, shouldScroll = true) {
+  const zoneData = window.ghibliZoneData || {};
+  const data = zoneData[zoneKey];
+  if (!data) return;
+
+  document.querySelectorAll('#landmarks-group > g').forEach(el => el.classList.remove('active'));
+  const activeG = document.getElementById(`landmark-${zoneKey}`);
+  if (activeG) {
+      activeG.classList.add('active');
+  }
+
+  const emptyState = document.getElementById('empty-state');
+  if (emptyState) emptyState.classList.add('hidden');
+  
+  const contentArea = document.getElementById('content-area');
+  if (contentArea) contentArea.classList.remove('hidden');
+
+  const badge = document.getElementById('zone-badge');
+  if (badge) {
+      badge.innerText = data.badge;
+      badge.className = `px-3 py-1 text-xs font-bold rounded-full text-white ${data.badgeColor}`;
+  }
+  
+  const zoneTitle = document.getElementById('zone-title');
+  if (zoneTitle) zoneTitle.innerText = data.title;
+  
+  const zoneTransport = document.getElementById('zone-transport');
+  if (zoneTransport) {
+      zoneTransport.innerHTML = `
+          <i data-lucide="map-pin" class="w-3.5 h-3.5"></i>
+          <span>${data.transport}</span>
+      `;
+  }
+
+  const spotList = document.getElementById('spot-list');
+  if (spotList) {
+      spotList.innerHTML = '';
+      data.spots.forEach(spot => {
+          const li = document.createElement('li');
+          li.className = 'p-3 bg-white rounded-2xl border border-slate-100 hover:border-emerald-200 hover:shadow-sm transition-all';
+          li.innerHTML = `
+              <div class="font-bold text-slate-800 text-sm flex items-center gap-1.5">
+                  <span class="text-emerald-600">✦</span> ${spot.name}
+              </div>
+              <div class="text-xs text-slate-500 mt-1 pl-4 leading-relaxed">${spot.desc}</div>
+          `;
+          spotList.appendChild(li);
+      });
+  }
+
+  const navList = document.getElementById('navigation-list');
+  if (navList) {
+      navList.innerHTML = '';
+      data.navs.forEach(nav => {
+          const div = document.createElement('div');
+          div.className = 'flex items-center gap-2 p-1.5 border-b border-slate-50 last:border-b-0';
+          div.innerHTML = `
+              <span class="text-emerald-600 text-[10px] font-bold">▶</span>
+              <span class="text-xs">${nav}</span>
+          `;
+          navList.appendChild(div);
+      });
+  }
+
+  lucide.createIcons();
+
+  if (shouldScroll) {
+      const detailPanel = document.getElementById('detail-panel');
+      if (detailPanel) detailPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+}
+
+
+// ==========================================
+// 🚀 Global Application Bootstrapper
+// ==========================================
 document.addEventListener("DOMContentLoaded", () => {
   renderDayTabs();
   renderItineraryContent();
   if (document.getElementById('attractions-grid')) {
       renderCards();
   }
+
+  // 同步初始化 Lucide Icons（適用於主視圖中的圖標）
+  lucide.createIcons();
 });
 
-// Back to Top Logic
+// 滾動回到頂部按鈕狀態
 const backToTopBtn = document.getElementById("backToTop");
-
 window.addEventListener("scroll", () => {
-  if (window.scrollY > 300) {
-    backToTopBtn.classList.remove("opacity-0", "translate-y-10");
-  } else {
-    backToTopBtn.classList.add("opacity-0", "translate-y-10");
+  if (backToTopBtn) {
+    if (window.scrollY > 300) {
+      backToTopBtn.classList.remove("opacity-0", "translate-y-10");
+    } else {
+      backToTopBtn.classList.add("opacity-0", "translate-y-10");
+    }
   }
 });
 
 function scrollToTop() {
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
-
-// ==========================================
-// 🗺️ Attractions & Food Gallery Logic
-// ==========================================
-const db = [
-    // 區域 1：名站區 (景點)
-    { id: 1, area: "名站區", type: "attraction", name: "Bic Camera (玩具模型/電器)", hours: "10:00–21:00", location: "名站西口 (太閤通口)", transport: "從飯店步行 2 分鐘", notes: "買電器與藥妝首選！樓上擁有極大的玩具模型與鋼普拉區，距離 VIA INN 飯店極近。", icon: "fa-camera", color: "bg-purple-100 text-purple-600", mapQuery: "ビックカメラ 名古屋駅西店 愛知県名古屋市中村区椿町6-9" },
-    { id: 2, area: "名站區", type: "attraction", name: "Animate & 羅針盤 (動漫尋寶)", hours: "10:00–21:00 (依店鋪不同)", location: "名站西口周邊", transport: "從飯店步行 3 分鐘", notes: "動漫周邊、同人誌與二手公仔的集散地，建議利用每天早晚的零碎時間去挖寶。", icon: "fa-gamepad", color: "bg-purple-100 text-purple-600", mapQuery: "アニメイト 名古屋 愛知県名古屋市中村区椿町18-4" },
-    { id: 3, area: "名站區", type: "attraction", name: "JR Gate Tower 雙塔 & 地下街", hours: "10:00–20:00", location: "名站東口 (櫻通口)", transport: "穿過車站大廳即達", notes: "結合 Unimall 等超長地下街，日系服飾、雜貨天堂。Gate Tower 15樓有免費的高空夜景可以看！", icon: "fa-building", color: "bg-blue-100 text-blue-600", mapQuery: "JRゲートタワー 愛知県名古屋市中村区名駅1-1-3" },
-    { id: 4, area: "名站區", type: "attraction", name: "名鐵百貨 (Nana 醬巨型人偶)", hours: "10:00–20:00", location: "名站東口 (櫻通口)", transport: "車站外步行 3 分鐘", notes: "名古屋站最具代表性的打卡地標「Nana醬人形」，她經常會換上各種奇特的服裝。", icon: "fa-person-dress", color: "bg-indigo-100 text-indigo-600", mapQuery: "ナナちゃん人形 愛知県名古屋市中村区名駅1-2-1" },
-
-    // ================= 區域 1：名站區 (美食) =================
-    { id: 5, area: "名站區", type: "food", name: "馬喰一代 (WEST店 - 炭火燒肉)", hours: "11:30–15:00 / 17:00–23:00", location: "名站西口步行 3 分鐘", category: "午餐 (高CP值) / 晚餐", notes: "主打【極致炭火燒肉】！想吃頂級 A5 飛驒牛燒肉請選這間，平日商業午餐極度划算，強烈建議出發前一個月上網預約。", icon: "fa-fire-burner", color: "bg-red-100 text-red-600", mapQuery: "飛騨牛一頭家 馬喰一代 名古屋WEST 愛知県名古屋市西区牛島町6-24" },
-    { id: 6, area: "名站區", type: "food", name: "馬喰一代 (名古屋 EAST 店 - 壽喜燒)", hours: "11:30–15:00 / 17:00–23:00", location: "名站東口步行 2 分鐘 (アストラーレ名駅2F)", category: "午餐 / 晚餐", notes: "主打【關西風壽喜燒 / 涮涮鍋】！想體驗醬汁濃郁煎烤的和牛，或是清爽的高湯涮肉請選這間。環境優雅，同樣需預約。", icon: "fa-bowl-food", color: "bg-orange-100 text-orange-600", mapQuery: "飛騨牛一頭家 馬喰一代 名古屋EAST 愛知県名古屋市中村区名駅2-41-10" },
-    { id: 49, area: "名站區", type: "food", name: "しゃぶすき家 WEST (壽喜燒 / 涮涮鍋)", hours: "11:30–24:00 (午餐至 15:00)", location: "名站西口步行 3 分鐘 (Acrocube 2F)", category: "午餐 / 晚餐", notes: "專攻頂級飛驒牛壽喜燒與涮涮鍋。就開在 WEST 燒肉店的正隔壁，環境極佳，務必提前預約。", icon: "fa-bowl-food", color: "bg-orange-100 text-orange-600", mapQuery: "最飛び飛騨牛 しゃぶすき家 馬喰一代 名古屋WEST 愛知県名古屋市西区牛島町6-24" },
-    { id: 7, area: "名站區", type: "food", name: "梅丘壽司美登利", hours: "11:00–22:00", location: "JR Gate Tower 12 樓", category: "午餐 / 晚餐", notes: "東京來的排隊霸主！主打巨無霸浮誇握壽司，星鰻一整條。預算約 4500 日圓可吃極好。抵達12樓請務必【先抽號碼牌】再去逛街。", icon: "fa-fish", color: "bg-orange-100 text-orange-600", mapQuery: "梅丘寿司の美登利 JRゲートタワー店 愛知県名古屋市中村区名駅1-1-3" },
-    { id: 8, area: "名站區", type: "food", name: "麵家 獅子丸", hours: "11:00–14:30 / 17:30–21:30", location: "地鐵「龜島站」步行 2 分鐘", category: "午餐 / 晚餐", notes: "Tabelog百名店。洋風泡系白湯拉麵，湯頭細緻綿密如卡布奇諾。無法預約，開門前20分鐘就會排隊。", icon: "fa-bowl-food", color: "bg-amber-100 text-amber-600", mapQuery: "麺家 獅子丸 愛知県名古屋市中村区亀島2-1-1" },
-    { id: 9, area: "名站區", type: "food", name: "味仙拉麵 (驛麵通 / 大名古屋大廈店)", hours: "11:00–22:00", location: "名古屋車站內 / 東口對面", category: "午餐 / 晚餐 / 宵夜", notes: "大蒜與辣椒爆炒的湯頭，極度重口味、爆汗過癮。非常適合當作一整天行程結束、回飯店洗澡前吃的一餐。", icon: "fa-pepper-hot", color: "bg-red-100 text-red-600", mapQuery: "味仙 JR名古屋駅店 愛知県名古屋市中村区名駅1-1-4" },
-    { id: 10, area: "名站區", type: "food", name: "燕子麵包＆Milk (Tsubame Bread)", hours: "08:00–20:00", location: "名站 4 丁目 (東口步行 5 分鐘)", category: "早餐 / 午餐 / 下午茶", notes: "天然酵母吐司專賣！IG爆紅的【爆漿起司厚蛋三明治】早上 11:00 後才開賣。早上8-11點提供的是點飲料送吐司的早餐。", icon: "fa-bread-slice", color: "bg-yellow-100 text-yellow-600", mapQuery: "つばめパン＆Milk 名駅店 愛知県名古屋市中村区名駅4-26-25" },
-    { id: 11, area: "名站區", type: "food", name: "ÉCHIRÉ 艾許奶油專賣店", hours: "10:00–20:00", location: "JR 名古屋高島屋 1 樓", category: "甜點 / 伴手禮", notes: "法國奶油界LV！必買邊緣酥脆的「費南雪」與「瑪德蓮」，以及名古屋限定奶油夾心餅乾。", icon: "fa-cookie", color: "bg-amber-100 text-amber-700", mapQuery: "エシレ・パティスリー オ ブール JR名古屋タカシマヤ店 愛知県名古屋市中村区名駅1-1-4" },
-    { id: 12, area: "名站區", type: "food", name: "山本屋本店 (味噌煮込みうどん)", hours: "11:00–22:00", location: "西口 ESCA 地下街", category: "午/晚餐", notes: "正宗名古屋紅味噌烏龍麵！注意：它的特色是麵條「極度有嚼勁（生麵煮法）」，湯頭濃郁非常下飯。", icon: "fa-bowl-rice", color: "bg-orange-100 text-orange-700", mapQuery: "山本屋本店 エスカ店 愛知県名古屋市中村区椿町6-9" },
-    { id: 13, area: "名站區", type: "food", name: "世界的山將 / 風來坊", hours: "17:00–24:00 (依店鋪不同)", location: "名站周邊多間分店", category: "宵夜", notes: "宵夜必買！極度酥脆、胡椒嗆辣的炸雞翅(手羽先)，帶回 VIA INN 飯店配啤酒的完美組合。", icon: "fa-drumstick-bite", color: "bg-orange-100 text-orange-700", mapQuery: "世界の山ちゃん 名駅太閤店 愛知県名古屋市中村区太閤1-1-16" },
-    { id: 14, area: "名站區", type: "food", name: "客美多咖啡 (Komeda) / 喫茶 Riyon", hours: "07:00–21:00", location: "西口 ESCA 地下街 / 車站周邊", category: "早餐", notes: "點咖啡免費送烤吐司與紅豆泥，體驗最道地的名古屋 Morning Service 早餐文化，順便補眠。", icon: "fa-mug-hot", color: "bg-stone-100 text-stone-600", mapQuery: "コメダ珈琲店 エスカ店 愛知県名古屋市中村区椿町6-9" },
-    { id: 15, area: "名站區", type: "food", name: "コンパル (Konparu) 炸蝦三明治", hours: "08:00–20:00", location: "名站 Sun Road 地下街", category: "輕食 / 早餐", notes: "老字號喫茶店的神級「炸蝦三明治」，塔塔醬與現炸大蝦完美結合，咬下去會爆汁，也可外帶。", icon: "fa-sandwich", color: "bg-yellow-100 text-yellow-700", mapQuery: "コンパル サンロード店 愛知県名古屋市中村区名駅4-7-25" },
-    { id: 16, area: "名站區", type: "food", name: "ぴよりん (Piyorin 小雞蛋糕)", hours: "10:00–20:00", location: "名古屋車站中央通道", category: "甜點", notes: "名站限定的超萌小雞布丁蛋糕。因為極度脆弱，可以試著挑戰把它「無傷」提回飯店吃！", icon: "fa-cake-candles", color: "bg-pink-100 text-pink-500", mapQuery: "ぴよりんSTATION カフェジャンシアーヌ 愛知県名古屋市中村区名駅1-1-4" },
-    { id: 17, area: "名站區", type: "food", name: "千壽 炸蝦飯糰", hours: "08:00–20:00", location: "西口 ESCA 地下街", category: "早餐 / 外帶", notes: "一口大小的美味炸蝦飯糰。非常適合早上買好帶上新幹線 (去京都時) 當早餐吃！", icon: "fa-bowl-rice", color: "bg-rose-100 text-rose-600", mapQuery: "めいふつ 天むす 千寿 エスカ店 愛知県名古屋市中村区椿町6-9" },
-
-    // ================= 區域 2：大須 / 榮商圈 =================
-    // 景點
-    { id: 18, area: "大須 / 榮商圈", type: "attraction", name: "大須商店街 (Mandarake、Tsukumo)", hours: "10:30–19:00", location: "地鐵「大須觀音站」或「上前津站」", transport: "名站搭東山線至伏見轉鶴舞線", notes: "中部的秋葉原！Tsukumo、Dospara有高階PC零件；Mandarake、駿河屋、Joshin是尋找絕版公仔與模型的終極聖地！", icon: "fa-store", color: "bg-teal-100 text-teal-600", mapQuery: "大須商店街 愛知県名古屋市中区大須" },
-    { id: 19, area: "大須 / 榮商圈", type: "attraction", name: "榮商圈百貨 (寶可夢中心 / JUMP SHOP)", hours: "10:00–20:00", location: "地鐵「矢場町站」或「榮站」", transport: "從大須步行即可達", notes: "松坂屋頂樓有超巨大的寶可夢中心；PARCO有潮牌與 JUMP SHOP 官方周邊。", icon: "fa-bag-shopping", color: "bg-pink-100 text-pink-600", mapQuery: "ポケモンセンターナゴヤ 愛知県名古屋市中区栄3-16-1" },
-    { id: 20, area: "大須 / 榮商圈", type: "attraction", name: "綠洲 21 (Oasis 21) & 名古屋電視塔", hours: "水之宇宙船開放至 21:00", location: "地鐵「榮站」直結", transport: "榮商圈內步行", notes: "榮商圈必看浪漫都市夜景，以電視塔為背景的玻璃水池是經典打卡點。吃飽飯後散步極佳。", icon: "fa-tower-observation", color: "bg-sky-100 text-sky-600", mapQuery: "オアシス21 愛知県名古屋市東区東桜1-11-1" },
-    // 美食
-    { id: 21, area: "大須 / 榮商圈", type: "food", name: "和牛たんじ (榮錦店)", hours: "17:00–23:00", location: "榮商圈 (錦三丁目)", category: "晚餐", notes: "限時 100 分鐘的【厚切仙台牛舌】與和牛大腹肉壽司吃到飽。高人氣名店，必須上網預約！", icon: "fa-cow", color: "bg-red-100 text-red-700", mapQuery: "和牛たんじ 名古屋栄錦店 愛知県名古屋市中区錦3-19-21" },
-    { id: 22, area: "大須 / 榮商圈", type: "food", name: "にぎりの徳兵衛 (Oasis 21 店)", hours: "11:00–22:00", location: "榮商圈綠洲 21 地下一樓", category: "晚餐 / 午餐", notes: "動線極佳，看完夜景可直接下樓吃。平板輕鬆點餐，食材精緻，是逛街後毫無壓力的中高級迴轉壽司。", icon: "fa-plate-wheat", color: "bg-blue-100 text-blue-600", mapQuery: "にぎりの徳兵衛 オアシス21店 愛知県名古屋市東区東桜1-11-1" },
-    { id: 23, area: "大須 / 榮商圈", type: "food", name: "やきとり千亀 (Yakitori Sengame)", hours: "17:00–24:00 (週日休)", location: "榮站步行約 7 分鐘巷弄內", category: "晚餐 / 宵夜", notes: "Tabelog燒鳥百名店！使用高級名古屋交趾雞，炭火烤功出神入化。必點爆漿的【提燈】。極度難訂位。", icon: "fa-fire", color: "bg-orange-100 text-orange-600", mapQuery: "やきとり千亀 愛知県名古屋市中区栄3-1-19" },
-    { id: 24, area: "大須 / 榮商圈", type: "food", name: "いば昇 (Ibasho) 鰻魚飯", hours: "11:00–14:30 / 16:00–20:00", location: "榮商圈 (錦本店)", category: "午 / 晚餐", notes: "榮商圈的百年關西風脆皮鰻魚飯老店。如果你不想去熱田神宮排蓬萊軒，這家是逛街時完美的備案。", icon: "fa-fish-fins", color: "bg-amber-100 text-amber-700", mapQuery: "いば昇 錦本店 愛知県名古屋市中区錦3-13-22" },
-    { id: 25, area: "大須 / 榮商圈", type: "food", name: "HARBS 榮本店", hours: "11:00–20:00", location: "榮站步行 3 分鐘", category: "甜點 / 下午茶", notes: "台灣人最愛的水果千層蛋糕「創始總店」，來這裡吃一塊招牌蛋糕，絕對是最高級的下午茶享受。", icon: "fa-cake-candles", color: "bg-pink-100 text-pink-500", mapQuery: "HARBS 栄本店 愛知県名古屋市中区錦3-6-17" },
-    { id: 26, area: "大須 / 榮商圈", type: "food", name: "大須街頭小吃 (糰子/炸雞/蒙布朗)", hours: "11:00–18:00 (配合商店街)", location: "大須商店街內", category: "小吃", notes: "新雀本店(烤糰子)、李さんの台湾名物屋(人氣排隊唐揚雞)、和栗モンブラン専門店 栗りん(現擠瀑布栗子蒙布朗)。", icon: "fa-ice-cream", color: "bg-pink-100 text-pink-600", mapQuery: "新雀本店 愛知県名古屋市中区大須2-30-12" },
-    { id: 50, area: "大須 / 榮商圈", type: "food", name: "馬喰一代 (榮店 - 燒肉/鍋物綜合)", hours: "11:30–23:00 (午餐至 15:00)", location: "地鐵「榮站」步行 2 分鐘 (BINO栄 5F)", category: "午餐 / 晚餐", notes: "榮商圈的旗艦店，同時提供炭火燒肉與壽喜燒/涮涮鍋。逛完綠洲 21 或大須後，就近吃頂級和牛的最佳選擇。", icon: "fa-fire-burner", color: "bg-red-100 text-red-600", mapQuery: "飛騨牛一頭家 馬喰一代 名古屋 栄 愛知県名古屋市中区錦3-24-17" },
-
-    // ================= 區域 3：名古屋城區 =================
-    // 景點
-    { id: 27, area: "名古屋城區", type: "attraction", name: "名古屋城 ＆ 本丸御殿", hours: "09:00–16:30 (最後入場 16:00)", location: "地鐵「名古屋城站」7 號出口", transport: "名站搭櫻通線轉名城線", notes: "天守閣因耐震無法進入，但耗資百億全木造復原的「本丸御殿」極其華麗，室內冷氣充足，是夏日避暑絕佳景點。", icon: "fa-chess-rook", color: "bg-slate-200 text-slate-700", mapQuery: "名古屋城 本丸御殿 愛知県名古屋市中区本丸1-1" },
-    { id: 28, area: "名古屋城區", type: "attraction", name: "德川園 ＆ 德川美術館", hours: "09:30–17:30 (週一休)", location: "名古屋城東側", transport: "觀光巴士 Me～guru", notes: "池泉迴遊式大名庭園。如果逛完名古屋城還有時間，可以來欣賞精緻的日式造景，綠意盎然且非常幽靜。", icon: "fa-tree", color: "bg-green-100 text-green-700", mapQuery: "徳川園 愛知県名古屋市東区徳川町1001" },
-    // 美食
-    { id: 29, area: "名古屋城區", type: "food", name: "金鯱橫丁 (義直區 / 宗春區)", hours: "10:30–17:30 (依店家不同)", location: "名古屋城正門與東門外", category: "美食街 / 小吃", notes: "城外的仿古美食街。義直區主打名古屋傳統老店（如矢場豬排）；宗春區偏向現代新銳餐廳與甜點。", icon: "fa-store", color: "bg-amber-100 text-amber-700", mapQuery: "金シャチ横丁 愛知県名古屋市中区三の丸1-2-3" },
-    { id: 30, area: "名古屋城區", type: "food", name: "備長鰻魚飯 (金鯱橫丁店)", hours: "10:30–15:30 / 17:00–20:00", location: "金鯱橫丁內", category: "午餐 / 晚餐", notes: "全程無蒸煮、直火強烤，表皮極度焦脆！如果沒排到熱田蓬萊軒，逛完名古屋城直接來吃這家絕佳。", icon: "fa-fish-fins", color: "bg-amber-100 text-amber-800", mapQuery: "ひつまぶし名古屋備長 金シャチ横丁店 愛知県名古屋市中区三の丸1-2-5" },
-
-    // ================= 區域 4：熱田神宮區 =================
-    // 景點
-    { id: 31, area: "熱田神宮區", type: "attraction", name: "熱田神宮 ＆ 草薙館", hours: "神宮 24H；草薙館 09:00–16:30", location: "地鐵「熱田神宮傳馬町站」", transport: "搭乘地鐵名城線", notes: "供奉日本三大神器之一「草薙劍」的聖地。境內有千年神木；草薙館可親手體驗武士刀重量。", icon: "fa-torii-gate", color: "bg-green-100 text-green-700", mapQuery: "熱田神宮 愛知県名古屋市熱田区神宮1-1-1" },
-    { id: 32, area: "熱田神宮區", type: "attraction", name: "白鳥庭園", hours: "09:00–17:00 (週一休)", location: "熱田神宮西側步行 10 分鐘", transport: "從神宮步行即達", notes: "市內最大日式庭園。如果等待鰻魚飯的時間超過兩小時，除了逛神宮，也可散步來這裡喝杯日式抹茶。", icon: "fa-leaf", color: "bg-emerald-100 text-emerald-600", mapQuery: "白鳥庭園 愛知県名古屋市熱田区熱田西町2-5" },
-    // 美食
-    { id: 33, area: "熱田神宮區", type: "food", name: "熱田蓬萊軒 (神宮店)", hours: "11:30–14:30 / 16:30–20:30", location: "熱田神宮南門旁 (步行1分)", category: "午餐 / 晚餐", notes: "150年歷史的神級鰻魚飯三吃！【不接受預約，採現場人工登記】。抵達後務必先拿時間單，再去逛神宮抵銷排隊時間。", icon: "fa-bowl-rice", color: "bg-orange-100 text-orange-800", mapQuery: "あつた蓬莱軒 神宮店 愛知県名古屋市熱田区神宮2-10-26" },
-    { id: 34, area: "熱田神宮區", type: "food", name: "宮きしめん (宮棊子麵)", hours: "09:00–16:30", location: "熱田神宮森林境內", category: "午餐 / 輕食", notes: "在神木環繞的半露天座位，吃清甜柴魚湯頭的名古屋特色寬扁麵。氣氛極佳且不需大排長龍。", icon: "fa-water", color: "bg-blue-100 text-blue-700", mapQuery: "宮きしめん 神宮店 愛知県名古屋市熱田区神宮1-1-1" },
-    { id: 35, area: "熱田神宮區", type: "food", name: "きよめ餅總本家 (Kiyome Mochi)", hours: "09:00–18:00", location: "名鐵神宮前站周邊", category: "伴手禮", notes: "熱田神宮最具代表性的名產！雪白的羽二重餅皮包著細緻紅豆泥，可內用搭配抹茶套餐。", icon: "fa-cookie", color: "bg-pink-100 text-pink-600", mapQuery: "きよめ餅総本家 愛知県名古屋市熱田区神宮3-7-21" },
-
-    // ================= 區域 5：犬山區 =================
-    { id: 36, area: "犬山區", type: "attraction", name: "犬山城 ＆ 三光稻荷神社", hours: "09:00–17:00", location: "名鐵「犬山站」步行約 15 分", transport: "名站搭名鐵特急約 30 分鐘直達", notes: "日本現存最古老的木造國寶天守閣，木製階梯極陡。山腳有著名的「洗錢」池與粉紅愛心繪馬。", icon: "fa-monument", color: "bg-orange-100 text-orange-600", mapQuery: "国宝 犬山城 愛知県犬山市犬山北古券65-2" },
-    { id: 37, area: "犬山區", type: "food", name: "犬山城下町老街小吃", hours: "10:00–17:00", location: "犬山城外老街", category: "小吃", notes: "推薦「犬山牛太郎」的A5飛驒牛握壽司，以及塗滿濃郁醬汁現烤的「山田五平餅」。", icon: "fa-burger", color: "bg-red-100 text-red-500", mapQuery: "犬山牛太郎 愛知県犬山市犬山東古券75-4" },
-
-    // ================= 區域 6：京都 / 市郊 / 機場 =================
-    { id: 38, area: "京都 / 市郊", type: "attraction", name: "吉卜力公園", hours: "平日 10:00–17:00 (週二休)", location: "愛・地球博紀念公園", transport: "地鐵東山線轉乘 Linimo", notes: "需提前兩個月於官網預購大倉庫等門票。必拍無臉男與貓巴士，建議預留一整天慢慢逛。", icon: "fa-tree", color: "bg-emerald-100 text-emerald-700", mapQuery: "ジブリパーク 愛知県長久手市茨ケ廻間乙1533-1" },
-    { id: 39, area: "京都 / 市郊", type: "attraction", name: "長島三井 Outlet", hours: "10:00–20:00", location: "三重縣", transport: "名鐵巴士中心搭高速巴士直達", notes: "發揮 46kg 行李額度的終極血拚戰場！買完務必先回飯店卸貨再安排後續行程。", icon: "fa-bag-shopping", color: "bg-pink-100 text-pink-600", mapQuery: "三井アウトレットパーク ジャズドリーム長島 三重県桑名市長島町浦安368" },
-    { id: 40, area: "京都 / 市郊", type: "attraction", name: "京都 (伏見稻荷 ➔ 清水寺 ➔ 祇園)", hours: "早上 08:30 前抵達伏見稻荷", location: "日本京都", transport: "名古屋搭新幹線至京都 (35分)", notes: "神級避暑動線：伏見稻荷搭「京阪本線」至清水五條後，直接攔計程車至清水寺上方順坡而下。", icon: "fa-train", color: "bg-purple-100 text-purple-600", mapQuery: "清水寺 京都府京都市東山区清水1丁目294" },
-    { id: 41, area: "京都 / 市郊", type: "food", name: "清水順正 Okabe 家", hours: "10:30–17:00", location: "清水寺參道周邊", category: "午餐", notes: "庭園氛圍極佳的湯豆腐定食，建議事先網路預約避開清水寺中午人潮。", icon: "fa-leaf", color: "bg-green-100 text-green-600", mapQuery: "清水順正 おかべ家 京都府京都市東山区清水2丁目239" },
-    { id: 42, area: "京都 / 市郊", type: "food", name: "京都勝牛 (京都站前店)", hours: "11:00–22:00", location: "京都車站中央口對面", category: "晚餐", notes: "經典和牛炸牛排定食。吃完剛好去京都車站買伴手禮，直接搭新幹線回名古屋。", icon: "fa-utensils", color: "bg-orange-100 text-orange-600", mapQuery: "牛カツ京都勝牛 京都駅前店 京都府京都市下京区真苧屋町211" },
-    { id: 43, area: "京都 / 市郊", type: "food", name: "東洋亭 (京都 Porta店)", hours: "11:00–22:00", location: "京都車站地下街 Porta", category: "晚餐", notes: "百年洋食老店！招牌是「鋁箔紙包漢堡排」與「冰鎮番茄沙拉」。若不想吃炸牛排，這家是完美備案。", icon: "fa-hamburger", color: "bg-red-100 text-red-600", mapQuery: "東洋亭 京都ポルタ店 京都府京都市下京区烏丸通塩小路下ル東塩小路町902" },
-    { id: 44, area: "京都 / 市郊", type: "food", name: "祢ざめ家 (Nezameya)", hours: "10:00–17:30", location: "伏見稻荷大社旁", category: "小吃 / 午餐", notes: "近 500 年歷史的老店。來伏見稻荷必吃吸滿高湯的豆皮壽司 (稻荷壽司)，走完鳥居吃幾顆剛好。", icon: "fa-box-open", color: "bg-amber-100 text-amber-600", mapQuery: "祢ざめ家 京都府京都市伏見区深草稲荷御前町82-1" },
-    { id: 45, area: "京都 / 市郊", type: "food", name: "GOKAGO 抹茶拿鐵", hours: "10:00–18:00", location: "清水寺/祇園周邊", category: "飲品", notes: "網美風現刷宇治抹茶拿鐵加冰淇淋，是漫步清水寺與祇園時消暑的最佳聖品。", icon: "fa-mug-hot", color: "bg-green-100 text-green-800", mapQuery: "GOKAGO 京都府京都市東山区星野町88" },
-    { id: 46, area: "京都 / 市郊", type: "food", name: "矢場味噌豬排", hours: "11:00–21:00", location: "長島三井 Outlet 內", category: "午餐", notes: "Outlet 逛累了就來吃名古屋代表味。招牌草鞋特大豬排淋上紅味噌醬，甜鹹濃郁。", icon: "fa-piggy-bank", color: "bg-rose-100 text-rose-700", mapQuery: "矢場とん ジャズドリーム長島店 三重県桑名市長島町浦安368" },
-    { id: 47, area: "京都 / 市郊", type: "food", name: "桂新堂 蝦仙貝之里", hours: "08:00–20:00 (依機場規定)", location: "中部國際機場 4 樓", category: "伴手禮", notes: "體積大但極輕，直接當手提行李上機，完美保留你的 46kg 托運額度裝其他重物！", icon: "fa-gift", color: "bg-blue-100 text-blue-500", mapQuery: "えびせんべいの里 中部国際空港店 愛知県常滑市セントレア1-1" },
-    { id: 48, area: "名站區", type: "attraction", name: "VIA INN 名古屋站前椿町", hours: "Check-in 15:00 / Check-out 10:00", location: "太閤通口（新幹線口）步行 5 分鐘", transport: "名古屋站新幹線口", notes: "本次旅程的大本營，鄰近車站、Bic Camera 與 ESCA 地下街，採買極為方便。", icon: "fa-hotel", color: "bg-blue-100 text-blue-600", mapQuery: "ヴィアイン名古屋駅前椿町" }
-];
-
-function renderCards(filter = 'All') {
-    const attractionsGrid = document.getElementById('attractions-grid');
-    const foodGrid = document.getElementById('food-grid');
-    if (!attractionsGrid || !foodGrid) return;
-    
-    attractionsGrid.innerHTML = '';
-    foodGrid.innerHTML = '';
-
-    const filteredData = filter === 'All' ? db : db.filter(item => item.area === filter);
-
-    filteredData.forEach((item, i) => {
-        const card = document.createElement('div');
-        card.className = "bg-white p-5 rounded-2xl shadow-sm border border-stone-100 cursor-pointer hover:shadow-xl hover:border-stone-200 hover:-translate-y-1 transition-all duration-300 flex items-start space-x-4 group animate-fade-in-up opacity-0";
-        card.style.animationDelay = `${i * 0.05}s`;
-        card.onclick = () => openModal(item);
-
-        const iconDiv = document.createElement('div');
-        iconDiv.className = `w-14 h-14 rounded-2xl flex items-center justify-center flex-shrink-0 ${item.color} transform group-hover:scale-110 transition-transform duration-300`;
-        iconDiv.innerHTML = `<i class="fa-solid ${item.icon} text-2xl"></i>`;
-
-        const contentDiv = document.createElement('div');
-        contentDiv.className = "flex-1";
-        contentDiv.innerHTML = `
-            <div class="text-xs font-bold text-stone-400 mb-1 uppercase tracking-wider">${item.area}</div>
-            <h3 class="text-lg font-bold text-stone-800 leading-tight mb-2 group-hover:text-rose-600 transition-colors">${item.name}</h3>
-            <p class="text-sm text-stone-500 line-clamp-2">${item.notes}</p>
-        `;
-
-        card.appendChild(iconDiv);
-        card.appendChild(contentDiv);
-
-        if (item.type === 'attraction') {
-            attractionsGrid.appendChild(card);
-        } else {
-            foodGrid.appendChild(card);
-        }
-    });
-
-    if(attractionsGrid.innerHTML === '') attractionsGrid.innerHTML = '<p class="text-stone-400 text-sm py-4 col-span-full">此區域目前無景點資料</p>';
-    if(foodGrid.innerHTML === '') foodGrid.innerHTML = '<p class="text-stone-400 text-sm py-4 col-span-full">此區域目前無美食資料</p>';
-}
-
-function filterByArea(area) {
-    document.querySelectorAll('.filter-btn').forEach(btn => {
-        if (btn.getAttribute('data-area') === area) {
-            btn.classList.add('active-filter');
-            btn.classList.remove('text-stone-600', 'bg-white');
-        } else {
-            btn.classList.remove('active-filter');
-            btn.classList.add('text-stone-600', 'bg-white');
-        }
-    });
-    renderCards(area);
-}
-
-function openModal(item) {
-    const modalBg = document.getElementById('modal-bg');
-    const modalContent = document.getElementById('modal-content');
-    const modalBody = document.getElementById('modal-body');
-    const exactQuery = item.mapQuery || item.name;
-    const mapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(exactQuery)}`;
-    
-    let extraDetails = '';
-    if (item.type === 'attraction') {
-        extraDetails = `
-            <div class="mb-3 flex"><span class="font-bold text-stone-700 w-20 shrink-0"><i class="fa-regular fa-clock mr-2 text-stone-400"></i>時間:</span> <span class="text-stone-600">${item.hours}</span></div>
-            <div class="mb-3 flex"><span class="font-bold text-stone-700 w-20 shrink-0"><i class="fa-solid fa-train mr-2 text-stone-400"></i>交通:</span> <span class="text-stone-600">${item.transport}</span></div>
-        `;
-    } else {
-        extraDetails = `
-            <div class="mb-3 flex"><span class="font-bold text-stone-700 w-20 shrink-0"><i class="fa-solid fa-tag mr-2 text-stone-400"></i>分類:</span> <span class="text-rose-600 bg-rose-50 px-2 py-0.5 rounded text-sm font-medium">${item.category}</span></div>
-            <div class="mb-3 flex"><span class="font-bold text-stone-700 w-20 shrink-0"><i class="fa-regular fa-clock mr-2 text-stone-400"></i>時間:</span> <span class="text-stone-600">${item.hours}</span></div>
-        `;
-    }
-
-    modalBody.innerHTML = `
-        <div class="flex items-center space-x-4 mb-6">
-            <div class="w-14 h-14 rounded-2xl flex items-center justify-center ${item.color}">
-                <i class="fa-solid ${item.icon} text-2xl"></i>
-            </div>
-            <div>
-                <span class="text-xs font-bold text-rose-500 uppercase tracking-wider bg-rose-50 px-2 py-1 rounded-md mb-1 inline-block">${item.area}</span>
-                <h2 class="text-2xl font-extrabold text-stone-900 leading-snug">${item.name}</h2>
-            </div>
-        </div>
-        
-        <div class="bg-stone-50 p-5 rounded-2xl mb-6 text-sm border border-stone-100">
-            <div class="mb-3 flex"><span class="font-bold text-stone-700 w-20 shrink-0"><i class="fa-solid fa-location-dot mr-2 text-stone-400"></i>地點:</span> <span class="text-stone-600">${item.location}</span></div>
-            ${extraDetails}
-        </div>
-
-        <div class="mb-8 relative">
-            <div class="absolute -left-3 top-0 bottom-0 w-1 bg-gradient-to-b from-yellow-300 to-yellow-500 rounded-full"></div>
-            <h4 class="font-bold text-stone-900 mb-2 flex items-center">專家筆記 <i class="fa-solid fa-pen-to-square text-yellow-500 ml-2"></i></h4>
-            <p class="text-stone-600 leading-relaxed bg-yellow-50/50 p-4 rounded-xl border border-yellow-100/50">${item.notes}</p>
-        </div>
-
-        <div class="mb-6 rounded-2xl overflow-hidden shadow-inner border border-stone-200 relative animate-fade-in-up" style="animation-delay: 0.2s">
-            <iframe 
-                width="100%" 
-                height="250" 
-                style="border:0;" 
-                loading="lazy" 
-                allowfullscreen 
-                src="https://maps.google.com/maps?q=${encodeURIComponent(exactQuery)}&t=&z=15&ie=UTF8&iwloc=&output=embed">
-            </iframe>
-        </div>
-
-        <a href="${mapUrl}" target="_blank" rel="noopener noreferrer" class="block w-full bg-stone-900 hover:bg-rose-500 text-white text-center font-bold py-4 rounded-2xl transition-colors shadow-md flex items-center justify-center gap-2 group animate-fade-in-up" style="animation-delay: 0.3s">
-            <i class="fa-solid fa-map-location-dot transform group-hover:scale-110 transition-transform"></i>
-            開啟 Google Maps App 導航
-        </a>
-    `;
-    
-    modalBg.classList.remove('hidden');
-    void modalBg.offsetWidth; // trigger reflow
-    modalBg.classList.remove('opacity-0');
-    modalContent.classList.remove('scale-95', 'opacity-0');
-    modalContent.classList.add('scale-100', 'opacity-100');
-    document.body.style.overflow = 'hidden';
-}
-
-function closeModal() {
-    const modalBg = document.getElementById('modal-bg');
-    const modalContent = document.getElementById('modal-content');
-    modalBg.classList.add('opacity-0');
-    modalContent.classList.remove('scale-100', 'opacity-100');
-    modalContent.classList.add('scale-95', 'opacity-0');
-    
-    setTimeout(() => {
-        modalBg.classList.add('hidden');
-        document.body.style.overflow = '';
-    }, 300);
-}
-
-document.addEventListener('click', (e) => {
-    const modalBg = document.getElementById('modal-bg');
-    if (e.target === modalBg) {
-        closeModal();
-    }
-});
-
-document.addEventListener('keydown', (e) => {
-    const modalBg = document.getElementById('modal-bg');
-    if (e.key === 'Escape' && !modalBg.classList.contains('hidden')) {
-        closeModal();
-    }
-});
