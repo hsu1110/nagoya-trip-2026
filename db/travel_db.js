@@ -15,7 +15,7 @@ window.itineraryData = [
       { time: "06:20", icon: "🛬", title: "抵達中部國際機場", desc: "樂桃 MM722 降落。搭名鐵 μ-SKY 特急直達名古屋站（約 28 分鐘）。" },
       { time: "08:00", icon: "🏨", title: "VIA INN 寄放行李", desc: "先至飯店前台寄放行李，在地下街簡單吃個早餐墊胃。" },
       { time: "09:30", icon: "🏯", title: "名古屋城 ＆ 本丸御殿", dbId: 27, desc: "趁早上體力最好、氣溫涼爽時先去逛，欣賞耗資百億復原的華麗壁畫與建築。" },
-      { time: "13:00", icon: "🥩", title: "午餐：馬喰一代 WEST店", dbId: 5, desc: "<strong>必吃：頂級和牛炭火燒肉！</strong>平日商業午餐超高CP值，就在飯店旁邊，吃完剛好 Check-in。" },
+      { time: "13:30", icon: "🥩", title: "午餐：馬喰一代 WEST店", dbId: 5, desc: "<strong>必吃：頂級和牛炭火燒肉！</strong>平日商業午餐超高CP值，就在飯店旁邊，吃完剛好 Check-in。" },
       { time: "15:00", icon: "🛍️", title: "飯店 Check-in ＆ 名站尋寶", dbId: 1, desc: "不補眠，直接攻略名站西口的 Bic Camera 買電器，或去 Animate 與地下街尋寶。" },
       { time: "18:30", icon: "🍜", title: "晚餐：麵家獅子丸 / 味仙", dbId: 8, desc: "吃獅子丸的泡系白湯拉麵，或是重口味爆汗的味仙台灣拉麵（二選一）。" },
       { time: "20:00", icon: "🍗", title: "宵夜：世界的山將", dbId: 13, desc: "買招牌胡椒炸雞翅帶回飯店，舒舒服服地洗完澡啃雞翅配啤酒！" }
@@ -171,5 +171,10 @@ window.db = [
   { id: 45, area: "京都 / 市郊", type: "food", name: "GOKAGO 抹茶拿鐵", hours: "10:00–18:00", location: "清水寺/祇園周邊", category: "飲品", notes: "網美風現刷宇治抹茶拿鐵加冰淇淋，是漫步清水寺與祇園時消暑的最佳聖品。", icon: "fa-mug-hot", color: "bg-green-100 text-green-800", mapQuery: "GOKAGO 京都府京都市東山区星野町88" },
   { id: 46, area: "京都 / 市郊", type: "food", name: "矢場味噌豬排", hours: "11:00–21:00", location: "長島三井 Outlet 內", category: "午餐", notes: "Outlet 逛累了就來吃名古屋代表味。招牌草鞋特大豬排淋上紅味噌醬，甜鹹濃意。", icon: "fa-piggy-bank", color: "bg-rose-100 text-rose-700", mapQuery: "矢場とん ジャズドリーム長島店 三重県桑名市長島町浦安368" },
   { id: 47, area: "京都 / 市郊", type: "food", name: "桂新堂 蝦仙貝之里", hours: "08:00–20:00 (依機場規定)", location: "中部國際機場 4 樓", category: "伴手禮", notes: "體積大但極輕，直接當手提行李上機，完美保留你的 46kg 托運額度裝其他重物！", icon: "fa-gift", color: "bg-blue-100 text-blue-500", mapQuery: "えびせんべいの里 中部国際空港店 愛知県常滑市セントレア1-1" },
-  { id: 48, area: "名站區", type: "attraction", name: "VIA INN 名古屋站前椿町", hours: "Check-in 15:00 / Check-out 10:00", location: "太閤通口（新幹線口）步行 5 分鐘", transport: "名古屋站新幹線口", notes: "本次旅程的大本營，鄰近車站、Bic Camera 與 ESCA 地下街，採買極為方便。", icon: "fa-hotel", color: "bg-blue-100 text-blue-600", mapQuery: "ヴィアイン名古屋駅前椿町" }
+  { id: 48, area: "名站區", type: "attraction", name: "VIA INN 名古屋站前椿町", hours: "Check-in 15:00 / Check-out 10:00", location: "太閤通口（新幹線口）步行 5 分鐘", transport: "名古屋站新幹線口", notes: "本次旅程的大本營，鄰近車站、Bic Camera 與 ESCA 地下街，採買極為方便。", icon: "fa-hotel", color: "bg-blue-100 text-blue-600", mapQuery: "ヴィアイン名古屋駅前椿町" },
+
+  // ================= 區域 2：大須 / 榮商圈 (新增) =================
+  { id: 51, area: "大須 / 榮商圈", type: "attraction", name: "駿河屋 名古屋大須本館", hours: "10:00–21:00", location: "愛知県名古屋市中区大須3-32-23 (3F-5F)", transport: "地鐵名城線「上前津站」或鶴舞線「大須觀音站」步行約 7 分鐘", notes: "<strong>🔥 全名古屋魔王級二手/新品手辦寶庫</strong><br>• <strong>一番賞攻略：</strong>擁有極為壯觀的「一番賞景品專區」。如果你不想碰運氣抽籤，可以直接在這裡用極為劃算的二手「祭典價」買到心儀 de B 賞、C 賞或最後賞公仔，非常透明。<br>• <strong>逛店指南：</strong>整棟大樓的 3 樓到 5 樓全都是動漫模型，手辦分類極其細緻（從七龍珠、航海王、排球少年到最新熱門番、賽馬娘通通有）。現場滿滿的展示牆，花 1-2 小時在這裡撈寶非常過癮！", icon: "fa-robot", color: "bg-purple-100 text-purple-600", mapQuery: "駿河屋 名古屋大須本館" },
+  { id: 52, area: "大須 / 榮商圈", type: "attraction", name: "まんだらけ 名古屋店", hours: "12:00–20:00", location: "愛知県名古屋市中区大須3-18-21", transport: "地鐵名城線「上前津站」步行約 5 分鐘", notes: "<strong>👾 古物/神物/絕版怨念物終結聖地</strong><br>• <strong>一番賞攻略：</strong>以收集各年代「稀有、絕版、限定版」一番賞最後賞（Last One）及高階 PVC 著稱。如果你在找多年前錯過的一番賞怨念公仔，來這裡的玻璃展示櫃挖寶準沒錯。<br>• <strong>逛店指南：</strong>巨大的黑色外牆是店面地標。店內風格像大型博物館，除了現代熱門手辦外，還有海量的超合金、復古懷舊玩具、原畫集與同人誌，是硬核收藏家不可錯過的朝聖點。", icon: "fa-ghost", color: "bg-purple-100 text-purple-600", mapQuery: "まんだらけ 名古屋店" },
+  { id: 53, area: "大須 / 榮商圈", type: "attraction", name: "BOOK-OFF SUPER BAZAAR 榮SKYLE店", hours: "10:00–21:00", location: "愛知県名古屋市中区栄3-4-5 栄スカイル (SKYLE) 8F", transport: "地鐵東山線/名城線「榮站」地下街 7 號出口直結", notes: "<strong>🏢 百貨高空！超平價二手模型出清大本營</strong><br>• <strong>一番賞攻略：</strong>由於這裡不是傳統的動漫一級戰區，許多當地人會把抽到但不需要的全新未拆一番賞公仔，直接拿到這低價變賣。因此這裡的一番賞公仔「撿漏價」往往比秋葉原或大須更有殺傷力！<br>• <strong>逛店指南：</strong>位於榮商圈核心 SKYLE 百貨的 8 樓。這家是 SUPER BAZAAR（超級大綜合版），HOBBY 玩具特區規模大得驚人。地理位置極佳，非常適合逛完街、或在附近吃飽後來順路隨機挖寶。", icon: "fa-store", color: "bg-teal-100 text-teal-600", mapQuery: "BOOKOFF SUPER BAZAAR 栄スカイル店" }
 ];
